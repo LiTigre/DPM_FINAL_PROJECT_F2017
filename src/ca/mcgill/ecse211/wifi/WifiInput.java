@@ -1,4 +1,4 @@
-package ca.mcgill.ecse211.wificlient;
+package ca.mcgill.ecse211.wifi;
 
 import java.util.Map;
 import ca.mcgill.ecse211.WiFiClient.WifiConnection;
