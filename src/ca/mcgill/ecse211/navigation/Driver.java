@@ -80,4 +80,27 @@ public class Driver {
 	private void setTravelling(boolean travel) {
 		
 	}
+	
+	/**
+	 * Converts a distance specified into an angle.
+	 * @param radius Radii of the wheels in cm. 
+	 * @param distance Distance in cm.
+	 * @return angle in radiant.
+	 * @since 1.1
+	 */
+	private static int convertDistance(double radius, double distance) {
+		return (int) ((180.0 * distance) / (Math.PI * radius));
+	}
+	
+	/**
+	 * Converts an angle specified into the proper angle. 
+	 * @param radius Radii of the wheels in cm.
+	 * @param TRACK Track of the robot in cm. 
+	 * @param angle Angle that will be converted in radiant.
+	 * @return angle in radiant.
+	 * @since 1.1 
+	 */
+	private static int convertAngle(double radius, double TRACK, double angle) {
+		return convertDistance(radius, Math.PI * width * angle / 360.0);
+	}
 }

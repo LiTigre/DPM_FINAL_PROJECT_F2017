@@ -26,6 +26,8 @@ import lejos.hardware.Button;
  * ENABLE_DEBUG_WIFI_PRINT (below).
  * 
  * @author Michael Smith
+ * @version 1.0
+ * @since 1.0
  *
  */
 public class WifiInput {
