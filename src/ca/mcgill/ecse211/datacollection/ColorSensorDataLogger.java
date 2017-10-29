@@ -1,4 +1,4 @@
-package ca.mcgill.ecse211.testssh;
+package ca.mcgill.ecse211.datacollection;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -9,8 +9,21 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 
-public class TestColorSensor {
+/**
+ * Collects data from the color sensor and stores it in a file.
+ * This requires and ssh connection to a computer.
+ * @author Team 2
+ * @version 1.0
+ * @since 1.1
+ */
+public class ColorSensorDataLogger {
 	
+	/**
+	 * @param args used to specify the compiler this is a main and should run from here. 
+	 * @throws InterruptedException exception necessary for this class to work.
+	 * @throws FileNotFoundException if the file it is trying to write in cannot be found.
+	 * @throws UnsupportedEncodingException exception necessary for this class to work. 
+	 */
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException,
 	UnsupportedEncodingException {
 		PrintWriter writer = null;
