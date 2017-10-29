@@ -28,12 +28,19 @@ public class Odometer extends Thread {
 	
 	/**
 	 * Constructor for the Odometer.
-	 * @param leftMotor Left wheel's motor created from the MainController class. 
-	 * @param rightMotor Right wheel's motor created from the MainController class. 
+	 * @param leftMotor Left wheel's motor created in the MainController class. 
+	 * @param rightMotor Right wheel's motor created in the MainController class. 
 	 * @since 1.1
 	 */
 	public Odometer(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor) {
-		
+		this.leftMotor = leftMotor;
+		this.rightMotor = rightMotor;
+		this.x = 0.0;
+		this.y = 0.0;
+		this.theta = 0.0;
+		this.leftMotorTachoCount = 0;
+		this.rightMotorTachoCount = 0;
+		lock = new Object();
 	}
 	
 	/* (non-Javadoc)
