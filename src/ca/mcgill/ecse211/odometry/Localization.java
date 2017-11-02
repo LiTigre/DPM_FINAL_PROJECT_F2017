@@ -1,7 +1,6 @@
 package ca.mcgill.ecse211.odometry;
 
 import ca.mcgill.ecse211.controller.MainController;
-import ca.mcgill.ecse211.localizationlab.ZiplineLab;
 import ca.mcgill.ecse211.navigation.Driver;
 import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
@@ -9,21 +8,25 @@ import lejos.robotics.SampleProvider;
 /**
  * Determines the starting point of the robot based on the corner it has been placed in. 
  * @author Team 2
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class Localization {
 
-	private Odometer odometer;
-	private Driver driver;
+	// Objects 
+	private final Odometer odometer;
+	private final Driver driver;
 	
-	private double SENSOR_TO_TRACK;
-	private double LINE_THRESHOLD;
-	private final int THRESHOLD_WALL = 35;
-	private final int NOISE_GAP = 1;
+	// Constants
+	private final double SENSOR_TO_TRACK;
+	private final double LINE_THRESHOLD;
+	private final int THRESHOLD_WALL;
+	private final int NOISE_GAP;
 	
-	private double [] collectedData = new double [4];
+	// Color sensor data
+	private double [] collectedData;
 	
+	// Booleans
 	private boolean isCompleted;
 	public boolean isLocalizing;
 	
@@ -35,8 +38,19 @@ public class Localization {
 	 * @param driver Driver created in MainController.
 	 * @since 1.1
 	 */
-	public Localization(Odometer odometer, SampleProvider colorSensor, SampleProvider usSensor, Driver driver) {
-	
+	public Localization(Odometer odometer, Driver driver, double SENSOR_TO_TRACK, double LINE_THRESHOLD, 
+						int THRESHOLD_WALL, int NOISE_GAP) {
+		this.odometer = odometer;
+		this.driver = driver;
+		
+		this.SENSOR_TO_TRACK = SENSOR_TO_TRACK;
+		this.LINE_THRESHOLD = LINE_THRESHOLD;
+		this.THRESHOLD_WALL = THRESHOLD_WALL;
+		this.NOISE_GAP = NOISE_GAP;
+		
+		collectedData = new double[4];
+		isCompleted = false;
+		isLocalizing = false;
 	}
 	
 	/**
@@ -44,15 +58,19 @@ public class Localization {
 	 * @since 1.1
 	 */
 	public void localize() {
+		setLocalizing(true);
 		
+		// If the robot is facing the wall, do rising edge.
 		if(MainController.getDistanceValue() < THRESHOLD_WALL + NOISE_GAP) {
 			risingEdgeLocalization();
 		}
+		// If the robot is not facing the wall, do falling edge.
 		else{
 			fallingEdgeLocalization();
 		}
 		
 		lightLocalization();
+		setLocalizing(false);
 	}
 	
 	/**
@@ -131,7 +149,7 @@ public class Localization {
 		driver.turnDistance(360);
 		
 		while(driver.isTurning()) {
-			
+			int i = 0;
 			// Collect data during the ultrasonic localization is running
 			if(MainController.getLightValue() < LINE_THRESHOLD) {
 	    			//implement collecting data here
@@ -200,7 +218,23 @@ public class Localization {
 			isCompleted = false;
 	}
 	
+	/**
+	 * Sets the isLocalizing boolean to the boolean passed.
+	 * @param localize True when it is localizing, false localizing.
+	 * @since 1.2
+	 */
+	private void setLocalizing(boolean localize) {
+		isLocalizing = localize;
+	}
 	
+	/**
+	 * Gets the value of the isLocalizing boolean 
+	 * @return The booleans value. True if it is localizing, false otherwise.
+	 * @since 1.2
+	 */
+	public boolean getLocalizing() {
+		return isLocalizing;
+	}
 	
 	/**
 	 * Calculates the value of the rising edge and the falling edge in order for the robot to orient itself to the right angle. 

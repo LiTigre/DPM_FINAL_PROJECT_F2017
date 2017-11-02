@@ -11,15 +11,18 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
  */
 public class Driver {
 	
-	private Odometer odometer;
-	private EV3LargeRegulatedMotor leftMotor;
-	private EV3LargeRegulatedMotor rightMotor;
+	// Objects 
+	private final Odometer odometer;
+	private final EV3LargeRegulatedMotor leftMotor;
+	private final EV3LargeRegulatedMotor rightMotor;
 	
-	private double WHEEL_RADIUS;
-	private double TRACK;
-	private int FORWARD_SPEED;
-	private int ROTATE_SPEED;
+	// Constants
+	private final double WHEEL_RADIUS;
+	private final double TRACK;
+	private final int FORWARD_SPEED;
+	private final int ROTATE_SPEED;
 	
+	// Booleans
 	private boolean travelling;
 	private boolean turning;
 	
@@ -202,6 +205,7 @@ public class Driver {
 	/**
 	 * Sets the turning boolean.
 	 * @param turn True when it is turning, false otherwise.
+	 * @since 1.2
 	 */
 	private void setTurning(boolean turn) {
 		turning = turn;
