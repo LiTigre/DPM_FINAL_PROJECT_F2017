@@ -1,7 +1,5 @@
 package ca.mcgill.ecse211.odometry;
 
-import ca.mcgill.ecse211.controller.MainController;
-import ca.mcgill.ecse211.localizationlab.ZiplineLab;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
 /**
@@ -16,8 +14,12 @@ public class Odometer extends Thread {
 	private double x;
 	private double y;
 	private double theta;
+	private double WHEEL_RADIUS;
+	private double TRACK;
+	
 	private int leftMotorTachoCount;
 	private int rightMotorTachoCount;
+	
 	private EV3LargeRegulatedMotor leftMotor;
 	private EV3LargeRegulatedMotor rightMotor;
 
@@ -32,14 +34,19 @@ public class Odometer extends Thread {
 	 * @param rightMotor Right wheel's motor created in the MainController class. 
 	 * @since 1.1
 	 */
-	public Odometer(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor) {
+	public Odometer(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, double WHEEL_RADIUS, double TRACK) {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
+		
 		this.x = 0.0;
 		this.y = 0.0;
 		this.theta = 0.0;
+		
+		this.WHEEL_RADIUS = WHEEL_RADIUS;
+		this.TRACK = TRACK;
 		this.leftMotorTachoCount = 0;
 		this.rightMotorTachoCount = 0;
+		
 		lock = new Object();
 	}
 	
@@ -53,15 +60,15 @@ public class Odometer extends Thread {
 		while (true) {
 			updateStart = System.currentTimeMillis();
 			double distLeft, distRight, deltaDistance, deltaTheta, dX, dY;
-			distLeft = Math.PI * MainController.WHEEL_RADIUS * (leftMotor.getTachoCount() - leftMotorTachoCount) / 180; // Calculated
+			distLeft = Math.PI * WHEEL_RADIUS * (leftMotor.getTachoCount() - leftMotorTachoCount) / 180; // Calculated
 																													// using
 																													// arclength
-			distRight = Math.PI * MainController.WHEEL_RADIUS * (rightMotor.getTachoCount() - rightMotorTachoCount) / 180;
+			distRight = Math.PI * WHEEL_RADIUS * (rightMotor.getTachoCount() - rightMotorTachoCount) / 180;
 			leftMotorTachoCount = leftMotor.getTachoCount(); // Save current TachoCount (change in
 																// angle) for next iteration
 			rightMotorTachoCount = rightMotor.getTachoCount();
 			deltaDistance = (distLeft + distRight) / 2; // Compute displacement of vehicle
-			deltaTheta = (distLeft - distRight) / MainController.TRACK; // Compute heading
+			deltaTheta = (distLeft - distRight) / TRACK; // Compute heading
 
 			synchronized (lock) {
 				/**

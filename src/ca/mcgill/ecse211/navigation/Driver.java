@@ -11,6 +11,18 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
  */
 public class Driver {
 	
+	private Odometer odometer;
+	private EV3LargeRegulatedMotor leftMotor;
+	private EV3LargeRegulatedMotor rightMotor;
+	
+	private double WHEEL_RADIUS;
+	private double TRACK;
+	private int FORWARD_SPEED;
+	private int ROTATE_SPEED;
+	
+	private boolean travelling;
+	private boolean turning;
+	
 	/**
 	 * Constructor for driver class.
 	 * @param leftMotor Left wheel's motor created in the MainController class. 
@@ -20,9 +32,19 @@ public class Driver {
 	 * @param odometer Odometer created in the MainController class.
 	 * @since 1.1
 	 */
-	public Driver(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, double WHEEL_RADIUS,
-				double TRACK, Odometer odometer) {
+	public Driver(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, Odometer odometer, 
+					double WHEEL_RADIUS, double TRACK, int FORWARD_SPEED, int ROTATE_SPEED) {
+		this.odometer = odometer;
+		this.leftMotor = leftMotor;
+		this.rightMotor = rightMotor;
 		
+		this.WHEEL_RADIUS = WHEEL_RADIUS;
+		this.TRACK = TRACK;
+		this.FORWARD_SPEED = FORWARD_SPEED;
+		this.ROTATE_SPEED = ROTATE_SPEED;
+		
+		this.travelling = false;
+		this.turning = false;
 	}
 	
 	/**
@@ -40,13 +62,13 @@ public class Driver {
 		double thetaTurn = thetaD - odometer.getTheta();
 		
 		if (thetaTurn < -180.0) {
-			turnTo(360.0 + thetaTurn);
+			turnDistance(360.0 + thetaTurn);
 		}
 		else if (thetaTurn > 180.0) {
-			turnTo(thetaTurn - 360.0);
+			turnDistance(thetaTurn - 360.0);
 		}
 		else {
-			turnTo(thetaTurn);
+			turnDistance(thetaTurn);
 		}
 		
 		leftMotor.setSpeed(FORWARD_SPEED);
@@ -56,8 +78,8 @@ public class Driver {
 		
 		setTravelling(true);
 		
-		leftMotor.rotate(convertDistance(radius, distance), true);
-		rightMotor.rotate(convertDistance(radius, distance), false);
+		leftMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
+		rightMotor.rotate(convertDistance(WHEEL_RADIUS, distance), false);
 		
 		setTravelling(false);
 	}
@@ -73,8 +95,8 @@ public class Driver {
 		
 		setTravelling(true);
 		
-		leftMotor.rotate(convertDistance(radius, distance), true);
-		rightMotor.rotate(convertDistance(radius, distance), false);
+		leftMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
+		rightMotor.rotate(convertDistance(WHEEL_RADIUS, distance), false);
 		
 		setTravelling(false);
 	}
@@ -90,8 +112,8 @@ public class Driver {
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
 		
-		leftMotor.rotate(convertAngle(radius, width, theta), true);
-		rightMotor.rotate(-convertAngle(radius, width, theta), true);
+		leftMotor.rotate(convertAngle(WHEEL_RADIUS, TRACK, angle), true);
+		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), false);
 		
 		setTurning(false);
 	}
@@ -111,14 +133,14 @@ public class Driver {
 		double thetaTurn = thetaD - odometer.getTheta();
 		
 		if (thetaTurn < -180.0) {
-			turnTo(360.0 + thetaTurn);
+			turnDistance(360.0 + thetaTurn);
 
 		}
 		else if (thetaTurn > 180.0) {
-			turnTo(thetaTurn - 360.0);
+			turnDistance(thetaTurn - 360.0);
 		}
 		else {
-			turnTo(thetaTurn);
+			turnDistance(thetaTurn);
 		}
 		
 	}
@@ -177,7 +199,7 @@ public class Driver {
 	 * @return angle in radiant.
 	 * @since 1.1 
 	 */
-	private static int convertAngle(double radius, double TRACK, double angle) {
-		return convertDistance(radius, Math.PI * width * angle / 360.0);
+	private static int convertAngle(double radius, double track, double angle) {
+		return convertDistance(radius, Math.PI * track * angle / 360.0);
 	}
 }
