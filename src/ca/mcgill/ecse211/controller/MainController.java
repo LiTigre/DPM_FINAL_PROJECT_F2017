@@ -23,7 +23,7 @@ public class MainController {
 	 * @return The ultrasonic sensor reading multiplied by 100 for precision. 
 	 * @since 1.1
 	 */
-	public float getDistanceValue(){
+	public static float getDistanceValue(){
 		usSensor.fetchSample(usData, 0);
 		return usData[0]*100;
 	}
@@ -33,7 +33,7 @@ public class MainController {
 	 * @return The color sensor reading multiplied by 1000 for precision. 
 	 * @since 1.1
 	 */
-	public float getLightValue() {
+	public static float getLightValue() {
 		colorSample.fetchSample(lightData, 0);
 		return lightData[0]*1000;
 	}

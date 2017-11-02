@@ -6,7 +6,7 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 /**
  * Main navigation class of the system. Contains all the basic travel methods necessary. 
  * @author Team 2
- * @version 1.2
+ * @version 1.3
  * @since 1.0
  */
 public class Driver {
@@ -71,8 +71,7 @@ public class Driver {
 			turnDistance(thetaTurn);
 		}
 		
-		leftMotor.setSpeed(FORWARD_SPEED);
-		rightMotor.setSpeed(FORWARD_SPEED);
+		setSpeed(FORWARD_SPEED);
 		
 		double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 		
@@ -90,8 +89,7 @@ public class Driver {
 	 * @since 1.1
 	 */
 	public void travelDistance(double distance) {
-		leftMotor.setSpeed(FORWARD_SPEED);
-		rightMotor.setSpeed(FORWARD_SPEED);
+		setSpeed(FORWARD_SPEED);
 		
 		setTravelling(true);
 		
@@ -109,8 +107,7 @@ public class Driver {
 	public void turnDistance(double angle) {
 		setTurning(true);
 		
-		leftMotor.setSpeed(ROTATE_SPEED);
-		rightMotor.setSpeed(ROTATE_SPEED);
+		setSpeed(ROTATE_SPEED);
 		
 		leftMotor.rotate(convertAngle(WHEEL_RADIUS, TRACK, angle), true);
 		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), false);
@@ -143,6 +140,36 @@ public class Driver {
 			turnDistance(thetaTurn);
 		}
 		
+	}
+	
+	/**
+	 * Constant rotation of the wheels. This makes the robot turn on itself indefinitely. 
+	 * @since 1.3
+	 */
+	public void rotate() {
+		setSpeed(ROTATE_SPEED);
+		
+		leftMotor.forward();
+		rightMotor.backward();
+	}
+	
+	/**
+	 * Force stop of the both motors. 
+	 * @since 1.3
+	 */
+	public void instantStop() {
+		leftMotor.stop();
+		rightMotor.stop();
+	}
+	
+	/**
+	 * This makes setting the speed of both wheels easier.
+	 * @param speed Speed to set both wheels to.
+	 * @since 1.3
+	 */
+	private void setSpeed(int speed) {
+		leftMotor.setSpeed(speed);
+		rightMotor.setSpeed(speed);
 	}
 	
 	/**
