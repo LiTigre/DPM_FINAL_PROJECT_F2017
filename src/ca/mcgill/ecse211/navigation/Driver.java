@@ -6,7 +6,7 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 /**
  * Main navigation class of the system. Contains all the basic travel methods necessary. 
  * @author Team 2
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class Driver {
@@ -33,6 +33,33 @@ public class Driver {
 	 */
 	public void travelTo(double newX, double newY) {
 		
+		double deltaY = newY - odometer.getY();
+		double deltaX = newX - odometer.getX();
+
+		double thetaD = Math.toDegrees(Math.atan2(deltaX, deltaY));
+		double thetaTurn = thetaD - odometer.getTheta();
+		
+		if (thetaTurn < -180.0) {
+			turnTo(360.0 + thetaTurn);
+		}
+		else if (thetaTurn > 180.0) {
+			turnTo(thetaTurn - 360.0);
+		}
+		else {
+			turnTo(thetaTurn);
+		}
+		
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		
+		double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+		
+		setTravelling(true);
+		
+		leftMotor.rotate(convertDistance(radius, distance), true);
+		rightMotor.rotate(convertDistance(radius, distance), false);
+		
+		setTravelling(false);
 	}
 	
 	/**
@@ -41,7 +68,15 @@ public class Driver {
 	 * @since 1.1
 	 */
 	public void travelDistance(double distance) {
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
 		
+		setTravelling(true);
+		
+		leftMotor.rotate(convertDistance(radius, distance), true);
+		rightMotor.rotate(convertDistance(radius, distance), false);
+		
+		setTravelling(false);
 	}
 	
 	/**
@@ -50,7 +85,15 @@ public class Driver {
 	 * @since 1.1
 	 */
 	public void turnDistance(double angle) {
+		setTurning(true);
 		
+		leftMotor.setSpeed(ROTATE_SPEED);
+		rightMotor.setSpeed(ROTATE_SPEED);
+		
+		leftMotor.rotate(convertAngle(radius, width, theta), true);
+		rightMotor.rotate(-convertAngle(radius, width, theta), true);
+		
+		setTurning(false);
 	}
 	
 	/**
@@ -61,15 +104,32 @@ public class Driver {
 	 */
 	public void turnTo(double newX, double newY) {
 		
+		double deltaY = newY - odometer.getY();
+		double deltaX = newX - odometer.getX();
+
+		double thetaD = Math.toDegrees(Math.atan2(deltaX, deltaY));
+		double thetaTurn = thetaD - odometer.getTheta();
+		
+		if (thetaTurn < -180.0) {
+			turnTo(360.0 + thetaTurn);
+
+		}
+		else if (thetaTurn > 180.0) {
+			turnTo(thetaTurn - 360.0);
+		}
+		else {
+			turnTo(thetaTurn);
+		}
+		
 	}
 	
 	/**
 	 * Checks if the robot is currently traveling. 
-	 * @return boolean. If it is traveling then its true, otherwise false. 
+	 * @return boolean If it is traveling then it's true, otherwise false. 
 	 * @since 1.1
 	 */
 	public boolean isTraveling() {
-		return travelling;
+		return this.travelling;
 	}
 	
 	/**
@@ -78,7 +138,24 @@ public class Driver {
 	 * @since 1.1
 	 */
 	private void setTravelling(boolean travel) {
-		
+		travelling = travel;
+	}
+	
+	/**
+	 * Checks if the robot is currently turning.
+	 * @return boolean If it is turning then it's true, otherwise false.
+	 * @since 1.2 
+	 */
+	public boolean isTurning() {
+		return this.turning;
+	}
+	
+	/**
+	 * Sets the turning boolean.
+	 * @param turn True when it is turning, false otherwise.
+	 */
+	private void setTurning(boolean turn) {
+		turning = turn;
 	}
 	
 	/**
