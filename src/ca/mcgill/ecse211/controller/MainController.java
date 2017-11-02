@@ -12,11 +12,20 @@ import lejos.robotics.SampleProvider;
  * Controls all actions taken by the robot. Is in charge of sequencing operations 
  * in order to do what the tasks requires the robot to do. 
  * @author Team 2
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class MainController {
 	
+	// Constants
+	private final double SENSOR_TO_TRACK;
+	private final double LINE_THRESHOLD;
+	private final int THRESHOLD_WALL;
+	private final int NOISE_GAP;
+	private final double WHEEL_RADIUS;
+	private final double TRACK;
+	private final int FORWARD_SPEED;
+	private final int ROTATE_SPEED;
 	
 	
 	// Sensors 

@@ -14,12 +14,12 @@ import lejos.robotics.SampleProvider;
 public class Localization {
 
 	// Objects 
-	private Odometer odometer;
-	private Driver driver;
+	private final Odometer odometer;
+	private final Driver driver;
 	
 	// Constants
-	private double SENSOR_TO_TRACK;
-	private double LINE_THRESHOLD;
+	private final double SENSOR_TO_TRACK;
+	private final double LINE_THRESHOLD;
 	private final int THRESHOLD_WALL;
 	private final int NOISE_GAP;
 	
