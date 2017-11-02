@@ -11,15 +11,18 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
  */
 public class Driver {
 	
+	// Objects 
 	private Odometer odometer;
 	private EV3LargeRegulatedMotor leftMotor;
 	private EV3LargeRegulatedMotor rightMotor;
 	
+	// Constants
 	private double WHEEL_RADIUS;
 	private double TRACK;
 	private int FORWARD_SPEED;
 	private int ROTATE_SPEED;
 	
+	// Booleans
 	private boolean travelling;
 	private boolean turning;
 	
