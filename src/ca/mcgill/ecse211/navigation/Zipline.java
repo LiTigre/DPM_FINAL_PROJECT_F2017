@@ -1,5 +1,6 @@
 package ca.mcgill.ecse211.navigation;
 
+import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -14,13 +15,10 @@ import lejos.robotics.SampleProvider;
 public class Zipline {
 	
 	private Odometer odometer;
-	private SampleProvider colorSensor;
-	private float[] colorSensorData;
-	private EV3LargeRegulatedMotor motor;
+	private EV3LargeRegulatedMotor ZiplineMotor;
 	
-	private double floorColorThreshold;
-
-	private final int MOTOR_SPEED = 200;
+	private final double FLOOR_THRESHOLD;
+	private final int ZIPLINE_SPEED;
 
 	/**
 	 * Constructor for the Zipline class.
@@ -30,12 +28,12 @@ public class Zipline {
 	 * @param floorColorThreshold Calculated color sensor value of floor
 	 * @since 1.1
 	 */
-	public Zipline(Odometer odometer, SampleProvider colorSensor, EV3LargeRegulatedMotor motor, double floorColorThreshold) {
+	public Zipline(Odometer odometer, EV3LargeRegulatedMotor ZiplineMotor, int ZIPLINE_SPEED, double FLOOR_THRESHOLD) {
 		this.odometer = odometer;
-		this.colorSensor = colorSensor;
-		this.colorSensorData = new float[colorSensor.sampleSize()];
-		this.motor = motor;
-		this.floorColorThreshold = floorColorThreshold;
+		this.ZiplineMotor = ZiplineMotor;
+		
+		this.ZIPLINE_SPEED = ZIPLINE_SPEED;
+		this.FLOOR_THRESHOLD = FLOOR_THRESHOLD;
 	}
 	
 	/**
@@ -43,12 +41,13 @@ public class Zipline {
 	 * @since 1.1
 	 */
 	public void performZiplineTravel() {
-		motor.setSpeed(MOTOR_SPEED);
-		motor.forward();
-		while (!hasLanded()) {
-			continue;
-		}
-		motor.stop();
+		ZiplineMotor.setSpeed(ZIPLINE_SPEED);
+		
+		ZiplineMotor.forward();
+		
+		while (!hasLanded());
+
+		ZiplineMotor.stop();
 	}
 	
 	/**
@@ -58,17 +57,7 @@ public class Zipline {
 	 * @since 1.2
 	 */
 	private boolean hasLanded() {
-		if (getColorData() < floorColorThreshold) return true;
+		if (MainController.getLightValue() > FLOOR_THRESHOLD) return true;
 		return false;
-	}
-	
-	/**
-	 * Return the data retrieved from the color sensor
-	 * @return float data from the color sensor
-	 * @since 1.2
-	 */
-	private float getColorData() {
-		colorSensor.fetchSample(colorSensorData, 0);
-		return colorSensorData[0];
 	}
 }

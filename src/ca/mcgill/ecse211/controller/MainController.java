@@ -18,14 +18,16 @@ import lejos.robotics.SampleProvider;
 public class MainController {
 	
 	// Constants
-	private final double SENSOR_TO_TRACK;
-	private final double LINE_THRESHOLD;
-	private final int THRESHOLD_WALL;
-	private final int NOISE_GAP;
-	private final double WHEEL_RADIUS;
-	private final double TRACK;
-	private final int FORWARD_SPEED;
-	private final int ROTATE_SPEED;
+	private static final double SENSOR_TO_TRACK;
+	private static final double LINE_THRESHOLD;
+	private static final int THRESHOLD_WALL;
+	private static final int NOISE_GAP;
+	private static final double WHEEL_RADIUS;
+	private static final double TRACK;
+	private static final int FORWARD_SPEED;
+	private static final int ROTATE_SPEED;
+	private static final int ZIPLINE_SPEED = 200;
+	private static final double FLOOR_THRESHOLD;
 	
 	
 	// Sensors 
