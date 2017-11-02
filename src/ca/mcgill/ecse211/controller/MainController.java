@@ -1,5 +1,13 @@
 package ca.mcgill.ecse211.controller;
 
+import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.port.Port;
+import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.hardware.sensor.SensorModes;
+import lejos.robotics.SampleProvider;
+
 /**
  * Controls all actions taken by the robot. Is in charge of sequencing operations 
  * in order to do what the tasks requires the robot to do. 
@@ -8,7 +16,19 @@ package ca.mcgill.ecse211.controller;
  * @since 1.0
  */
 public class MainController {
+	
+	
+	
+	// Sensors 
+	private static final EV3ColorSensor colorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S1"));
+	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S2"));
+	private static SampleProvider colorSample = colorSensor.getMode("Red");
+	private static SampleProvider usDistance = usSensor.getMode("Distance");
+	private static float lightData[] = new float[colorSample.sampleSize()];
+	private static float usData[] = new float[usDistance.sampleSize()];
+	
 
+	
 	/**
 	 * Runs capture the flag.
 	 * @param args required to make this the main method of the system. 
@@ -34,7 +54,7 @@ public class MainController {
 	 * @since 1.1
 	 */
 	public static float getLightValue() {
-		colorSample.fetchSample(lightData, 0);
+		colorSensor.fetchSample(lightData, 0);
 		return lightData[0]*1000;
 	}
 }
