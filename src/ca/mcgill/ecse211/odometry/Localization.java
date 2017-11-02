@@ -13,16 +13,20 @@ import lejos.robotics.SampleProvider;
  */
 public class Localization {
 
+	// Objects 
 	private Odometer odometer;
 	private Driver driver;
 	
+	// Constants
 	private double SENSOR_TO_TRACK;
 	private double LINE_THRESHOLD;
 	private final int THRESHOLD_WALL;
 	private final int NOISE_GAP;
 	
+	// Color sensor data
 	private double [] collectedData;
 	
+	// Booleans
 	private boolean isCompleted;
 	public boolean isLocalizing;
 	
@@ -56,9 +60,11 @@ public class Localization {
 	public void localize() {
 		setLocalizing(true);
 		
+		// If the robot is facing the wall, do rising edge.
 		if(MainController.getDistanceValue() < THRESHOLD_WALL + NOISE_GAP) {
 			risingEdgeLocalization();
 		}
+		// If the robot is not facing the wall, do falling edge.
 		else{
 			fallingEdgeLocalization();
 		}
