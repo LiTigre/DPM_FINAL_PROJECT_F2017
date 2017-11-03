@@ -17,23 +17,18 @@ public class Zipline {
 	private Odometer odometer;
 	private EV3LargeRegulatedMotor ZiplineMotor;
 	
-	private final double FLOOR_THRESHOLD;
-	private final int ZIPLINE_SPEED;
+	private static final double FLOOR_THRESHOLD;
+	private static final int ZIPLINE_SPEED = 200;
 
 	/**
 	 * Constructor for the Zipline class.
 	 * @param odometer Odometer created in MainController.
-	 * @param colorSensor Color sensor created in MainController.
-	 * @param motor Motor controlling the pulley
-	 * @param floorColorThreshold Calculated color sensor value of floor
+	 * @param ZiplineMotor Motor controlling the pulley
 	 * @since 1.1
 	 */
-	public Zipline(Odometer odometer, EV3LargeRegulatedMotor ZiplineMotor, int ZIPLINE_SPEED, double FLOOR_THRESHOLD) {
+	public Zipline(Odometer odometer, EV3LargeRegulatedMotor ZiplineMotor) {
 		this.odometer = odometer;
 		this.ZiplineMotor = ZiplineMotor;
-		
-		this.ZIPLINE_SPEED = ZIPLINE_SPEED;
-		this.FLOOR_THRESHOLD = FLOOR_THRESHOLD;
 	}
 	
 	/**

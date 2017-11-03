@@ -1,5 +1,6 @@
 package ca.mcgill.ecse211.odometry;
 
+import ca.mcgill.ecse211.controller.MainController;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
 /**
@@ -14,8 +15,10 @@ public class Odometer extends Thread {
 	private double x;
 	private double y;
 	private double theta;
-	private double WHEEL_RADIUS;
-	private double TRACK;
+	
+	// Constants
+	private static final double WHEEL_RADIUS = MainController.WHEEL_RADIUS;
+	private static final double TRACK = MainController.TRACK;
 	
 	private int leftMotorTachoCount;
 	private int rightMotorTachoCount;
@@ -34,7 +37,7 @@ public class Odometer extends Thread {
 	 * @param rightMotor Right wheel's motor created in the MainController class. 
 	 * @since 1.1
 	 */
-	public Odometer(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, double WHEEL_RADIUS, double TRACK) {
+	public Odometer(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor) {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 		
@@ -42,8 +45,6 @@ public class Odometer extends Thread {
 		this.y = 0.0;
 		this.theta = 0.0;
 		
-		this.WHEEL_RADIUS = WHEEL_RADIUS;
-		this.TRACK = TRACK;
 		this.leftMotorTachoCount = 0;
 		this.rightMotorTachoCount = 0;
 		
@@ -98,6 +99,24 @@ public class Odometer extends Thread {
 					// another thread
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Gets the x, y and theta position indicated by the odometer.
+	 * @param position Array with the 3 parameters (x, y, theta).
+	 * @param update Array of boolean of whether or not the parameter will get recieved.
+	 * @since 1.1
+	 */
+	public void getPosition(double[] position, boolean[] update) {
+		// ensure that the values don't change while the odometer is running
+		synchronized (lock) {
+			if (update[0])
+				position[0] = x;
+			if (update[1])
+				position[1] = y;
+			if (update[2])
+				position[2] = theta;
 		}
 	}
 	

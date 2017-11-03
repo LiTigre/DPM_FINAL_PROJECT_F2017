@@ -1,5 +1,6 @@
 package ca.mcgill.ecse211.navigation;
 
+import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
@@ -17,10 +18,10 @@ public class Driver {
 	private final EV3LargeRegulatedMotor rightMotor;
 	
 	// Constants
-	private final double WHEEL_RADIUS;
-	private final double TRACK;
-	private final int FORWARD_SPEED;
-	private final int ROTATE_SPEED;
+	private static final double WHEEL_RADIUS = MainController.WHEEL_RADIUS;
+	private static final double TRACK = MainController.TRACK;
+	private static final int FORWARD_SPEED;
+	private static final int ROTATE_SPEED;
 	
 	// Booleans
 	private boolean travelling;
@@ -30,21 +31,13 @@ public class Driver {
 	 * Constructor for driver class.
 	 * @param leftMotor Left wheel's motor created in the MainController class. 
 	 * @param rightMotor Right wheel's motor created in the MainController class. 
-	 * @param WHEEL_RADIUS Wheels' radii set in the MainController class.
-	 * @param TRACK Track size set in MainController class.
 	 * @param odometer Odometer created in the MainController class.
 	 * @since 1.1
 	 */
-	public Driver(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, Odometer odometer, 
-					double WHEEL_RADIUS, double TRACK, int FORWARD_SPEED, int ROTATE_SPEED) {
+	public Driver(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, Odometer odometer) {
 		this.odometer = odometer;
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
-		
-		this.WHEEL_RADIUS = WHEEL_RADIUS;
-		this.TRACK = TRACK;
-		this.FORWARD_SPEED = FORWARD_SPEED;
-		this.ROTATE_SPEED = ROTATE_SPEED;
 		
 		this.travelling = false;
 		this.turning = false;

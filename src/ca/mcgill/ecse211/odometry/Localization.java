@@ -18,10 +18,10 @@ public class Localization {
 	private final Driver driver;
 	
 	// Constants
-	private final double SENSOR_TO_TRACK;
-	private final double LINE_THRESHOLD;
-	private final int THRESHOLD_WALL;
-	private final int NOISE_GAP;
+	private static final double SENSOR_TO_TRACK;
+	private static final double LINE_THRESHOLD;
+	private static final int THRESHOLD_WALL;
+	private static final int NOISE_GAP;
 	
 	// Color sensor data
 	private double [] collectedData;
@@ -33,20 +33,12 @@ public class Localization {
 	/**
 	 * Constructor for the localization class.
 	 * @param odometer Odometer created in MainController.
-	 * @param colorSensor Color sensor created in MainController.
-	 * @param usSensor Ultrasonic sensor created in MainController.
 	 * @param driver Driver created in MainController.
 	 * @since 1.1
 	 */
-	public Localization(Odometer odometer, Driver driver, double SENSOR_TO_TRACK, double LINE_THRESHOLD, 
-						int THRESHOLD_WALL, int NOISE_GAP) {
+	public Localization(Odometer odometer, Driver driver) {
 		this.odometer = odometer;
 		this.driver = driver;
-		
-		this.SENSOR_TO_TRACK = SENSOR_TO_TRACK;
-		this.LINE_THRESHOLD = LINE_THRESHOLD;
-		this.THRESHOLD_WALL = THRESHOLD_WALL;
-		this.NOISE_GAP = NOISE_GAP;
 		
 		collectedData = new double[4];
 		isCompleted = false;

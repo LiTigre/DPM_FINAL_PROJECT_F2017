@@ -1,5 +1,6 @@
 package ca.mcgill.ecse211.datacollection;
 
+import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.lcd.TextLCD;
 import lejos.robotics.SampleProvider;
@@ -49,7 +50,7 @@ public class LCDDisplay {
 				screen.drawString(formattedDoubleToString(position[i], 2), 3, i);
 			}
 			// display distance information
-			screen.drawString(formattedDoubleToString(getDistanceValue(), 2), 3, 3);
+			screen.drawString(formattedDoubleToString(MainController.getDistanceValue(), 2), 3, 3);
 
 			// throttle the LCDDisplay
 			displayEnd = System.currentTimeMillis();
@@ -61,11 +62,6 @@ public class LCDDisplay {
 				}
 			}
 		}
-	}
-
-	private double getDistanceValue() {
-		usSensor.fetchSample(usData, 0);
-		return usData[0] * 100;
 	}
 
 	private static String formattedDoubleToString(double x, int places) {
