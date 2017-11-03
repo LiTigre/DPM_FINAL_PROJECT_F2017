@@ -26,15 +26,13 @@ import lejos.hardware.Button;
  * ENABLE_DEBUG_WIFI_PRINT (below).
  * 
  * @author Michael Smith
- * @version 1.0
- * @since 1.0
  *
  */
 public class WifiInput {
 
   // ** Set these as appropriate for your team and current situation **
   private static final String SERVER_IP = "192.168.2.3";
-  private static final int TEAM_NUMBER = 2;
+  private static final int TEAM_NUMBER = 1;
 
   // Enable/disable printing of debug info from the WiFi class
   private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;

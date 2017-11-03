@@ -50,7 +50,7 @@ public class Search implements Runnable {
 	 * @return captureStatus Returns true if the block has been captured, false otherwise. 
 	 * @since 1.1
 	 */
-	private boolean isCaptured() {
+	public boolean isCaptured() {
 		return captureStatus;
 	}
 	
@@ -69,7 +69,7 @@ public class Search implements Runnable {
 	 * @return Returns true if the block is the flag, false otherwise.
 	 * @since 1.1
 	 */
-	private boolean isBlock() {
+	public boolean isBlock() {
 		return foundBlock;
 	}
 	
@@ -80,5 +80,15 @@ public class Search implements Runnable {
 	 */
 	private void setFoundBlock(boolean foundBlock) {
 		
+	}
+
+	/**
+	 * Checks if the robot is currently searching for the block. 
+	 * @return True if it is searching, false otherwise.
+	 * @since 1.1
+	 */
+	public boolean isSearching() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

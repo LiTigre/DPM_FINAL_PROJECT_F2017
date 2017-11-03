@@ -1,5 +1,7 @@
 package ca.mcgill.ecse211.navigation;
 
+import ca.mcgill.ecse211.controller.MainController;
+import ca.mcgill.ecse211.odometry.Localization;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.robotics.SampleProvider;
 
@@ -8,47 +10,75 @@ import lejos.robotics.SampleProvider;
  * Thread constantly polls data from the ultrasonic sensor.
  * Once the object has been avoided, it returns to the previous process.
  * @author Team 2
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class ObstacleAvoidance extends Thread {
 
+	// Objects
+	Driver driver;
+	Search search;
+	
+	// Constants
 	/**
-	 * Constructor for the ObstacleAvoidance class.
-	 * @param leftMotor Left wheel's motor created in the MainController class. 
-	 * @param rightMotor Right wheel's motor created in the MainController class. 
-	 * @param usSensor Ultrasonic sensor created in MainController.
-	 * @param driver Driver created in MainController.
-	 * @param search Search created in MainController.
-	 * @since 1.1
+	 * Constant that is associated to how close the robot can get to an object without triggered obstacle avoidance.
 	 */
-	public ObstacleAvoidance(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, 
-							SampleProvider usSensor, Driver driver, Search search) {
+	private final static double DISTANCE_FROM_OBJECT;
+	/**
+	 * Threshold added to the distance from an object because of variation is ultrasonic data.
+	 */
+	private final static double DISTANCE_THRESHOLD;
+	/**
+	 * Constant that indicated how far away the robot needs to travel from the block before returning to normal process. 
+	 */
+	private final static double DISTANCE_TO_AVOID;
+	
+	// Booleans
+	/**
+	 * Boolean that is used to indicate if the robot is currently avoiding an object or not.
+	 */
+	private boolean avoiding;
+	
+	
+	public ObstacleAvoidance(Driver driver, Search search) {
+		this.driver = driver;
+		this.search = search;
 		
+		this.avoiding = false;
 	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
 	 */
 	public void run() {
+		while (true) {
+			double error; 	
+			if((DISTANCE_FROM_OBJECT+DISTANCE_THRESHOLD) >= MainController.getDistanceValue()) {
+				if(driver.isTraveling() && !(search.isSearching()) && isAvoiding()) {
+		    			avoid();
+				}
+		    }
 		
+		     try {
+		       Thread.sleep(50);
+		     } catch (Exception e) {
+		     } // Poor man's timed sampling
+		}
 	}
 	
 	/**
 	 * Performs the avoidance and returns to the previous operation. 
 	 * @since 1.1
 	 */
-	public void avoidReturn() {
-		
+	public void avoid() {
+		setAvoiding(true);
+		driver.instantStop();
+		driver.turnDistance(90);
+		setAvoiding(false);
+		driver.travelDistance(DISTANCE_TO_AVOID);
+		driver.turnDistance(-90);
 	}
 	
-	/**
-	 * Performs the avoidance and continues to the next operation.
-	 * @since 1.1 
-	 */
-	public void avoidContinue() {
-		
-	}
 	
 	/**
 	 * Checks if the robot is currently avoiding an object. 
@@ -64,7 +94,7 @@ public class ObstacleAvoidance extends Thread {
 	 * @param avoid Boolean it is being set to.
 	 * @since 1.1
 	 */
-	public void setAvoiding(boolean avoid) {
-		
+	private void setAvoiding(boolean avoid) {
+		avoiding = avoid;
 	}
 }

@@ -17,7 +17,13 @@ public class Zipline {
 	private Odometer odometer;
 	private EV3LargeRegulatedMotor ZiplineMotor;
 	
+	/**
+	 * Constant that indicates that the robot is off the floor (compared to the light sensor data)
+	 */
 	private static final double FLOOR_THRESHOLD;
+	/**
+	 * Speed of the zipline motor in degrees/second
+	 */
 	private static final int ZIPLINE_SPEED = 200;
 
 	/**

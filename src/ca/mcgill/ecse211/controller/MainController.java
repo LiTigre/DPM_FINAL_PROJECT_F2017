@@ -16,18 +16,40 @@ import lejos.robotics.SampleProvider;
  * @since 1.0
  */
 public class MainController {
-	
-	// Constants
+	// Constants 
+	/**
+	 * The radius of the robot's wheels in cm  
+	 */
 	public static final double WHEEL_RADIUS;
+	/**
+	 * The length of the robot's track in cm. 
+	 */
 	public static final double TRACK;
 	
 	
-	// Sensors 
+	/**
+	 * Color sensor with associated port.
+	 */
 	private static final EV3ColorSensor colorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S1"));
+	/**
+	 * Ultrasonic sensor with associated port. 
+	 */
 	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S2"));
+	/**
+	 * Data collected from the color sensor.
+	 */
 	private static SampleProvider colorSample = colorSensor.getMode("Red");
+	/**
+	 * Data collected from the ultrasonic sensor.
+	 */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
+	/**
+	 * Array of floats that stores the value of the data from the color sensor.
+	 */
 	private static float lightData[] = new float[colorSample.sampleSize()];
+	/**
+	 * Array of floats that stores the value of the data from the ultrasonic sensor. 
+	 */
 	private static float usData[] = new float[usDistance.sampleSize()];
 	
 

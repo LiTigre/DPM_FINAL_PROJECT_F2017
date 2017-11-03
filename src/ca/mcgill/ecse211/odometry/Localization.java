@@ -18,16 +18,37 @@ public class Localization {
 	private final Driver driver;
 	
 	// Constants
+	/**
+	 * Distance from the color sensor to the middle of the track in cm
+	 */
 	private static final double SENSOR_TO_TRACK;
+	/**
+	 * Value that indicates a black line.
+	 */
 	private static final double LINE_THRESHOLD;
+	/**
+	 * Value that separates falling and rising edge.
+	 */
 	private static final int THRESHOLD_WALL;
+	/**
+	 * Noise created from the corner during localization and must be ignored.
+	 */
 	private static final int NOISE_GAP;
 	
 	// Color sensor data
+	/**
+	 * Array that collects the angle values of every time the robot reads a black line. 
+	 */
 	private double [] collectedData;
 	
 	// Booleans
+	/**
+	 * Boolean that indicates whether the edges have been completed 
+	 */
 	private boolean isCompleted;
+	/**
+	 * Boolean that indicates whether the robot is currently localizing. 
+	 */
 	public boolean isLocalizing;
 	
 	/**
