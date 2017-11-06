@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.navigation;
 
 import ca.mcgill.ecse211.controller.MainController;
+import java.util.ArrayList;
 import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -60,5 +61,23 @@ public class Zipline {
 	private boolean hasLanded() {
 		if (MainController.getLightValue() > FLOOR_THRESHOLD) return true;
 		return false;
+	}
+	
+	/**
+	 * Return the data retrieved from the color sensor
+	 * @return float data from the color sensor
+	 * @since 1.2
+	 */
+	
+	private float calculateFloorColor() {
+		ArrayList<Float> colors = new ArrayList<Float>();
+		float sum = 0;
+		float color;
+		for (int i = 0; i < 1000; i++) {
+			color = getColor();
+			
+			colors.add(getColor());
+		}
+		
 	}
 }
