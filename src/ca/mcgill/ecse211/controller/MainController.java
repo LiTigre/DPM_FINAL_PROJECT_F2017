@@ -25,12 +25,24 @@ public class MainController {
 	 * The length of the robot's track in cm. 
 	 */
 	public static final double TRACK;
+	/**
+	 * Distance from the color sensor to the middle of the track in cm
+	*/
+	public static final double SENSOR_TO_TRACK;
+	/**
+	 * Value that indicates a black line.
+	 */
+	public static final double LINE_THRESHOLD;
 	
 	
 	/**
 	 * Color sensor with associated port.
 	 */
-	private static final EV3ColorSensor colorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S1"));
+	private static final EV3ColorSensor colorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
+	/**
+	 * Color sensor used for angle correction with associated port. 
+	 */
+	private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S1"));
 	/**
 	 * Ultrasonic sensor with associated port. 
 	 */
@@ -40,6 +52,10 @@ public class MainController {
 	 */
 	private static SampleProvider colorSample = colorSensor.getMode("Red");
 	/**
+	 * Data collected from the angle color sensor.
+	 */
+	private static SampleProvider angleColorSample = angleColorSensor.getMode("Red");
+	/**
 	 * Data collected from the ultrasonic sensor.
 	 */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
@@ -47,6 +63,10 @@ public class MainController {
 	 * Array of floats that stores the value of the data from the color sensor.
 	 */
 	private static float lightData[] = new float[colorSample.sampleSize()];
+	/**
+	 * Array of floats that stores the value of the data from the color sensor.
+	 */
+	private static float angleLightData[] = new float[angleColorSample.sampleSize()];
 	/**
 	 * Array of floats that stores the value of the data from the ultrasonic sensor. 
 	 */
@@ -80,6 +100,16 @@ public class MainController {
 	 */
 	public static float getLightValue() {
 		colorSensor.fetchSample(lightData, 0);
+		return lightData[0]*1000;
+	}
+	
+	/**
+	 * Gets the light value reading of the angle color sensor.
+	 * @return The angle color sensor reading multiplied by 1000 for precision.
+	 * @since 1.2
+	 */
+	public static float getAngleLightValue() {
+		angleColorSensor.fetchSample(angleLightData, 0);
 		return lightData[0]*1000;
 	}
 }
