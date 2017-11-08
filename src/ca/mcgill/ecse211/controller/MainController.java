@@ -72,6 +72,16 @@ public class MainController {
 	 */
 	private static float usData[] = new float[usDistance.sampleSize()];
 	
+	/**
+	 * The coordinates from where robot began its travel from. 
+	 */
+	private double previousX, previousY;
+	
+	/**
+	 * The coordinates to where the robot is supposed to stop its traveling at. 
+	 */
+	private double futureX, futureY;
+	
 
 	
 	/**
@@ -81,6 +91,32 @@ public class MainController {
 	 */
 	public static void main(String[] args) {
 		
+	}
+	
+	private void setPreviousCoordinates(double lastX, double lastY) {
+		previousX = lastX;
+		previousY = lastY;
+	}
+
+	public double getPreviousX() {
+		return this.previousX;
+	}
+	
+	public double getPreviousY() {
+		return this.previousY;
+	}
+	
+	private void setFutureCoordinates(double nextX, double nextY) {
+		futureX = nextX;
+		futureY = nextY;
+	}
+	
+	public double getFutureX() {
+		return this.futureX;
+	}
+	
+	public double getFutureY() {
+		return this.futureY;
 	}
 	
 	/**

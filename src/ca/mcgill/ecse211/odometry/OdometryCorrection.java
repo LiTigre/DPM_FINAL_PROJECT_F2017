@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.odometry;
 
 import ca.mcgill.ecse211.controller.MainController;
+import ca.mcgill.ecse211.navigation.Driver;
 import lejos.robotics.SampleProvider;
 
 /**
@@ -33,14 +34,16 @@ public class OdometryCorrection extends Thread {
 	 */
 	private static final long CORRECTION_PERIOD = 10;
 	
+	Driver driver;
+	
 	/**
 	 * Constructor for the OdometryCorrection class. 
 	 * @param odometer Odometer created in the MainCpntroller class.
 	 * @param colorSensor Color sensor created in MainController.
 	 * @since 1.1
 	 */
-	public OdometryCorrection(Odometer odometer, SampleProvider colorSensor) {
-		
+	public OdometryCorrection(Odometer odometer, Driver driver) {
+		this.driver = driver;
 	}
 	
 	/* (non-Javadoc)
@@ -48,13 +51,22 @@ public class OdometryCorrection extends Thread {
 	 */
 	public void run() {
 		long correctionStart, correctionEnd;
+		double firstX, secondX, firstY, secondY;
 		while(true) {
 			correctionStart = System.currentTimeMillis();
 			// this ensure the odometry correction occurs only once every period
 			correctionEnd = System.currentTimeMillis();
 		      
-			
-			
+			if(MainController.getLightValue() <= LINE_THRESHOLD) {
+				if(!(driver.isTurning())) {
+					//perform correction 
+				}
+			}
+			else if(MainController.getAngleLightValue() <= ANGLE_LINE_THRESHOLD) {
+				if(!(driver.isTurning())) {
+					//perform second correction and angle correction
+				}
+			}
 			
 			if (correctionEnd - correctionStart < CORRECTION_PERIOD) {
 				try {
