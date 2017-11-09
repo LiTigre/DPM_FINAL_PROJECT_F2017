@@ -125,6 +125,12 @@ public class OdometryCorrection extends Thread {
 		}
 	}
 	
+	/**
+	 * This changes the odometry correction X and Y counters to the specified values. 
+	 * @param counterX Value that the X counter will be changed to.  
+	 * @param counterY Value that the Y counter will be changed to.
+	 * @since 1.2
+	 */
 	public void hardResetPosition(int counterX, int counterY) {
 		xCounter = counterX;
 		yCounter = counterY;
