@@ -25,6 +25,9 @@ public class OdometryCorrection extends Thread {
 	 * @see MainController#LINE_THRESHOLD
 	 */
 	private static final double LINE_THRESHOLD = MainController.LINE_THRESHOLD;
+	/**
+	 * @see MainController#BLOCK_LENGTH
+	 */
 	private static final double BLOCK_LENGTH = MainController.BLOCK_LENGTH;
 	/**
 	 * Distance from the angle color sensor to the middle of the track in cm 
@@ -46,6 +49,10 @@ public class OdometryCorrection extends Thread {
 	 * Keeps track of the y position of the robot. 
 	 */
 	private int yCounter = 0;
+	/**
+	 * Checks if it able to correct the the angle or not. 
+	 */
+	private boolean positionCorrection = false;
 	
 	/**
 	 * Constructor for the OdometryCorrection class. 
@@ -72,18 +79,19 @@ public class OdometryCorrection extends Thread {
 			if(MainController.getLightValue() <= LINE_THRESHOLD) {
 				// To avoid correction while turning on itself.
 				if(!(driver.isTurning())) {
-					performCorrection(xCounter, yCounter);
+					
+					performCorrection();
+					changeBoolState();
 				}
 			}
 			//Angle correction sensor
-			//else if(MainController.getAngleLightValue() <= ANGLE_LINE_THRESHOLD) {
+			else if(MainController.getAngleLightValue() <= ANGLE_LINE_THRESHOLD) {
 				// To avoid correction while turning on itself.
-			//	if(!(driver.isTurning())) {
-			//		performCorrection();
-					//Perform angle correction here 
-					//RIGHT NOW DOES NOT WORK 
-			//	}
-			//}
+				if(!(driver.isTurning())) {
+					performCorrection();
+					changeBoolState();
+				}
+			}
 			
 			if (correctionEnd - correctionStart < CORRECTION_PERIOD) {
 				try {
@@ -101,27 +109,34 @@ public class OdometryCorrection extends Thread {
 	 * Corrects the odometer values based on light sensor readings. 
 	 * @since 1.1
 	 */
-	private void performCorrection(int counterX, int counterY) {
+	private void performCorrection() {
 		double whichXWay = MainController.getFutureX() - MainController.getPreviousX(); 
 		double whichYWay = MainController.getFutureY() - MainController.getPreviousY();
 		
-		// Figure out which way the robot is going and increment/decrement an odometer accordingly. 
+		// Figure out which way the robot is going and increment/decrement the odometer accordingly. 
 		if((whichXWay < 0) && (whichYWay == 0)) {
-			
-			counterX = counterX - 1;
-			odometer.setX((counterX*BLOCK_LENGTH) + SENSOR_TO_TRACK);
+			if(!(positionCorrection)) {
+				xCounter = xCounter - 1;
+			}
+			odometer.setX((xCounter*BLOCK_LENGTH) + SENSOR_TO_TRACK);
 		}
 		else if((whichXWay > 0) && (whichYWay == 0)) {
-			counterX = counterX + 1;
-			odometer.setX((counterX*BLOCK_LENGTH) + SENSOR_TO_TRACK);
+			if(!(positionCorrection)) {
+				xCounter = xCounter + 1;
+			}
+			odometer.setX((xCounter*BLOCK_LENGTH) + SENSOR_TO_TRACK);
 		}
 		else if((whichYWay < 0) && (whichXWay == 0)) {
-			counterY = counterY - 1;
-			odometer.setY((counterY*BLOCK_LENGTH) + SENSOR_TO_TRACK);
+			if(!(positionCorrection)) {
+				yCounter =yCounter - 1;
+			}
+			odometer.setY((yCounter*BLOCK_LENGTH) + SENSOR_TO_TRACK);
 		}
 		else if((whichYWay > 0) && (whichXWay == 0)) {
-			counterY = counterY + 1;
-			odometer.setY((counterY*BLOCK_LENGTH) + SENSOR_TO_TRACK);
+			if(!(positionCorrection)) {
+				yCounter = yCounter + 1;
+			}
+			odometer.setY((yCounter*BLOCK_LENGTH) + SENSOR_TO_TRACK);
 		}
 	}
 	
@@ -134,5 +149,13 @@ public class OdometryCorrection extends Thread {
 	public void hardResetPosition(int counterX, int counterY) {
 		xCounter = counterX;
 		yCounter = counterY;
+	}
+	
+	/**
+	 * This changes the value of the boolean to the opposite of the current state. 
+	 * @since 1.2
+	 */
+	private void changeBoolState() {
+		positionCorrection = !(positionCorrection);
 	}
 }
