@@ -2,6 +2,10 @@ package ca.mcgill.ecse211.wifi;
 
 import java.util.Map;
 import ca.mcgill.ecse211.WiFiClient.WifiConnection;
+import ca.mcgill.ecse211.settings.SearchRegion;
+import ca.mcgill.ecse211.settings.Setting;
+import ca.mcgill.ecse211.settings.ShallowZone;
+import ca.mcgill.ecse211.settings.StartingZone;
 import lejos.hardware.Button;
 
 /**
@@ -32,7 +36,7 @@ public class WiFiExample {
 
   // ** Set these as appropriate for your team and current situation **
   private static final String SERVER_IP = "192.168.2.3";
-  private static final int TEAM_NUMBER = 1;
+  private static final int TEAM_NUMBER = 2;
 
   // Enable/disable printing of debug info from the WiFi class
   private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
@@ -60,24 +64,76 @@ public class WiFiExample {
        */
       Map data = conn.getData();
 
-      // Example 1: Print out all received data
-      System.out.println("Map:\n" + data);
-
-      // Example 2 : Print out specific values
       int redTeam = ((Long) data.get("RedTeam")).intValue();
-      System.out.println("Red Team: " + redTeam);
-
-      int og = ((Long) data.get("OG")).intValue();
-      System.out.println("Green opponent flag: " + og);
-
-      // Example 3: Compare value
-      int sh_ll_x =  ((Long) data.get("SH_LL_x")).intValue();
-      if (sh_ll_x < 5) {
-        System.out.println("Shallow water LL zone X < 5");
+      int greenTeam = ((Long) data.get("GreenTeam")).intValue();
+      
+      int redStartingCorner = ((Long) data.get("RedCorner")).intValue();
+      int greenStartingCorner = ((Long) data.get("GreenCorner")).intValue();
+      
+      int redZoneUpperRightX = ((Long) data.get("Red_UR_x")).intValue();
+      int redZoneUpperRightY = ((Long) data.get("Red_UR_y")).intValue();
+      int redZoneLowerLeftX = ((Long) data.get("Red_LL_x")).intValue();
+      int redZoneLowerLeftY = ((Long) data.get("Red_LL_y")).intValue();
+      
+      int greenZoneUpperRightX = ((Long) data.get("Red_UR_x")).intValue();
+      int greenZoneUpperRightY = ((Long) data.get("Red_UR_y")).intValue();
+      int greenZoneLowerLeftX = ((Long) data.get("Red_LL_x")).intValue();
+      int greenZoneLowerLeftY = ((Long) data.get("Red_LL_y")).intValue();
+      
+      int shallowZoneHorizontalLowerLeftX = ((Long) data.get("SH_LL_x")).intValue();
+      int shallowZoneHorizontalLowerLeftY = ((Long) data.get("SH_LL_y")).intValue();
+      int shallowZoneHorizontalUpperRightX = ((Long) data.get("SH_UR_x")).intValue();
+      int shallowZoneHorizontalUpperRightY = ((Long) data.get("SH_UR_y")).intValue();
+      int shallowZoneVerticalLowerLeftX = ((Long) data.get("SV_LL_x")).intValue();
+      int shallowZoneVerticalLowerLeftY = ((Long) data.get("SV_LL_y")).intValue();
+      int shallowZoneVerticalUpperRightX = ((Long) data.get("SV_UR_x")).intValue();
+      int shallowZoneVerticalUpperRightY = ((Long) data.get("SV_UR_y")).intValue();
+      
+      int opponentFlag = 0;
+      
+      int ziplineStartX = ((Long) data.get("ZC_G_x")).intValue();
+      int ziplineStartY = ((Long) data.get("ZC_G_y")).intValue();
+      int ziplineEndX = ((Long) data.get("ZC_R_x")).intValue();
+      int ziplineEndY = ((Long) data.get("ZC_R_y")).intValue();
+      
+      int searchRegionRedLowerLeftX = ((Long) data.get("SR_LL_x")).intValue();
+      int searchRegionRedLowerLeftY = ((Long) data.get("SR_LL_y")).intValue();
+      int searchRegionRedUpperRightX = ((Long) data.get("SR_UR_x")).intValue();
+      int searchRegionRedUpperRightY = ((Long) data.get("SR_UR_y")).intValue();
+      
+      int searchRegionGreenLowerLeftX = ((Long) data.get("SG_LL_x")).intValue();
+      int searchRegionGreenLowerLeftY = ((Long) data.get("SG_LL_y")).intValue();
+      int searchRegionGreenUpperRightX = ((Long) data.get("SG_UR_x")).intValue();
+      int searchRegionGreenUpperRightY = ((Long) data.get("SG_UR_y")).intValue();
+      
+      if (TEAM_NUMBER == redTeam) {
+      	Setting.setTeamColor(Setting.TeamColor.Red);
+      	Setting.setStartingCorner(redStartingCorner);
+      	opponentFlag = ((Long) data.get("OR")).intValue();
+      } else if (TEAM_NUMBER == greenTeam) {
+      	Setting.setTeamColor(Setting.TeamColor.Green);
+      	Setting.setStartingCorner(greenStartingCorner);
+      	opponentFlag = ((Long) data.get("OG")).intValue();
       }
-      else {
-        System.out.println("Shallow water LL zone X >= 5");
-      }
+      
+      Setting.setOpponentFlagColor(opponentFlag);
+      Setting.setZiplineStart(ziplineStartX, ziplineStartY);
+      Setting.setZiplineEnd(ziplineEndX, ziplineEndY);
+      
+      StartingZone.setGreenZoneLowerLeftCorner(greenZoneLowerLeftX, greenZoneLowerLeftY);
+      StartingZone.setGreenZoneUpperRightCorner(greenZoneUpperRightX, greenZoneUpperRightY);
+      StartingZone.setRedZoneLowerLeftCorner(redZoneLowerLeftX, redZoneLowerLeftY);
+      StartingZone.setRedZoneUpperRightCorner(redZoneUpperRightX, redZoneUpperRightY);
+      
+      ShallowZone.setHorizontalLowerLeftCorner(shallowZoneHorizontalLowerLeftX, shallowZoneHorizontalLowerLeftY);
+      ShallowZone.setHorizontalUpperRightCorner(shallowZoneHorizontalUpperRightX, shallowZoneHorizontalUpperRightY);
+      ShallowZone.setVerticalLowerLeftCorner(shallowZoneVerticalLowerLeftX, shallowZoneVerticalLowerLeftY);
+      ShallowZone.setVerticalUpperRightCorner(shallowZoneVerticalUpperRightX, shallowZoneVerticalUpperRightY);
+      
+      SearchRegion.setGreenLowerLeftCorner(searchRegionGreenLowerLeftX, searchRegionGreenLowerLeftY);
+      SearchRegion.setGreenUpperRightCorner(searchRegionGreenUpperRightX, searchRegionGreenUpperRightY);
+      SearchRegion.setRedLowerLeftCorner(searchRegionRedLowerLeftX, searchRegionRedLowerLeftY);
+      SearchRegion.setRedUpperRightCorner(searchRegionRedUpperRightX, searchRegionRedUpperRightY);
 
     } catch (Exception e) {
       System.err.println("Error: " + e.getMessage());
