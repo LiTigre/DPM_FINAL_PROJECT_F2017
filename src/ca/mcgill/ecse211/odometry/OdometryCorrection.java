@@ -44,15 +44,15 @@ public class OdometryCorrection extends Thread {
 	/**
 	 * Keeps track of the x position of the robot. 
 	 */
-	private int xCounter = 0;
+	private int xCounter;
 	/**
 	 * Keeps track of the y position of the robot. 
 	 */
-	private int yCounter = 0;
+	private int yCounter;
 	/**
 	 * Checks if it able to correct the the angle or not. 
 	 */
-	private boolean positionCorrection = false;
+	private boolean positionCorrection;
 	
 	/**
 	 * Constructor for the OdometryCorrection class. 
@@ -63,6 +63,10 @@ public class OdometryCorrection extends Thread {
 	public OdometryCorrection(Odometer odometer, Driver driver) {
 		this.driver = driver;
 		this.odometer = odometer;
+		
+		this.xCounter = 0;
+		this.yCounter = 0; 
+		this.positionCorrection = false;
 	}
 	
 	/* (non-Javadoc)

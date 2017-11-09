@@ -28,7 +28,7 @@ import lejos.hardware.Button;
  * @author Michael Smith
  *
  */
-public class WifiInput {
+public class WiFiExample {
 
   // ** Set these as appropriate for your team and current situation **
   private static final String SERVER_IP = "192.168.2.3";

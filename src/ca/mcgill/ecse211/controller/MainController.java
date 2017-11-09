@@ -1,5 +1,9 @@
 package ca.mcgill.ecse211.controller;
 
+import ca.mcgill.ecse211.navigation.Driver;
+import ca.mcgill.ecse211.odometry.Localization;
+import ca.mcgill.ecse211.odometry.Odometer;
+import ca.mcgill.ecse211.odometry.OdometryCorrection;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.Port;
@@ -38,6 +42,7 @@ public class MainController {
 	 */
 	public static final double BLOCK_LENGTH; 
 	
+	
 	/**
 	 * Color sensor with associated port.
 	 */
@@ -49,7 +54,23 @@ public class MainController {
 	/**
 	 * Ultrasonic sensor with associated port. 
 	 */
-	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S2"));
+	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S4"));
+	
+	
+	/**
+	 * Left motor with associated port.
+	 */
+	static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+	/**
+	 * Right motor with associated port.
+	 */
+	static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
+	/**
+	 * Zipline motor with associated port. 
+	 */
+	static final EV3LargeRegulatedMotor ziplineMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
+	
+	
 	/**
 	 * Data collected from the color sensor.
 	 */
@@ -62,6 +83,8 @@ public class MainController {
 	 * Data collected from the ultrasonic sensor.
 	 */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
+	
+	
 	/**
 	 * Array of floats that stores the value of the data from the color sensor.
 	 */
@@ -75,17 +98,27 @@ public class MainController {
 	 */
 	private static float usData[] = new float[usDistance.sampleSize()];
 	
-	/**
-	 * The coordinates from where robot began its travel from. 
-	 */
-	private static double previousX;
-	private static double previousY;
 	
 	/**
-	 * The coordinates to where the robot is supposed to stop its traveling at. 
+	 * The X coordinate from where robot began its travel from. 
+	 */
+	private static double previousX;
+	/**
+	 * The Y coordinate from where robot began its travel from. 
+	 */
+	private static double previousY;
+	
+	
+	/**
+	 * The X coordinate to where the robot is supposed to stop its traveling at. 
 	 */
 	private static double futureX;
+	/**
+	 * The Y coordinate to where the robot is supposed to stop its traveling at. 
+	 */
 	private static double futureY;
+	
+	
 	
 
 	
@@ -95,6 +128,11 @@ public class MainController {
 	 * @since 1.1
 	 */
 	public static void main(String[] args) {
+		// Object creation 
+		Odometer odometer = new Odometer(leftMotor, rightMotor);
+		Driver driver = new Driver(leftMotor, rightMotor, odometer);
+		Localization localization = new Localization(odometer, driver);
+		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver);
 		
 	}
 	
