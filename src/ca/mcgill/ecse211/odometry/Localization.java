@@ -19,13 +19,13 @@ public class Localization {
 	
 	// Constants
 	/**
-	 * Distance from the color sensor to the middle of the track in cm
+	 * @see MainController#SENSOR_TO_TRACK
 	 */
-	private static final double SENSOR_TO_TRACK;
+	private static final double SENSOR_TO_TRACK = MainController.SENSOR_TO_TRACK;
 	/**
-	 * Value that indicates a black line.
+	 * @see MainController#LINE_THRESHOLD
 	 */
-	private static final double LINE_THRESHOLD;
+	private static final double LINE_THRESHOLD = MainController.LINE_THRESHOLD;
 	/**
 	 * Value that separates falling and rising edge.
 	 */

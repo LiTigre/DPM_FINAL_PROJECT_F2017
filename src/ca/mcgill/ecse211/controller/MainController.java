@@ -1,5 +1,9 @@
 package ca.mcgill.ecse211.controller;
 
+import ca.mcgill.ecse211.navigation.Driver;
+import ca.mcgill.ecse211.odometry.Localization;
+import ca.mcgill.ecse211.odometry.Odometer;
+import ca.mcgill.ecse211.odometry.OdometryCorrection;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.Port;
@@ -25,32 +29,96 @@ public class MainController {
 	 * The length of the robot's track in cm. 
 	 */
 	public static final double TRACK;
+	/**
+	 * Distance from the color sensor to the middle of the track in cm
+	*/
+	public static final double SENSOR_TO_TRACK;
+	/**
+	 * Value that indicates a black line.
+	 */
+	public static final double LINE_THRESHOLD;
+	/**
+	 * Value of the length of a block in cm
+	 */
+	public static final double BLOCK_LENGTH; 
 	
 	
 	/**
 	 * Color sensor with associated port.
 	 */
-	private static final EV3ColorSensor colorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S1"));
+	private static final EV3ColorSensor colorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
+	/**
+	 * Color sensor used for angle correction with associated port. 
+	 */
+	private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S1"));
 	/**
 	 * Ultrasonic sensor with associated port. 
 	 */
-	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S2"));
+	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S4"));
+	
+	
+	/**
+	 * Left motor with associated port.
+	 */
+	static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+	/**
+	 * Right motor with associated port.
+	 */
+	static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
+	/**
+	 * Zipline motor with associated port. 
+	 */
+	static final EV3LargeRegulatedMotor ziplineMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
+	
+	
 	/**
 	 * Data collected from the color sensor.
 	 */
 	private static SampleProvider colorSample = colorSensor.getMode("Red");
 	/**
+	 * Data collected from the angle color sensor.
+	 */
+	private static SampleProvider angleColorSample = angleColorSensor.getMode("Red");
+	/**
 	 * Data collected from the ultrasonic sensor.
 	 */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
+	
+	
 	/**
 	 * Array of floats that stores the value of the data from the color sensor.
 	 */
 	private static float lightData[] = new float[colorSample.sampleSize()];
 	/**
+	 * Array of floats that stores the value of the data from the color sensor.
+	 */
+	private static float angleLightData[] = new float[angleColorSample.sampleSize()];
+	/**
 	 * Array of floats that stores the value of the data from the ultrasonic sensor. 
 	 */
 	private static float usData[] = new float[usDistance.sampleSize()];
+	
+	
+	/**
+	 * The X coordinate from where robot began its travel from. 
+	 */
+	private static double previousX;
+	/**
+	 * The Y coordinate from where robot began its travel from. 
+	 */
+	private static double previousY;
+	
+	
+	/**
+	 * The X coordinate to where the robot is supposed to stop its traveling at. 
+	 */
+	private static double futureX;
+	/**
+	 * The Y coordinate to where the robot is supposed to stop its traveling at. 
+	 */
+	private static double futureY;
+	
+	
 	
 
 	
@@ -60,7 +128,38 @@ public class MainController {
 	 * @since 1.1
 	 */
 	public static void main(String[] args) {
+		// Object creation 
+		Odometer odometer = new Odometer(leftMotor, rightMotor);
+		Driver driver = new Driver(leftMotor, rightMotor, odometer);
+		Localization localization = new Localization(odometer, driver);
+		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver);
 		
+	}
+	
+	private void setPreviousCoordinates(double lastX, double lastY) {
+		previousX = lastX;
+		previousY = lastY;
+	}
+
+	public static double getPreviousX() {
+		return previousX;
+	}
+	
+	public static double getPreviousY() {
+		return previousY;
+	}
+	
+	private void setFutureCoordinates(double nextX, double nextY) {
+		futureX = nextX;
+		futureY = nextY;
+	}
+	
+	public static double getFutureX() {
+		return futureX;
+	}
+	
+	public static double getFutureY() {
+		return futureY;
 	}
 	
 	/**
@@ -80,6 +179,16 @@ public class MainController {
 	 */
 	public static float getLightValue() {
 		colorSensor.fetchSample(lightData, 0);
+		return lightData[0]*1000;
+	}
+	
+	/**
+	 * Gets the light value reading of the angle color sensor.
+	 * @return The angle color sensor reading multiplied by 1000 for precision.
+	 * @since 1.2
+	 */
+	public static float getAngleLightValue() {
+		angleColorSensor.fetchSample(angleLightData, 0);
 		return lightData[0]*1000;
 	}
 }
