@@ -7,7 +7,7 @@ import lejos.robotics.SampleProvider;
 /**
  * Provides correction to the odometer based on light sensor data. 
  * @author Team 2
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class OdometryCorrection extends Thread {
@@ -25,6 +25,7 @@ public class OdometryCorrection extends Thread {
 	 * @see MainController#LINE_THRESHOLD
 	 */
 	private static final double LINE_THRESHOLD = MainController.LINE_THRESHOLD;
+	private static final double BLOCK_LENGTH = MainController.BLOCK_LENGTH;
 	/**
 	 * Distance from the angle color sensor to the middle of the track in cm 
 	 */
@@ -37,7 +38,14 @@ public class OdometryCorrection extends Thread {
 	 * Thread time of the correction. 
 	 */
 	private static final long CORRECTION_PERIOD = 10;
-	
+	/**
+	 * Keeps track of the x position of the robot. 
+	 */
+	private int xCounter = 0;
+	/**
+	 * Keeps track of the y position of the robot. 
+	 */
+	private int yCounter = 0;
 	
 	/**
 	 * Constructor for the OdometryCorrection class. 
@@ -55,7 +63,6 @@ public class OdometryCorrection extends Thread {
 	 */
 	public void run() {
 		long correctionStart, correctionEnd;
-		double firstX, secondX, firstY, secondY;
 		while(true) {
 			correctionStart = System.currentTimeMillis();
 			// this ensure the odometry correction occurs only once every period
@@ -65,17 +72,18 @@ public class OdometryCorrection extends Thread {
 			if(MainController.getLightValue() <= LINE_THRESHOLD) {
 				// To avoid correction while turning on itself.
 				if(!(driver.isTurning())) {
-					performCorrection();
+					performCorrection(xCounter, yCounter);
 				}
 			}
 			//Angle correction sensor
-			else if(MainController.getAngleLightValue() <= ANGLE_LINE_THRESHOLD) {
+			//else if(MainController.getAngleLightValue() <= ANGLE_LINE_THRESHOLD) {
 				// To avoid correction while turning on itself.
-				if(!(driver.isTurning())) {
-					performCorrection();
-					//Perform angle correction here
-				}
-			}
+			//	if(!(driver.isTurning())) {
+			//		performCorrection();
+					//Perform angle correction here 
+					//RIGHT NOW DOES NOT WORK 
+			//	}
+			//}
 			
 			if (correctionEnd - correctionStart < CORRECTION_PERIOD) {
 				try {
@@ -93,26 +101,32 @@ public class OdometryCorrection extends Thread {
 	 * Corrects the odometer values based on light sensor readings. 
 	 * @since 1.1
 	 */
-	private void performCorrection() {
+	private void performCorrection(int counterX, int counterY) {
 		double whichXWay = MainController.getFutureX() - MainController.getPreviousX(); 
 		double whichYWay = MainController.getFutureY() - MainController.getPreviousY();
 		
 		// Figure out which way the robot is going and increment/decrement an odometer accordingly. 
 		if((whichXWay < 0) && (whichYWay == 0)) {
-			//do something
-			odometer.setX(--);
+			
+			counterX = counterX - 1;
+			odometer.setX((counterX*BLOCK_LENGTH) + SENSOR_TO_TRACK);
 		}
 		else if((whichXWay > 0) && (whichYWay == 0)) {
-			//do something
-			odometer.setX(++);
+			counterX = counterX + 1;
+			odometer.setX((counterX*BLOCK_LENGTH) + SENSOR_TO_TRACK);
 		}
 		else if((whichYWay < 0) && (whichXWay == 0)) {
-			//do something
-			odometer.setY(--);
+			counterY = counterY - 1;
+			odometer.setY((counterY*BLOCK_LENGTH) + SENSOR_TO_TRACK);
 		}
 		else if((whichYWay > 0) && (whichXWay == 0)) {
-			//do something 
-			odometer.setY(++);
+			counterY = counterY + 1;
+			odometer.setY((counterY*BLOCK_LENGTH) + SENSOR_TO_TRACK);
 		}
+	}
+	
+	public void hardResetPosition(int counterX, int counterY) {
+		xCounter = counterX;
+		yCounter = counterY;
 	}
 }

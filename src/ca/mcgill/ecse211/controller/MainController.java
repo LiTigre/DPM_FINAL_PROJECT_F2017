@@ -33,7 +33,10 @@ public class MainController {
 	 * Value that indicates a black line.
 	 */
 	public static final double LINE_THRESHOLD;
-	
+	/**
+	 * Value of the length of a block in cm
+	 */
+	public static final double BLOCK_LENGTH; 
 	
 	/**
 	 * Color sensor with associated port.
