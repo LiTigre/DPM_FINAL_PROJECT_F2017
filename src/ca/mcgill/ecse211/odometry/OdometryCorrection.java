@@ -57,14 +57,19 @@ public class OdometryCorrection extends Thread {
 			// this ensure the odometry correction occurs only once every period
 			correctionEnd = System.currentTimeMillis();
 		      
+			//Main Correction sensor
 			if(MainController.getLightValue() <= LINE_THRESHOLD) {
+				// To avoid correction while turning on itself.
 				if(!(driver.isTurning())) {
-					//perform correction 
+					performCorrection();
 				}
 			}
+			//Angle correction sensor
 			else if(MainController.getAngleLightValue() <= ANGLE_LINE_THRESHOLD) {
+				// To avoid correction while turning on itself.
 				if(!(driver.isTurning())) {
-					//perform second correction and angle correction
+					performCorrection();
+					//Perform angle correction here
 				}
 			}
 			
@@ -85,6 +90,21 @@ public class OdometryCorrection extends Thread {
 	 * @since 1.1
 	 */
 	private void performCorrection() {
+		double whichXWay = MainController.getFutureX() - MainController.getPreviousX(); 
+		double whichYWay = MainController.getFutureY() - MainController.getPreviousY();
 		
+		// Figure out which way the robot is going and increment/decrement an odometer accordingly. 
+		if((whichXWay < 0) && (whichYWay == 0)) {
+		
+		}
+		else if((whichXWay > 0) && (whichYWay == 0)) {
+			
+		}
+		else if((whichYWay < 0) && (whichXWay == 0)) {
+			
+		}
+		else if((whichYWay > 0) && (whichXWay == 0)) {
+			
+		}
 	}
 }

@@ -75,12 +75,14 @@ public class MainController {
 	/**
 	 * The coordinates from where robot began its travel from. 
 	 */
-	private double previousX, previousY;
+	private static double previousX;
+	private static double previousY;
 	
 	/**
 	 * The coordinates to where the robot is supposed to stop its traveling at. 
 	 */
-	private double futureX, futureY;
+	private static double futureX;
+	private static double futureY;
 	
 
 	
@@ -98,12 +100,12 @@ public class MainController {
 		previousY = lastY;
 	}
 
-	public double getPreviousX() {
-		return this.previousX;
+	public static double getPreviousX() {
+		return previousX;
 	}
 	
-	public double getPreviousY() {
-		return this.previousY;
+	public static double getPreviousY() {
+		return previousY;
 	}
 	
 	private void setFutureCoordinates(double nextX, double nextY) {
@@ -111,12 +113,12 @@ public class MainController {
 		futureY = nextY;
 	}
 	
-	public double getFutureX() {
-		return this.futureX;
+	public static double getFutureX() {
+		return futureX;
 	}
 	
-	public double getFutureY() {
-		return this.futureY;
+	public static double getFutureY() {
+		return futureY;
 	}
 	
 	/**
