@@ -14,7 +14,13 @@ import lejos.robotics.SampleProvider;
 public class Localization {
 
 	// Objects 
+	/**
+	 * Odometer created in the main controller.
+	 */
 	private final Odometer odometer;
+	/**
+	 * Driver created in the main controller. 
+	 */
 	private final Driver driver;
 	
 	// Constants

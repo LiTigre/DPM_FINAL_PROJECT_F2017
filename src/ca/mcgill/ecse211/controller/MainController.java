@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.controller;
 
 import ca.mcgill.ecse211.navigation.Driver;
+import ca.mcgill.ecse211.navigation.Zipline;
 import ca.mcgill.ecse211.odometry.Localization;
 import ca.mcgill.ecse211.odometry.Odometer;
 import ca.mcgill.ecse211.odometry.OdometryCorrection;
@@ -16,7 +17,7 @@ import lejos.robotics.SampleProvider;
  * Controls all actions taken by the robot. Is in charge of sequencing operations 
  * in order to do what the tasks requires the robot to do. 
  * @author Team 2
- * @version 1.2
+ * @version 1.3
  * @since 1.0
  */
 public class MainController {
@@ -119,9 +120,6 @@ public class MainController {
 	private static double futureY;
 	
 	
-	
-
-	
 	/**
 	 * Runs capture the flag.
 	 * @param args required to make this the main method of the system. 
@@ -133,31 +131,64 @@ public class MainController {
 		Driver driver = new Driver(leftMotor, rightMotor, odometer);
 		Localization localization = new Localization(odometer, driver);
 		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver);
+		Zipline zipline = new Zipline(ziplineMotor);
 		
 	}
 	
+	/**
+	 * Sets the X and Y coordinates of the previous point it was at. 
+	 * @param lastX X value of the previous coordinate.
+	 * @param lastY Y value of the previous coordinate.
+	 * @since 1.3
+	 */
 	private void setPreviousCoordinates(double lastX, double lastY) {
 		previousX = lastX;
 		previousY = lastY;
 	}
 
+	/**
+	 * Returns the previous X coordinates. 
+	 * @return The previous X value. 
+	 * @since 1.3
+	 */
 	public static double getPreviousX() {
 		return previousX;
 	}
 	
+	/**
+	 * Returns the previous Y coordinates. 
+	 * @return The previous Y value. 
+	 * @since 1.3
+	 */
 	public static double getPreviousY() {
 		return previousY;
 	}
 	
+	/**
+	 * Sets the X and Y coordinates of the next point it is going to. 
+	 * @param nextX X value of the next coordinate.
+	 * @param nextY Y value of the next coordinate.
+	 * @since 1.3
+	 */
 	private void setFutureCoordinates(double nextX, double nextY) {
 		futureX = nextX;
 		futureY = nextY;
 	}
 	
+	/**
+	 * Returns the next X coordinates. 
+	 * @return The previous X value. 
+	 * @since 1.3
+	 */
 	public static double getFutureX() {
 		return futureX;
 	}
 	
+	/**
+	 * Returns the next Y coordinates. 
+	 * @return The previous Y value. 
+	 * @since 1.3
+	 */
 	public static double getFutureY() {
 		return futureY;
 	}

@@ -44,7 +44,13 @@ public class Odometer extends Thread {
 	 */
 	private int rightMotorTachoCount;
 	
+	/**
+	 * Left motor created in the main controller. 
+	 */
 	private EV3LargeRegulatedMotor leftMotor;
+	/**
+	 * Right motor created in the main controller. 
+	 */
 	private EV3LargeRegulatedMotor rightMotor;
 
 	/**
@@ -52,7 +58,10 @@ public class Odometer extends Thread {
 	 */
 	private static final long ODOMETER_PERIOD = 25; /* odometer update period, in ms */
 
-	private Object lock; /* lock object for mutual exclusion */
+	/**
+	 * Lock objects for mutual exclusion. 
+	 */
+	private Object lock; 
 		
 	
 	/**

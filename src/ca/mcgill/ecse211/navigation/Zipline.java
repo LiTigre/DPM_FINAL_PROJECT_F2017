@@ -15,8 +15,10 @@ import lejos.robotics.SampleProvider;
  */
 public class Zipline {
 	
-	private Odometer odometer;
-	private EV3LargeRegulatedMotor ZiplineMotor;
+	/**
+	 * Zipline motor created in the main controller. 
+	 */
+	private EV3LargeRegulatedMotor ziplineMotor;
 	
 	/**
 	 * Light sensor value of the floor
@@ -29,11 +31,11 @@ public class Zipline {
 	/**
 	 * Create a range of acceptable values to consider the floor
 	 */
-	private final int RANGE = 50;
+	private final int RANGE;
 	/**
 	 * Number of times same light sensor value has to be read to be considered acceptable
 	 */
-	private final int FILTER = 3;
+	private final int FILTER;
 	/**
 	 * Keep track of how many times the same value is read from the light sensor
 	 */
@@ -46,9 +48,8 @@ public class Zipline {
 	 * @since 1.1
 	 * @version 1.1
 	 */
-	public Zipline(Odometer odometer, EV3LargeRegulatedMotor ZiplineMotor) {
-		this.odometer = odometer;
-		this.ZiplineMotor = ZiplineMotor;
+	public Zipline(EV3LargeRegulatedMotor ziplineMotor) {
+		this.ziplineMotor = ziplineMotor;
 		this.FLOOR_INTENSITY = calculateFloorIntensity();
 	}
 	
@@ -58,13 +59,13 @@ public class Zipline {
 	 * @version 1.0
 	 */
 	public void performZiplineTravel() {
-		ZiplineMotor.setSpeed(ZIPLINE_SPEED);
+		ziplineMotor.setSpeed(ZIPLINE_SPEED);
 		
-		ZiplineMotor.forward();
+		ziplineMotor.forward();
 		
 		while (!hasLanded());
 
-		ZiplineMotor.stop();
+		ziplineMotor.stop();
 	}
 	
 	/**

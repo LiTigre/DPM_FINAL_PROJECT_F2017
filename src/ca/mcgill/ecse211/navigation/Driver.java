@@ -13,9 +13,19 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 public class Driver {
 	
 	// Objects 
+	/**
+	 * Odometer object created in the main controller.  
+	 */
 	private final Odometer odometer;
+	/**
+	 * Left motor object created in the main controller. 
+	 */
 	private final EV3LargeRegulatedMotor leftMotor;
+	/**
+	 * Right motor object created in the main controller. 
+	 */
 	private final EV3LargeRegulatedMotor rightMotor;
+	
 	
 	// Constants
 	/**
@@ -34,6 +44,7 @@ public class Driver {
 	 * The rotational speed of the ronot in (degrees/second)
 	 */
 	private static final int ROTATE_SPEED;
+	
 	
 	// Booleans
 	/**

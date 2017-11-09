@@ -16,7 +16,13 @@ import lejos.robotics.SampleProvider;
 public class ObstacleAvoidance extends Thread {
 
 	// Objects
+	/**
+	 * Driver object created in the main controller. 
+	 */
 	Driver driver;
+	/**
+	 * Search object created in the main controller. 
+	 */
 	Search search;
 	
 	// Constants
@@ -40,6 +46,12 @@ public class ObstacleAvoidance extends Thread {
 	private boolean avoiding;
 	
 	
+	/**
+	 * Obstacle avoidance object constructor. 
+	 * @param driver Object from the main controller. 
+	 * @param search Object from the main controller. 
+	 * @since 1.1
+	 */
 	public ObstacleAvoidance(Driver driver, Search search) {
 		this.driver = driver;
 		this.search = search;
@@ -49,6 +61,7 @@ public class ObstacleAvoidance extends Thread {
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
+	 * @since 1.1
 	 */
 	public void run() {
 		while (true) {

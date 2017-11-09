@@ -13,8 +13,15 @@ import lejos.robotics.SampleProvider;
 public class OdometryCorrection extends Thread {
 
 	// Objects 
+	/**
+	 * Driver object created in the main controller. 
+	 */
 	Driver driver;
+	/**
+	 * Odometer object created in the main controller. 
+	 */
 	Odometer odometer;
+	
 	
 	// Constants
 	/**
