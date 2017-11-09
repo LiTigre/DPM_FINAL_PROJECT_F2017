@@ -12,6 +12,10 @@ import lejos.robotics.SampleProvider;
  */
 public class OdometryCorrection extends Thread {
 
+	// Objects 
+	Driver driver;
+	Odometer odometer;
+	
 	// Constants
 	/**
 	 * @see MainController#SENSOR_TO_TRACK
@@ -34,7 +38,6 @@ public class OdometryCorrection extends Thread {
 	 */
 	private static final long CORRECTION_PERIOD = 10;
 	
-	Driver driver;
 	
 	/**
 	 * Constructor for the OdometryCorrection class. 
@@ -44,6 +47,7 @@ public class OdometryCorrection extends Thread {
 	 */
 	public OdometryCorrection(Odometer odometer, Driver driver) {
 		this.driver = driver;
+		this.odometer = odometer;
 	}
 	
 	/* (non-Javadoc)
@@ -95,16 +99,20 @@ public class OdometryCorrection extends Thread {
 		
 		// Figure out which way the robot is going and increment/decrement an odometer accordingly. 
 		if((whichXWay < 0) && (whichYWay == 0)) {
-		
+			//do something
+			odometer.setX(--);
 		}
 		else if((whichXWay > 0) && (whichYWay == 0)) {
-			
+			//do something
+			odometer.setX(++);
 		}
 		else if((whichYWay < 0) && (whichXWay == 0)) {
-			
+			//do something
+			odometer.setY(--);
 		}
 		else if((whichYWay > 0) && (whichXWay == 0)) {
-			
+			//do something 
+			odometer.setY(++);
 		}
 	}
 }
