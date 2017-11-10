@@ -30,11 +30,11 @@ public class MainController {
 	/** The radius of the robot's wheels in cm */
 	public static final double WHEEL_RADIUS = 2.15;
 	/** The length of the robot's track in cm. */
-	public static final double TRACK = 11.1;
+	public static final double TRACK = 12;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 14.85;
 	/** Value that indicates a black line. */
-	public static final double LINE_THRESHOLD = 1200;
+	public static final double LINE_THRESHOLD = 450;
 	/** Value of the length of a block in cm */
 	public static final double BLOCK_LENGTH = 30.48; 
 	
@@ -45,7 +45,7 @@ public class MainController {
 	/** Color sensor used for angle correction with associated port. */
 	private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
 	/** Ultrasonic sensor with associated port. */
-	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S4"));
+	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S1"));
 	
 	
 	// Motors
@@ -59,9 +59,9 @@ public class MainController {
 	
 	// Make it that we can collect data from the sensor
 	/** Data collected from the color sensor. */
-	private static SampleProvider lightSample = lightSensor.getMode("Red");
+	private static SampleProvider lightSample = lightSensor.getRedMode();
 	/** Data collected from the angle color sensor. */
-	private static SampleProvider angleColorSample = angleColorSensor.getMode("Red");
+	private static SampleProvider angleColorSample = angleColorSensor.getRedMode();
 	/** Data collected from the ultrasonic sensor. */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
 
@@ -103,6 +103,7 @@ public class MainController {
 		WifiInput.recieveServerData();
 		
 		
+		System.out.println("x: " + odometer.getX() + " y: " + odometer.getY());
 	}
 	
 	/**
@@ -169,7 +170,7 @@ public class MainController {
 	 * @since 1.1
 	 */
 	public static float getDistanceValue(){
-		usSensor.fetchSample(usData, 0);
+		usDistance.fetchSample(usData, 0);
 		return usData[0]*100;
 	}
 	
@@ -179,8 +180,8 @@ public class MainController {
 	 * @since 1.1
 	 */
 	public static float getLightValue() {
-		lightSensor.fetchSample(lightData, 0);
-		return lightData[0]*100;
+		lightSample.fetchSample(lightData, 0);
+		return lightData[0]*1000;
 	}
 	
 	/**
@@ -189,7 +190,7 @@ public class MainController {
 	 * @since 1.2
 	 */
 	public static float getAngleLightValue() {
-		angleColorSensor.fetchSample(angleLightData, 0);
-		return lightData[0]*100;
+		angleColorSample.fetchSample(angleLightData, 0);
+		return lightData[0]*1000;
 	}
 }

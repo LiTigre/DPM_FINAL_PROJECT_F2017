@@ -16,9 +16,9 @@ public class Driver {
 	/** Odometer object created in the main controller. */
 	private final Odometer odometer;
 	/** Left motor object created in the main controller. */
-	private EV3LargeRegulatedMotor leftMotor;
+	public EV3LargeRegulatedMotor leftMotor;
 	/** Right motor object created in the main controller. */
-	private EV3LargeRegulatedMotor rightMotor;
+	public EV3LargeRegulatedMotor rightMotor;
 	
 	
 	// Constants
@@ -29,7 +29,7 @@ public class Driver {
 	/** The forward speed of the robot in (degrees/second) */
 	private static final int FORWARD_SPEED = 200;
 	/** The rotational speed of the robot in (degrees/second) */
-	private static final int ROTATE_SPEED = 200;
+	private static final int ROTATE_SPEED = 150;
 	
 	
 	// Booleans
