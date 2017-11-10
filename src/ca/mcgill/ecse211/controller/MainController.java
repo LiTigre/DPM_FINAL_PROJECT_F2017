@@ -28,9 +28,9 @@ public class MainController {
 	
 	// Constants 
 	/** The radius of the robot's wheels in cm */
-	public static final double WHEEL_RADIUS = 2.15;
+	public static final double WHEEL_RADIUS = 2.0633;
 	/** The length of the robot's track in cm. */
-	public static final double TRACK = 12;
+	public static final double TRACK = 13.77;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 14.85;
 	/** Value that indicates a black line. */
@@ -100,10 +100,11 @@ public class MainController {
 		Zipline zipline = new Zipline(ziplineMotor, driver);
 		
 		// First wait for server to send info.
-		WifiInput.recieveServerData();
+		//WifiInput.recieveServerData();
+		odometer.start();
+		driver.travelTo(6*30.48, 0);
 		
-		
-		System.out.println("x: " + odometer.getX() + " y: " + odometer.getY());
+		System.out.println("x: " + odometer.getX() + " y: " + odometer.getY() + "theta: " + odometer.getTheta());
 	}
 	
 	/**

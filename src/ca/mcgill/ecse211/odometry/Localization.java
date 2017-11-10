@@ -65,10 +65,11 @@ public class Localization {
 	 */
 	public void localize() {
 		setLocalizing(true);
-		
-		System.out.println("1. " + MainController.getDistanceValue());
-		
+	
 		// If the robot is facing the wall, do rising edge.
+		while(odometer.getTheta() < 180) {
+			driver.rotate();
+		}
 		if(MainController.getDistanceValue() < THRESHOLD_WALL + NOISE_GAP) {
 			risingEdgeLocalization();
 		}
@@ -111,7 +112,7 @@ public class Localization {
 		 //Make the robot turn to the calculated 0
 		 //driver.turnTo(0, 0);
 		 //If the first method does not work use this
-		 driver.turnDistance(360-newTheta);
+		 driver.turnDistance(360 - newTheta);
 	}
 	
 	/**
@@ -140,12 +141,13 @@ public class Localization {
 		deltaTheta = calculateTheta(firstAngle, lastAngle);
 		newTheta = odometer.getTheta() + deltaTheta;
 		
+		
 		odometer.setPosition(new double[] {0.0, 0.0, newTheta}, new boolean[]{true,true,true});
 		
 		//Make the robot turn to the calculated 0
 //		driver.turnTo(0, 0);
 		//If the first method does not work use this
-		driver.turnDistance(360-newTheta);
+		driver.turnDistance(360 - newTheta);
 	}
 	
 	/**
@@ -158,7 +160,6 @@ public class Localization {
 		
 		while(MainController.leftMotor.isMoving() && MainController.rightMotor.isMoving()) {
 			int i = 0;
-			System.out.println(MainController.getAngleLightValue());
 			// Collect data during the ultrasonic localization is running
 			if(MainController.getLightValue() < LINE_THRESHOLD) {
 	    			//implement collecting data here
@@ -187,12 +188,12 @@ public class Localization {
 		thetaY = collectedData[2]-collectedData[0];
 		
 		//Set the new/actual position of the robot.
-		odometer.setY(30.48-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
-		odometer.setX(30.48-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+		odometer.setY(-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+		odometer.setX(-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
 		
 		//Correct angle 
 		deltaTheta = 90-(collectedData[3]-180)+thetaX/2;
-		odometer.setTheta(deltaTheta);
+		odometer.setTheta(360 - deltaTheta);
 	}
 	
 	/**
@@ -201,7 +202,7 @@ public class Localization {
 	 */
 	private void turnToWall() {
 		while(!isCompleted){
-			System.out.println("2. " + MainController.getDistanceValue());
+			//System.out.println("2. " + MainController.getDistanceValue());
 			driver.rotate();
 			
 			//Checks if we reached a falling edge
@@ -218,7 +219,6 @@ public class Localization {
 	 */
 	private void turnAwayFromWall(){
 		while(!isCompleted){
-			System.out.println("3. " + MainController.getDistanceValue());
 			driver.rotate();
 			
 			if(MainController.getDistanceValue() > THRESHOLD_WALL + NOISE_GAP){
@@ -256,10 +256,10 @@ public class Localization {
 	 */
 	private double calculateTheta(double firstAngle, double secondAngle) {
 		if(firstAngle < secondAngle){
-			return 40 - (firstAngle + secondAngle) / 2;
+			return 45 - (firstAngle + secondAngle) / 2;
 		}
 		else{
-			return 220 - (firstAngle + secondAngle) / 2;
+			return 225 - (firstAngle + secondAngle) / 2;
 		}
 	}
 }
