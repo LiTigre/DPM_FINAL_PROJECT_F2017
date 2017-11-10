@@ -16,9 +16,9 @@ public class Driver {
 	/** Odometer object created in the main controller. */
 	private final Odometer odometer;
 	/** Left motor object created in the main controller. */
-	public EV3LargeRegulatedMotor leftMotor;
+	private EV3LargeRegulatedMotor leftMotor;
 	/** Right motor object created in the main controller. */
-	public EV3LargeRegulatedMotor rightMotor;
+	private EV3LargeRegulatedMotor rightMotor;
 	
 	
 	// Constants
@@ -78,6 +78,8 @@ public class Driver {
 		else {
 			turnDistance(thetaTurn);
 		}
+		
+		while(getWheelsMoving());
 		
 		setSpeed(FORWARD_SPEED);
 		
@@ -188,6 +190,14 @@ public class Driver {
 		rightMotor.setSpeed(speed);
 	}
 	
+	/**
+	 * Getter to check if the robot is currently moving. 
+	 * @return True if both wheels are moving, false otherwise.
+	 * @since 1.4
+	 */
+	public boolean getWheelsMoving() {
+		return (leftMotor.isMoving() && rightMotor.isMoving());
+	}
 	/**
 	 * Checks if the robot is currently traveling. 
 	 * @return boolean If it is traveling then it's true, otherwise false. 

@@ -67,7 +67,7 @@ public class Localization {
 		setLocalizing(true);
 	
 		// If the robot is facing the wall, do rising edge.
-		while(odometer.getTheta() < 180) {
+		while(odometer.getTheta() < 10) {
 			driver.rotate();
 		}
 		if(MainController.getDistanceValue() < THRESHOLD_WALL + NOISE_GAP) {
@@ -77,7 +77,7 @@ public class Localization {
 		else{
 			fallingEdgeLocalization();
 		}
-		while(driver.leftMotor.isMoving() && driver.rightMotor.isMoving());
+		while(driver.getWheelsMoving());
 		lightLocalization();
 		setLocalizing(false);
 	}
@@ -158,7 +158,7 @@ public class Localization {
 		
 		driver.turnDistance(360);
 		
-		while(MainController.leftMotor.isMoving() && MainController.rightMotor.isMoving()) {
+		while(driver.getWheelsMoving()) {
 			int i = 0;
 			// Collect data during the ultrasonic localization is running
 			if(MainController.getLightValue() < LINE_THRESHOLD) {
