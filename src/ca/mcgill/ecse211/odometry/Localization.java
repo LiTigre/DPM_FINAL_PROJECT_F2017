@@ -112,7 +112,7 @@ public class Localization {
 		 //Make the robot turn to the calculated 0
 		 //driver.turnTo(0, 0);
 		 //If the first method does not work use this
-		 driver.turnDistance(360 - newTheta);
+		 driver.turnDistance(359 - newTheta);
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public class Localization {
 		//Make the robot turn to the calculated 0
 //		driver.turnTo(0, 0);
 		//If the first method does not work use this
-		driver.turnDistance(360 - newTheta);
+		driver.turnDistance(359 - newTheta);
 	}
 	
 	/**
@@ -256,10 +256,10 @@ public class Localization {
 	 */
 	private double calculateTheta(double firstAngle, double secondAngle) {
 		if(firstAngle < secondAngle){
-			return 45 - (firstAngle + secondAngle) / 2;
+			return 40 - (firstAngle + secondAngle) / 2;
 		}
 		else{
-			return 225 - (firstAngle + secondAngle) / 2;
+			return 220 - (firstAngle + secondAngle) / 2;
 		}
 	}
 }
