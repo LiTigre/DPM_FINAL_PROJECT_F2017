@@ -49,41 +49,41 @@ public class WifiInput {
     // Connect to server and get the data, catching any errors that might occur
     try {
       /*
-       * getData() will connect to the server and wait until the user/TA presses the "Start" button
-       * in the GUI on their laptop with the data filled in. Once it's waiting, you can kill it by
-       * pressing the upper left hand corner button (back/escape) on the EV3. getData() will throw
-       * exceptions if it can't connect to the server (e.g. wrong IP address, server not running on
-       * laptop, not connected to WiFi router, etc.). It will also throw an exception if it connects
-       * but receives corrupted data or a message from the server saying something went wrong. For
-       * example, if TEAM_NUMBER is set to 1 above but the server expects teams 17 and 5, this robot
-       * will receive a message saying an invalid team number was specified and getData() will throw
-       * an exception letting you know.
-       */
-    		Map data = conn.getData();
+      * getData() will connect to the server and wait until the user/TA presses the "Start" button
+      * in the GUI on their laptop with the data filled in. Once it's waiting, you can kill it by
+      * pressing the upper left hand corner button (back/escape) on the EV3. getData() will throw
+      * exceptions if it can't connect to the server (e.g. wrong IP address, server not running on
+      * laptop, not connected to WiFi router, etc.). It will also throw an exception if it connects
+      * but receives corrupted data or a message from the server saying something went wrong. For
+      * example, if TEAM_NUMBER is set to 1 above but the server expects teams 17 and 5, this robot
+      * will receive a message saying an invalid team number was specified and getData() will throw
+      * an exception letting you know.
+      */
+  		Map data = conn.getData();
 
-    		int redTeam = ((Long) data.get("RedTeam")).intValue();
-    		int greenTeam = ((Long) data.get("GreenTeam")).intValue();
-      
-    		int redStartingCorner = ((Long) data.get("RedCorner")).intValue();
-    		int greenStartingCorner = ((Long) data.get("GreenCorner")).intValue();
-      
-    		int redZoneUpperRightX = ((Long) data.get("Red_UR_x")).intValue();
-    		int redZoneUpperRightY = ((Long) data.get("Red_UR_y")).intValue();
-    		int redZoneLowerLeftX = ((Long) data.get("Red_LL_x")).intValue();
-    		int redZoneLowerLeftY = ((Long) data.get("Red_LL_y")).intValue();
-      
-    		int greenZoneUpperRightX = ((Long) data.get("Red_UR_x")).intValue();
-    		int greenZoneUpperRightY = ((Long) data.get("Red_UR_y")).intValue();
-    		int greenZoneLowerLeftX = ((Long) data.get("Red_LL_x")).intValue();
-    		int greenZoneLowerLeftY = ((Long) data.get("Red_LL_y")).intValue();
-      
-    		int shallowZoneHorizontalLowerLeftX = ((Long) data.get("SH_LL_x")).intValue();
-    		int shallowZoneHorizontalLowerLeftY = ((Long) data.get("SH_LL_y")).intValue();
-    		int shallowZoneHorizontalUpperRightX = ((Long) data.get("SH_UR_x")).intValue();
-    		int shallowZoneHorizontalUpperRightY = ((Long) data.get("SH_UR_y")).intValue();
-    		int shallowZoneVerticalLowerLeftX = ((Long) data.get("SV_LL_x")).intValue();
-    		int shallowZoneVerticalLowerLeftY = ((Long) data.get("SV_LL_y")).intValue();
-    		int shallowZoneVerticalUpperRightX = ((Long) data.get("SV_UR_x")).intValue();
+  		int redTeam = ((Long) data.get("RedTeam")).intValue();
+  		int greenTeam = ((Long) data.get("GreenTeam")).intValue();
+    
+  		int redStartingCorner = ((Long) data.get("RedCorner")).intValue();
+  		int greenStartingCorner = ((Long) data.get("GreenCorner")).intValue();
+    
+  		int redZoneUpperRightX = ((Long) data.get("Red_UR_x")).intValue();
+  		int redZoneUpperRightY = ((Long) data.get("Red_UR_y")).intValue();
+  		int redZoneLowerLeftX = ((Long) data.get("Red_LL_x")).intValue();
+  		int redZoneLowerLeftY = ((Long) data.get("Red_LL_y")).intValue();
+    
+  		int greenZoneUpperRightX = ((Long) data.get("Red_UR_x")).intValue();
+  		int greenZoneUpperRightY = ((Long) data.get("Red_UR_y")).intValue();
+  		int greenZoneLowerLeftX = ((Long) data.get("Red_LL_x")).intValue();
+  		int greenZoneLowerLeftY = ((Long) data.get("Red_LL_y")).intValue();
+    
+  		int shallowZoneHorizontalLowerLeftX = ((Long) data.get("SH_LL_x")).intValue();
+  		int shallowZoneHorizontalLowerLeftY = ((Long) data.get("SH_LL_y")).intValue();
+  		int shallowZoneHorizontalUpperRightX = ((Long) data.get("SH_UR_x")).intValue();
+  		int shallowZoneHorizontalUpperRightY = ((Long) data.get("SH_UR_y")).intValue();
+  		int shallowZoneVerticalLowerLeftX = ((Long) data.get("SV_LL_x")).intValue();
+  		int shallowZoneVerticalLowerLeftY = ((Long) data.get("SV_LL_y")).intValue();
+  		int shallowZoneVerticalUpperRightX = ((Long) data.get("SV_UR_x")).intValue();
 	    int shallowZoneVerticalUpperRightY = ((Long) data.get("SV_UR_y")).intValue();
 	      
 	    int opponentFlag = 0;
@@ -124,15 +124,15 @@ public class WifiInput {
       
 	    ShallowZone.setHorizontalLowerLeftCorner(shallowZoneHorizontalLowerLeftX, shallowZoneHorizontalLowerLeftY);
 	    ShallowZone.setHorizontalUpperRightCorner(shallowZoneHorizontalUpperRightX, shallowZoneHorizontalUpperRightY);
-	    	ShallowZone.setVerticalLowerLeftCorner(shallowZoneVerticalLowerLeftX, shallowZoneVerticalLowerLeftY);
-	    	ShallowZone.setVerticalUpperRightCorner(shallowZoneVerticalUpperRightX, shallowZoneVerticalUpperRightY);
-      
-	    	SearchRegion.setGreenSearchLowerLeftCorner(searchRegionGreenLowerLeftX, searchRegionGreenLowerLeftY);
-	    	SearchRegion.setGreenSearchUpperRightCorner(searchRegionGreenUpperRightX, searchRegionGreenUpperRightY);
-	    	SearchRegion.setRedSearchLowerLeftCorner(searchRegionRedLowerLeftX, searchRegionRedLowerLeftY);
-	    	SearchRegion.setRedSearchUpperRightCorner(searchRegionRedUpperRightX, searchRegionRedUpperRightY);
+    	ShallowZone.setVerticalLowerLeftCorner(shallowZoneVerticalLowerLeftX, shallowZoneVerticalLowerLeftY);
+    	ShallowZone.setVerticalUpperRightCorner(shallowZoneVerticalUpperRightX, shallowZoneVerticalUpperRightY);
+    
+    	SearchRegion.setGreenSearchLowerLeftCorner(searchRegionGreenLowerLeftX, searchRegionGreenLowerLeftY);
+    	SearchRegion.setGreenSearchUpperRightCorner(searchRegionGreenUpperRightX, searchRegionGreenUpperRightY);
+    	SearchRegion.setRedSearchLowerLeftCorner(searchRegionRedLowerLeftX, searchRegionRedLowerLeftY);
+    	SearchRegion.setRedSearchUpperRightCorner(searchRegionRedUpperRightX, searchRegionRedUpperRightY);
 
-    	} catch (Exception e) {
+    } catch (Exception e) {
       System.err.println("Error: " + e.getMessage());
     }
   }
