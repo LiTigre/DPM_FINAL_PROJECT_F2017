@@ -13,48 +13,31 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 public class Driver {
 	
 	// Objects 
-	/**
-	 * Odometer object created in the main controller.  
-	 */
+	/** Odometer object created in the main controller. */
 	private final Odometer odometer;
-	/**
-	 * Left motor object created in the main controller. 
-	 */
+	/** Left motor object created in the main controller. */
 	private final EV3LargeRegulatedMotor leftMotor;
-	/**
-	 * Right motor object created in the main controller. 
-	 */
+	/** Right motor object created in the main controller. */
 	private final EV3LargeRegulatedMotor rightMotor;
 	
 	
 	// Constants
-	/**
-	 * @see MainController#WHEEL_RADIUS
-	 */
+	/** @see MainController#WHEEL_RADIUS */
 	private static final double WHEEL_RADIUS = MainController.WHEEL_RADIUS;
-	/**
-	 * @see MainController#TRACK
-	 */
+	/** @see MainController#TRACK */
 	private static final double TRACK = MainController.TRACK;
-	/**
-	 * The forward speed of the robot in (degrees/second)
-	 */
+	/** The forward speed of the robot in (degrees/second) */
 	private static final int FORWARD_SPEED;
-	/**
-	 * The rotational speed of the ronot in (degrees/second)
-	 */
+	/** The rotational speed of the ronot in (degrees/second) */
 	private static final int ROTATE_SPEED;
 	
 	
 	// Booleans
-	/**
-	 * Boolean that indicates whether the robot is currently traveling.
-	 */
+	/** Boolean that indicates whether the robot is currently traveling. */
 	private boolean travelling;
-	/**
-	 * Boolean that indicates whether the robot is currently turning.
-	 */
+	/** Boolean that indicates whether the robot is currently turning. */
 	private boolean turning;
+	
 	
 	/**
 	 * Constructor for driver class.

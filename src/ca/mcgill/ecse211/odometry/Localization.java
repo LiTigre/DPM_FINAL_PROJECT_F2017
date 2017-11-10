@@ -14,48 +14,34 @@ import lejos.robotics.SampleProvider;
 public class Localization {
 
 	// Objects 
-	/**
-	 * Odometer created in the main controller.
-	 */
+	/** Odometer created in the main controller. */
 	private final Odometer odometer;
-	/**
-	 * Driver created in the main controller. 
-	 */
+	/** Driver created in the main controller. */
 	private final Driver driver;
+
 	
 	// Constants
-	/**
-	 * @see MainController#SENSOR_TO_TRACK
-	 */
+	/** @see MainController#SENSOR_TO_TRACK */
 	private static final double SENSOR_TO_TRACK = MainController.SENSOR_TO_TRACK;
-	/**
-	 * @see MainController#LINE_THRESHOLD
-	 */
+	/** @see MainController#LINE_THRESHOLD */
 	private static final double LINE_THRESHOLD = MainController.LINE_THRESHOLD;
-	/**
-	 * Value that separates falling and rising edge.
-	 */
+	/** Value that separates falling and rising edge. */
 	private static final int THRESHOLD_WALL;
-	/**
-	 * Noise created from the corner during localization and must be ignored.
-	 */
+	/** Noise created from the corner during localization and must be ignored. */
 	private static final int NOISE_GAP;
 	
+	
 	// Color sensor data
-	/**
-	 * Array that collects the angle values of every time the robot reads a black line. 
-	 */
+	/** Array that collects the angle values of every time the robot reads a black line. */
 	private double [] collectedData;
 	
+	
 	// Booleans
-	/**
-	 * Boolean that indicates whether the edges have been completed 
-	 */
+	/** Boolean that indicates whether the edges have been completed. */
 	private boolean isCompleted;
-	/**
-	 * Boolean that indicates whether the robot is currently localizing. 
-	 */
+	/** Boolean that indicates whether the robot is currently localizing. */
 	public boolean isLocalizing;
+	
 	
 	/**
 	 * Constructor for the localization class.

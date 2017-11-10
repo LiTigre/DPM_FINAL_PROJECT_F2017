@@ -13,53 +13,32 @@ import lejos.robotics.SampleProvider;
 public class OdometryCorrection extends Thread {
 
 	// Objects 
-	/**
-	 * Driver object created in the main controller. 
-	 */
+	/** Driver object created in the main controller. */
 	Driver driver;
-	/**
-	 * Odometer object created in the main controller. 
-	 */
+	/** Odometer object created in the main controller. */
 	Odometer odometer;
 	
 	
 	// Constants
-	/**
-	 * @see MainController#SENSOR_TO_TRACK
-	*/
+	/** @see MainController#SENSOR_TO_TRACK */
 	private static final double SENSOR_TO_TRACK = MainController.SENSOR_TO_TRACK;
-	/**
-	 * @see MainController#LINE_THRESHOLD
-	 */
+	/** @see MainController#LINE_THRESHOLD */
 	private static final double LINE_THRESHOLD = MainController.LINE_THRESHOLD;
-	/**
-	 * @see MainController#BLOCK_LENGTH
-	 */
+	/** @see MainController#BLOCK_LENGTH */
 	private static final double BLOCK_LENGTH = MainController.BLOCK_LENGTH;
-	/**
-	 * Distance from the angle color sensor to the middle of the track in cm 
-	 */
+	/** Distance from the angle color sensor to the middle of the track in cm */
 	private static final double ANGLE_SENSOR_TO_TRACK;
-	/**
-	 * Value that indicates a black line for the second sensor. 
-	 */
+	/** Value that indicates a black line for the second sensor. */
 	private static final double ANGLE_LINE_THRESHOLD;
-	/**
-	 * Thread time of the correction. 
-	 */
+	/** Thread time of the correction. */
 	private static final long CORRECTION_PERIOD = 10;
-	/**
-	 * Keeps track of the x position of the robot. 
-	 */
+	/** Keeps track of the x position of the robot. */
 	private int xCounter;
-	/**
-	 * Keeps track of the y position of the robot. 
-	 */
+	/** Keeps track of the y position of the robot. */
 	private int yCounter;
-	/**
-	 * Checks if it able to correct the the angle or not. 
-	 */
+	/** Checks if it able to correct the the angle or not. */
 	private boolean positionCorrection;
+	
 	
 	/**
 	 * Constructor for the OdometryCorrection class. 

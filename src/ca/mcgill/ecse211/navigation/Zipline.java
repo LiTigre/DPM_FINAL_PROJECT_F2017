@@ -15,31 +15,26 @@ import lejos.robotics.SampleProvider;
  */
 public class Zipline {
 	
-	/**
-	 * Zipline motor created in the main controller. 
-	 */
+	// Objects
+	/** Zipline motor created in the main controller. */
 	private EV3LargeRegulatedMotor ziplineMotor;
 	
-	/**
-	 * Light sensor value of the floor
-	 */
-	private double FLOOR_INTENSITY;
-	/**
-	 * Speed of the zipline motor in degrees/second
-	 */
-	private final int ZIPLINE_SPEED = 200;
-	/**
-	 * Create a range of acceptable values to consider the floor
-	 */
-	private final int RANGE;
-	/**
-	 * Number of times same light sensor value has to be read to be considered acceptable
-	 */
-	private final int FILTER;
-	/**
-	 * Keep track of how many times the same value is read from the light sensor
-	 */
+	
+	// Constants
+	/** Light sensor value of the floor */
+	private final double FLOOR_INTENSITY;
+	/** Speed of the zipline motor in degrees/second */
+	private static final int ZIPLINE_SPEED = 200;
+	/** Create a range of acceptable values to consider the floor */
+	private static final int RANGE;
+	/** Number of times same light sensor value has to be read to be considered acceptable */
+	private static final int FILTER;
+	
+	
+	// Variables
+	/** Keep track of how many times the same value is read from the light sensor */
 	private int count = 0;
+	
 	
 	/**
 	 * Constructor for the Zipline class.

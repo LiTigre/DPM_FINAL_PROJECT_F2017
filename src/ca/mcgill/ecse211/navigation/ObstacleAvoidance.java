@@ -16,33 +16,23 @@ import lejos.robotics.SampleProvider;
 public class ObstacleAvoidance extends Thread {
 
 	// Objects
-	/**
-	 * Driver object created in the main controller. 
-	 */
+	/** Driver object created in the main controller. */
 	Driver driver;
-	/**
-	 * Search object created in the main controller. 
-	 */
+	/** Search object created in the main controller. */
 	Search search;
 	
+	
 	// Constants
-	/**
-	 * Constant that is associated to how close the robot can get to an object without triggered obstacle avoidance.
-	 */
+	/** Constant that is associated to how close the robot can get to an object without triggered obstacle avoidance. */
 	private final static double DISTANCE_FROM_OBJECT;
-	/**
-	 * Threshold added to the distance from an object because of variation is ultrasonic data.
-	 */
+	/** Threshold added to the distance from an object because of variation is ultrasonic data. */
 	private final static double DISTANCE_THRESHOLD;
-	/**
-	 * Constant that indicated how far away the robot needs to travel from the block before returning to normal process. 
-	 */
+	/** Constant that indicated how far away the robot needs to travel from the block before returning to normal process. */
 	private final static double DISTANCE_TO_AVOID;
 	
+	
 	// Booleans
-	/**
-	 * Boolean that is used to indicate if the robot is currently avoiding an object or not.
-	 */
+	/** Boolean that is used to indicate if the robot is currently avoiding an object or not. */
 	private boolean avoiding;
 	
 	

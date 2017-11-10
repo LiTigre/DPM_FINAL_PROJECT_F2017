@@ -12,55 +12,33 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 public class Odometer extends Thread {
 	
 	// robot position
-	/**
-	 * The x position of the robot based off the origin in cm
-	 */
+	/** The x position of the robot based off the origin in cm */
 	private double x;
-	/**
-	 * The y position of the robot based off the origin in cm
-	 */
+	/** The y position of the robot based off the origin in cm */
 	private double y;
-	/**
-	 * The theta position of the robot based in degrees (0 is facing the +Y-axis)
-	 */
+	/** The theta position of the robot based in degrees (0 is facing the +Y-axis) */
 	private double theta;
 	
-	// Constants
-	/**
-	 * @see MainController#WHEEL_RADIUS
-	 */
-	private static final double WHEEL_RADIUS = MainController.WHEEL_RADIUS;
-	/**
-	 * @see MainController#TRACK
-	 */
-	private static final double TRACK = MainController.TRACK;
 	
-	/**
-	 * Change in the left motor's angle. Used to calculate the change in position.
-	 */
+	// Constants
+	/** @see MainController#WHEEL_RADIUS */
+	private static final double WHEEL_RADIUS = MainController.WHEEL_RADIUS;
+	/** @see MainController#TRACK */
+	private static final double TRACK = MainController.TRACK;
+	/** Odometers update period in ms */
+	private static final long ODOMETER_PERIOD = 25; 
+	
+	// Other
+	/** Change in the left motor's angle. Used to calculate the change in position. */
 	private int leftMotorTachoCount;
-	/**
-	 * Change in the right motor's angle. Used to calculate the change in the position.
-	 */
+	/** Change in the right motor's angle. Used to calculate the change in the position. */
 	private int rightMotorTachoCount;
 	
-	/**
-	 * Left motor created in the main controller. 
-	 */
+	/** Left motor created in the main controller. */
 	private EV3LargeRegulatedMotor leftMotor;
-	/**
-	 * Right motor created in the main controller. 
-	 */
+	/** Right motor created in the main controller. */
 	private EV3LargeRegulatedMotor rightMotor;
-
-	/**
-	 * Odometers update period in ms
-	 */
-	private static final long ODOMETER_PERIOD = 25; /* odometer update period, in ms */
-
-	/**
-	 * Lock objects for mutual exclusion. 
-	 */
+	/** Lock objects for mutual exclusion. */
 	private Object lock; 
 		
 	

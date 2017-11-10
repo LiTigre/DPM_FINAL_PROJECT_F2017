@@ -21,102 +21,64 @@ import lejos.robotics.SampleProvider;
  * @since 1.0
  */
 public class MainController {
+	
 	// Constants 
-	/**
-	 * The radius of the robot's wheels in cm  
-	 */
+	/** The radius of the robot's wheels in cm */
 	public static final double WHEEL_RADIUS;
-	/**
-	 * The length of the robot's track in cm. 
-	 */
+	/** The length of the robot's track in cm. */
 	public static final double TRACK;
-	/**
-	 * Distance from the color sensor to the middle of the track in cm
-	*/
+	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK;
-	/**
-	 * Value that indicates a black line.
-	 */
+	/** Value that indicates a black line. */
 	public static final double LINE_THRESHOLD;
-	/**
-	 * Value of the length of a block in cm
-	 */
+	/** Value of the length of a block in cm */
 	public static final double BLOCK_LENGTH; 
 	
 	
-	/**
-	 * Color sensor with associated port.
-	 */
+	// Sensors
+	/**  Color sensor with associated port. */
 	private static final EV3ColorSensor colorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
-	/**
-	 * Color sensor used for angle correction with associated port. 
-	 */
+	/** Color sensor used for angle correction with associated port. */
 	private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S1"));
-	/**
-	 * Ultrasonic sensor with associated port. 
-	 */
+	/** Ultrasonic sensor with associated port. */
 	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S4"));
 	
 	
-	/**
-	 * Left motor with associated port.
-	 */
+	// Motors
+	/** Left motor with associated port. */
 	static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
-	/**
-	 * Right motor with associated port.
-	 */
+	/** Right motor with associated port. */
 	static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
-	/**
-	 * Zipline motor with associated port. 
-	 */
+	/** Zipline motor with associated port. */
 	static final EV3LargeRegulatedMotor ziplineMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
 	
 	
-	/**
-	 * Data collected from the color sensor.
-	 */
+	// Make it that we can collect data from the sensor
+	/** Data collected from the color sensor. */
 	private static SampleProvider colorSample = colorSensor.getMode("Red");
-	/**
-	 * Data collected from the angle color sensor.
-	 */
+	/** Data collected from the angle color sensor. */
 	private static SampleProvider angleColorSample = angleColorSensor.getMode("Red");
-	/**
-	 * Data collected from the ultrasonic sensor.
-	 */
+	/** Data collected from the ultrasonic sensor. */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
+
 	
-	
-	/**
-	 * Array of floats that stores the value of the data from the color sensor.
-	 */
+	// Data from the sensors
+	/** Array of floats that stores the value of the data from the color sensor. */
 	private static float lightData[] = new float[colorSample.sampleSize()];
-	/**
-	 * Array of floats that stores the value of the data from the color sensor.
-	 */
+	/** Array of floats that stores the value of the data from the color sensor. */
 	private static float angleLightData[] = new float[angleColorSample.sampleSize()];
-	/**
-	 * Array of floats that stores the value of the data from the ultrasonic sensor. 
-	 */
+	/** Array of floats that stores the value of the data from the ultrasonic sensor. */
 	private static float usData[] = new float[usDistance.sampleSize()];
 	
 	
-	/**
-	 * The X coordinate from where robot began its travel from. 
-	 */
+	// Variables
+	/** The X coordinate from where robot began its travel from. */
 	private static double previousX;
-	/**
-	 * The Y coordinate from where robot began its travel from. 
-	 */
+	/** The Y coordinate from where robot began its travel from. */
 	private static double previousY;
-	
-	
-	/**
-	 * The X coordinate to where the robot is supposed to stop its traveling at. 
-	 */
+	/** The X coordinate to where the robot is supposed to stop its traveling at. */
 	private static double futureX;
-	/**
-	 * The Y coordinate to where the robot is supposed to stop its traveling at. 
-	 */
+	/** The Y coordinate to where the robot is supposed to stop its traveling at. */
 	private static double futureY;
 	
 	
