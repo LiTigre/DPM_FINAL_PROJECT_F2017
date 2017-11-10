@@ -1,10 +1,14 @@
 package ca.mcgill.ecse211.controller;
 
 import ca.mcgill.ecse211.navigation.Driver;
+import ca.mcgill.ecse211.navigation.ObstacleAvoidance;
+import ca.mcgill.ecse211.navigation.Search;
 import ca.mcgill.ecse211.navigation.Zipline;
 import ca.mcgill.ecse211.odometry.Localization;
 import ca.mcgill.ecse211.odometry.Odometer;
 import ca.mcgill.ecse211.odometry.OdometryCorrection;
+import ca.mcgill.ecse211.settings.Setting;
+import ca.mcgill.ecse211.wifi.WifiInput;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.Port;
@@ -24,38 +28,38 @@ public class MainController {
 	
 	// Constants 
 	/** The radius of the robot's wheels in cm */
-	public static final double WHEEL_RADIUS;
+	public static final double WHEEL_RADIUS = 2.15;
 	/** The length of the robot's track in cm. */
-	public static final double TRACK;
+	public static final double TRACK = 11.1;
 	/** Distance from the color sensor to the middle of the track in cm */
-	public static final double SENSOR_TO_TRACK;
+	public static final double SENSOR_TO_TRACK = 14.85;
 	/** Value that indicates a black line. */
-	public static final double LINE_THRESHOLD;
+	public static final double LINE_THRESHOLD = 1200;
 	/** Value of the length of a block in cm */
-	public static final double BLOCK_LENGTH; 
+	public static final double BLOCK_LENGTH = 30.48; 
 	
 	
 	// Sensors
 	/**  Color sensor with associated port. */
-	private static final EV3ColorSensor colorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
+	private static final EV3ColorSensor lightSensor = new EV3ColorSensor(LocalEV3.get().getPort("S3"));
 	/** Color sensor used for angle correction with associated port. */
-	private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S1"));
+	private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
 	/** Ultrasonic sensor with associated port. */
 	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S4"));
 	
 	
 	// Motors
 	/** Left motor with associated port. */
-	static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 	/** Right motor with associated port. */
-	static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
+	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
 	/** Zipline motor with associated port. */
 	static final EV3LargeRegulatedMotor ziplineMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
 	
 	
 	// Make it that we can collect data from the sensor
 	/** Data collected from the color sensor. */
-	private static SampleProvider colorSample = colorSensor.getMode("Red");
+	private static SampleProvider lightSample = lightSensor.getMode("Red");
 	/** Data collected from the angle color sensor. */
 	private static SampleProvider angleColorSample = angleColorSensor.getMode("Red");
 	/** Data collected from the ultrasonic sensor. */
@@ -64,7 +68,7 @@ public class MainController {
 	
 	// Data from the sensors
 	/** Array of floats that stores the value of the data from the color sensor. */
-	private static float lightData[] = new float[colorSample.sampleSize()];
+	private static float lightData[] = new float[lightSample.sampleSize()];
 	/** Array of floats that stores the value of the data from the color sensor. */
 	private static float angleLightData[] = new float[angleColorSample.sampleSize()];
 	/** Array of floats that stores the value of the data from the ultrasonic sensor. */
@@ -93,7 +97,11 @@ public class MainController {
 		Driver driver = new Driver(leftMotor, rightMotor, odometer);
 		Localization localization = new Localization(odometer, driver);
 		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver);
-		Zipline zipline = new Zipline(ziplineMotor);
+		Zipline zipline = new Zipline(ziplineMotor, driver);
+		
+		// First wait for server to send info.
+		WifiInput.recieveServerData();
+		
 		
 	}
 	
@@ -171,8 +179,8 @@ public class MainController {
 	 * @since 1.1
 	 */
 	public static float getLightValue() {
-		colorSensor.fetchSample(lightData, 0);
-		return lightData[0]*1000;
+		lightSensor.fetchSample(lightData, 0);
+		return lightData[0]*100;
 	}
 	
 	/**
@@ -182,6 +190,6 @@ public class MainController {
 	 */
 	public static float getAngleLightValue() {
 		angleColorSensor.fetchSample(angleLightData, 0);
-		return lightData[0]*1000;
+		return lightData[0]*100;
 	}
 }

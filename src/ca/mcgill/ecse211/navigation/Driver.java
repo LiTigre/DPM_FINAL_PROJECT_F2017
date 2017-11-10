@@ -16,9 +16,9 @@ public class Driver {
 	/** Odometer object created in the main controller. */
 	private final Odometer odometer;
 	/** Left motor object created in the main controller. */
-	private final EV3LargeRegulatedMotor leftMotor;
+	private EV3LargeRegulatedMotor leftMotor;
 	/** Right motor object created in the main controller. */
-	private final EV3LargeRegulatedMotor rightMotor;
+	private EV3LargeRegulatedMotor rightMotor;
 	
 	
 	// Constants
@@ -27,9 +27,9 @@ public class Driver {
 	/** @see MainController#TRACK */
 	private static final double TRACK = MainController.TRACK;
 	/** The forward speed of the robot in (degrees/second) */
-	private static final int FORWARD_SPEED;
-	/** The rotational speed of the ronot in (degrees/second) */
-	private static final int ROTATE_SPEED;
+	private static final int FORWARD_SPEED = 200;
+	/** The rotational speed of the robot in (degrees/second) */
+	private static final int ROTATE_SPEED = 200;
 	
 	
 	// Booleans
@@ -107,6 +107,13 @@ public class Driver {
 		setTravelling(false);
 	}
 	
+	public void forward() {
+		setSpeed(FORWARD_SPEED);
+		
+		leftMotor.forward();
+		rightMotor.forward();
+	}
+	
 	/**
 	 * Turn a specified amount. 
 	 * @param angle Angle amount the robots needs to turn in degrees.
@@ -118,8 +125,7 @@ public class Driver {
 		setSpeed(ROTATE_SPEED);
 		
 		leftMotor.rotate(convertAngle(WHEEL_RADIUS, TRACK, angle), true);
-		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), false);
-		
+		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), true);
 		setTurning(false);
 	}
 	
@@ -197,7 +203,7 @@ public class Driver {
 	 * @since 1.1
 	 */
 	private void setTravelling(boolean travel) {
-		travelling = travel;
+		this.travelling = travel;
 	}
 	
 	/**
@@ -215,7 +221,7 @@ public class Driver {
 	 * @since 1.2
 	 */
 	private void setTurning(boolean turn) {
-		turning = turn;
+		this.turning = turn;
 	}
 	
 	/**

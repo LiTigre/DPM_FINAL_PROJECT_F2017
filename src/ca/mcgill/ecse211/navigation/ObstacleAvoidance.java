@@ -24,11 +24,11 @@ public class ObstacleAvoidance extends Thread {
 	
 	// Constants
 	/** Constant that is associated to how close the robot can get to an object without triggered obstacle avoidance. */
-	private final static double DISTANCE_FROM_OBJECT;
+	//private final static double DISTANCE_FROM_OBJECT ;
 	/** Threshold added to the distance from an object because of variation is ultrasonic data. */
-	private final static double DISTANCE_THRESHOLD;
+	//private final static double DISTANCE_THRESHOLD ;
 	/** Constant that indicated how far away the robot needs to travel from the block before returning to normal process. */
-	private final static double DISTANCE_TO_AVOID;
+	//private final static double DISTANCE_TO_AVOID ;
 	
 	
 	// Booleans
@@ -53,6 +53,7 @@ public class ObstacleAvoidance extends Thread {
 	 * @see java.lang.Thread#run()
 	 * @since 1.1
 	 */
+	/*
 	public void run() {
 		while (true) {
 			double error; 	
@@ -67,12 +68,13 @@ public class ObstacleAvoidance extends Thread {
 		     } catch (Exception e) {
 		     } // Poor man's timed sampling
 		}
-	}
+	} */
 	
 	/**
 	 * Performs the avoidance and returns to the previous operation. 
 	 * @since 1.1
 	 */
+	/*
 	public void avoid() {
 		setAvoiding(true);
 		driver.instantStop();
@@ -80,8 +82,7 @@ public class ObstacleAvoidance extends Thread {
 		setAvoiding(false);
 		driver.travelDistance(DISTANCE_TO_AVOID);
 		driver.turnDistance(-90);
-	}
-	
+	} */
 	
 	/**
 	 * Checks if the robot is currently avoiding an object. 

@@ -27,9 +27,9 @@ public class OdometryCorrection extends Thread {
 	/** @see MainController#BLOCK_LENGTH */
 	private static final double BLOCK_LENGTH = MainController.BLOCK_LENGTH;
 	/** Distance from the angle color sensor to the middle of the track in cm */
-	private static final double ANGLE_SENSOR_TO_TRACK;
+	private static final double ANGLE_SENSOR_TO_TRACK = 16;
 	/** Value that indicates a black line for the second sensor. */
-	private static final double ANGLE_LINE_THRESHOLD;
+	private static final double ANGLE_LINE_THRESHOLD = 400;
 	/** Thread time of the correction. */
 	private static final long CORRECTION_PERIOD = 10;
 	/** Keeps track of the x position of the robot. */

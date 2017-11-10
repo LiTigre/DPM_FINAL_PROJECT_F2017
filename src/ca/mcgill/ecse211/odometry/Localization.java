@@ -26,9 +26,9 @@ public class Localization {
 	/** @see MainController#LINE_THRESHOLD */
 	private static final double LINE_THRESHOLD = MainController.LINE_THRESHOLD;
 	/** Value that separates falling and rising edge. */
-	private static final int THRESHOLD_WALL;
+	private static final int THRESHOLD_WALL = 35;
 	/** Noise created from the corner during localization and must be ignored. */
-	private static final int NOISE_GAP;
+	private static final int NOISE_GAP = 1;
 	
 	
 	// Color sensor data
@@ -153,10 +153,11 @@ public class Localization {
 		
 		driver.turnDistance(360);
 		
-		while(driver.isTurning()) {
+		while(MainController.leftMotor.isMoving() && MainController.rightMotor.isMoving()) {
 			int i = 0;
+			System.out.println(MainController.getAngleLightValue());
 			// Collect data during the ultrasonic localization is running
-			if(MainController.getLightValue() < LINE_THRESHOLD) {
+			if(MainController.getLightValue() > LINE_THRESHOLD) {
 	    			//implement collecting data here
 	    			Sound.beep();
 	    			collectedData[i] = odometer.getTheta();

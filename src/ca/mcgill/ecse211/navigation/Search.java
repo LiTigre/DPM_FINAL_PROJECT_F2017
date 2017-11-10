@@ -14,11 +14,10 @@ public class Search implements Runnable {
 	/**
 	 * Constructor for the Search class.
 	 * @param odometer Odometer created in the MainController class.
-	 * @param colorSensor Color sensor created in MainController.
 	 * @param driver Driver created in MainController.
 	 * @since 1.1
 	 */
-	public Search(Odometer odometer, SampleProvider colorSensor, Driver driver) {
+	public Search(Odometer odometer, Driver driver) {
 		
 	}
 	
@@ -50,9 +49,9 @@ public class Search implements Runnable {
 	 * @return captureStatus Returns true if the block has been captured, false otherwise. 
 	 * @since 1.1
 	 */
-	public boolean isCaptured() {
-		return captureStatus;
-	}
+	//public boolean isCaptured() {
+	//	return captureStatus;
+//	}
 	
 
 	/**
@@ -69,9 +68,9 @@ public class Search implements Runnable {
 	 * @return Returns true if the block is the flag, false otherwise.
 	 * @since 1.1
 	 */
-	public boolean isBlock() {
-		return foundBlock;
-	}
+	//public boolean isBlock() {
+	//	return foundBlock;
+	//}
 	
 	/**
 	 * Sets the values of the foundBlock boolean. 

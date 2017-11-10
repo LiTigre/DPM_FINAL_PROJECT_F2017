@@ -27,7 +27,7 @@ import lejos.hardware.Button;
 public class WifiInput {
 
 	/** IP address of the computer running the server application. */
-	private static final String SERVER_IP = "192.168.2.3";
+	private static final String SERVER_IP = "192.168.2.10";
 	/** The project team number. */
 	private static final int TEAM_NUMBER = 2;
 
@@ -35,12 +35,11 @@ public class WifiInput {
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
 
 	/**
-	 * Main method of the wifi input class. This runs and waits to receive info from the speicified server. 
-	 * @param args Not used
+	 * Method of the wifi input class. This runs and waits to receive info from the specified server. 
 	 * @since 1.0
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void main(String[] args) {
+	public static void recieveServerData() {
 
     System.out.println("Running..");
 
@@ -136,8 +135,5 @@ public class WifiInput {
     	} catch (Exception e) {
       System.err.println("Error: " + e.getMessage());
     }
-
-    // Wait until user decides to end program
-    Button.waitForAnyPress();
   }
 }

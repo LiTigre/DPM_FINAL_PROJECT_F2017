@@ -24,6 +24,7 @@ public class UltrasonicSensorDataLogger {
 	 * @throws FileNotFoundException if the file it is trying to write in cannot be found.
 	 * @throws UnsupportedEncodingException exception necessary for this class to work. 
 	 */
+	/*
 	public static void main(String[] args) throws InterruptedException,
 	FileNotFoundException, UnsupportedEncodingException {
 		PrintWriter writer = null;
@@ -55,6 +56,6 @@ public class UltrasonicSensorDataLogger {
 		}
 		System.exit(0);
 
-	}
+	} */
 
-}
+} 
