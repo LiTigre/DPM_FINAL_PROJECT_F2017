@@ -28,11 +28,11 @@ public class MainController {
 	
 	// Constants 
 	/** The radius of the robot's wheels in cm */
-	public static final double WHEEL_RADIUS = 2.0633;
+	public static final double WHEEL_RADIUS = 2.10;
 	/** The length of the robot's track in cm. */
-	public static final double TRACK = 13.77;
+	public static final double TRACK = 13.22;
 	/** Distance from the color sensor to the middle of the track in cm */
-	public static final double SENSOR_TO_TRACK = 14.85;
+	public static final double SENSOR_TO_TRACK = 13.6;
 	/** Value that indicates a black line. */
 	public static final double LINE_THRESHOLD = 450;
 	/** Value of the length of a block in cm */
