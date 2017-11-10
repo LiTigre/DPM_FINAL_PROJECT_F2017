@@ -11,17 +11,8 @@ import lejos.hardware.Button;
 /**
  * WifiInput communicates with a server and receive data concerning the
  * competition such as the starting corner the robot is placed in.
- * 
- * There are two variables you **MUST** set manually before trying to use this code.
- * 
- * 1. SERVER_IP: The IP address of the computer running the server application. This will be your
- * own laptop, until the beta beta demo or competition where this is the TA or professor's laptop.
- * In that case, set the IP to 192.168.2.3.
- * 
- * 2. TEAM_NUMBER: your project team number
- * 
  * @author Team 2 
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class WifiInput {
@@ -124,13 +115,13 @@ public class WifiInput {
       
 	    ShallowZone.setHorizontalLowerLeftCorner(shallowZoneHorizontalLowerLeftX, shallowZoneHorizontalLowerLeftY);
 	    ShallowZone.setHorizontalUpperRightCorner(shallowZoneHorizontalUpperRightX, shallowZoneHorizontalUpperRightY);
-    	ShallowZone.setVerticalLowerLeftCorner(shallowZoneVerticalLowerLeftX, shallowZoneVerticalLowerLeftY);
-    	ShallowZone.setVerticalUpperRightCorner(shallowZoneVerticalUpperRightX, shallowZoneVerticalUpperRightY);
+	    ShallowZone.setVerticalLowerLeftCorner(shallowZoneVerticalLowerLeftX, shallowZoneVerticalLowerLeftY);
+	    ShallowZone.setVerticalUpperRightCorner(shallowZoneVerticalUpperRightX, shallowZoneVerticalUpperRightY);
     
-    	SearchRegion.setGreenSearchLowerLeftCorner(searchRegionGreenLowerLeftX, searchRegionGreenLowerLeftY);
-    	SearchRegion.setGreenSearchUpperRightCorner(searchRegionGreenUpperRightX, searchRegionGreenUpperRightY);
-    	SearchRegion.setRedSearchLowerLeftCorner(searchRegionRedLowerLeftX, searchRegionRedLowerLeftY);
-    	SearchRegion.setRedSearchUpperRightCorner(searchRegionRedUpperRightX, searchRegionRedUpperRightY);
+	    SearchRegion.setGreenSearchLowerLeftCorner(searchRegionGreenLowerLeftX, searchRegionGreenLowerLeftY);
+	    SearchRegion.setGreenSearchUpperRightCorner(searchRegionGreenUpperRightX, searchRegionGreenUpperRightY);
+	    SearchRegion.setRedSearchLowerLeftCorner(searchRegionRedLowerLeftX, searchRegionRedLowerLeftY);
+	    SearchRegion.setRedSearchUpperRightCorner(searchRegionRedUpperRightX, searchRegionRedUpperRightY);
 
     } catch (Exception e) {
       System.err.println("Error: " + e.getMessage());
