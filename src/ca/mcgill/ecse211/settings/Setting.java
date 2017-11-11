@@ -3,7 +3,7 @@ package ca.mcgill.ecse211.settings;
 /**
  * General information related to the game. Received from the server. 
  * @author Team 2
- * @version 1.0
+ * @version 1.1
  * @since 1.5
  */
 public class Setting {
@@ -28,7 +28,11 @@ public class Setting {
 	/** X and Y coordinates of the end of the zipline. [0] = X; [1] = Y */
 	private static int[] ziplineEnd;
 	
+	private static int[] startPointNearZipline;
+	private static int[] endPointNearZipline;
 	
+	
+
 	// Methods
 	/**
 	 * Getter for the team's color.
@@ -117,5 +121,42 @@ public class Setting {
 		int coordinate[] = {x, y};
 		Setting.ziplineEnd = coordinate;
 	}
-	
+	/**
+	 * Getter for the start point near the zipline
+	 * @return An array that holds the X and Y coordinates of the 
+	 * point near the starting position of the zipline in that order. 
+	 * @since 1.1
+	 */
+	public static int[] getStartPointNearZipline() {
+		return startPointNearZipline;
+	}
+	/**
+	 * Mutator for the point near the zipline start. Only used by the wifi class. 
+	 * @param x Integer value of the X coordinate. 
+	 * @param y Integer value of the Y coordinate. 
+	 * @since 1.1
+	 */
+	public static void setStartPointNearZipline(int x, int y) {
+		int coordinate[] = {x, y};
+		Setting.startPointNearZipline = coordinate;
+	}
+	/**
+	 * Getter for the end point near the zipline
+	 * @return An array that holds the X and Y coordinates of the 
+	 * point near the end position of the zipline in that order. 
+	 * @since 1.1
+	 */
+	public static int[] getEndPointNearZipline() {
+		return endPointNearZipline;
+	}
+	/**
+	 * Mutator for the point near the zipline end. Only used by the wifi class. 
+	 * @param x Integer value of the X coordinate. 
+	 * @param y Integer value of the Y coordinate. 
+	 * @since 1.1
+	 */
+	public static void setEndPointNearZipline(int x, int y) {
+		int coordinate[] = {x, y};
+		Setting.endPointNearZipline = coordinate;
+	}	
 }

@@ -83,6 +83,11 @@ public class WifiInput {
 	    int ziplineStartY = ((Long) data.get("ZC_G_y")).intValue();
 	    int ziplineEndX = ((Long) data.get("ZC_R_x")).intValue();
 	    int ziplineEndY = ((Long) data.get("ZC_R_y")).intValue();
+	    
+	    int ziplineNearStartPointX = ((Long) data.get("ZO_G_x")).intValue();
+	    int ziplineNearStartPointY = ((Long) data.get("ZO_G_y")).intValue();
+	    int ziplineNearEndPointX = ((Long) data.get("ZO_R_x")).intValue();
+	    int ziplineNearEndPointY = ((Long) data.get("ZO_R_y")).intValue();
 	      
 	    int searchRegionRedLowerLeftX = ((Long) data.get("SR_LL_x")).intValue();
 	    int searchRegionRedLowerLeftY = ((Long) data.get("SR_LL_y")).intValue();
@@ -107,6 +112,9 @@ public class WifiInput {
 	    Setting.setOpponentFlagColor(opponentFlag);
 	    Setting.setZiplineStart(ziplineStartX, ziplineStartY);
 	    Setting.setZiplineEnd(ziplineEndX, ziplineEndY);
+	    
+	    Setting.setStartPointNearZipline(ziplineNearStartPointX, ziplineNearStartPointY);
+	    Setting.setEndPointNearZipline(ziplineNearEndPointX, ziplineNearEndPointY);
       
 	    StartingZone.setGreenZoneLowerLeftCorner(greenZoneLowerLeftX, greenZoneLowerLeftY);
 	    StartingZone.setGreenZoneUpperRightCorner(greenZoneUpperRightX, greenZoneUpperRightY);
