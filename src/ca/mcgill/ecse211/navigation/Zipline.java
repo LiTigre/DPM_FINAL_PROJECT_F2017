@@ -27,8 +27,6 @@ public class Zipline {
 	
 	
 	// Constants
-	/** Light sensor value of the floor */
-	private final double FLOOR_INTENSITY = 600;
 	/** Speed of the zipline motor in degrees/second */
 	private static final int ZIPLINE_SPEED = 200;
 	/** Create a range of acceptable values to consider the floor */
@@ -42,7 +40,8 @@ public class Zipline {
 	// Variables
 	/** Keep track of how many times the same value is read from the light sensor */
 	private int count = 0;
-	
+	/** Light sensor value of the floor */
+	private double floorIntensity;
 	
 	/**
 	 * Constructor for the Zipline class.
@@ -54,6 +53,7 @@ public class Zipline {
 	public Zipline(EV3LargeRegulatedMotor ziplineMotor, Driver driver) {
 		this.ziplineMotor = ziplineMotor;
 		this.driver = driver;
+		this.floorIntensity = calculateFloorIntensity();
 	}
 	
 	/**
@@ -89,7 +89,7 @@ public class Zipline {
 	 * @version 1.1
 	 */
 	private boolean hasLanded() {
-		if (MainController.getLightValue() < (FLOOR_INTENSITY + RANGE) && MainController.getLightValue() > (FLOOR_INTENSITY - RANGE)) {
+		if (MainController.getLightValue() < (floorIntensity + RANGE) && MainController.getLightValue() > (floorIntensity - RANGE)) {
 			if (count > FILTER) return true;
 			count++;
 		} else {
