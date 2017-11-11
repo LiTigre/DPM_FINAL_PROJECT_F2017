@@ -2,6 +2,7 @@ package ca.mcgill.ecse211.odometry;
 
 import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.navigation.Driver;
+import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 
 /**
@@ -17,6 +18,7 @@ public class OdometryCorrection extends Thread {
 	Driver driver;
 	/** Odometer object created in the main controller. */
 	Odometer odometer;
+	Localization localization;
 	
 	
 	// Constants
@@ -25,13 +27,13 @@ public class OdometryCorrection extends Thread {
 	/** @see MainController#LINE_THRESHOLD */
 	private static final double LINE_THRESHOLD = MainController.LINE_THRESHOLD;
 	/** @see MainController#BLOCK_LENGTH */
-	private static final double BLOCK_LENGTH = MainController.BLOCK_LENGTH;
+	private static final double GRID_LENGTH = MainController.GRID_LENGTH;
 	/** Distance from the angle color sensor to the middle of the track in cm */
 	private static final double ANGLE_SENSOR_TO_TRACK = 16;
 	/** Value that indicates a black line for the second sensor. */
 	private static final double ANGLE_LINE_THRESHOLD = 400;
 	/** Thread time of the correction. */
-	private static final long CORRECTION_PERIOD = 10;
+	private static final long CORRECTION_PERIOD = 1000;
 	/** Keeps track of the x position of the robot. */
 	private int xCounter;
 	/** Keeps track of the y position of the robot. */
@@ -46,9 +48,10 @@ public class OdometryCorrection extends Thread {
 	 * @param colorSensor Color sensor created in MainController.
 	 * @since 1.1
 	 */
-	public OdometryCorrection(Odometer odometer, Driver driver) {
+	public OdometryCorrection(Odometer odometer, Driver driver, Localization localization) {
 		this.driver = driver;
 		this.odometer = odometer;
+		this.localization = localization;
 		
 		this.xCounter = 0;
 		this.yCounter = 0; 
@@ -68,8 +71,8 @@ public class OdometryCorrection extends Thread {
 			//Main Correction sensor
 			if(MainController.getLightValue() <= LINE_THRESHOLD) {
 				// To avoid correction while turning on itself.
-				if(!(driver.isTurning())) {
-					
+				if(!(localization.getLocalizing())) {
+					Sound.beep();
 					performCorrection();
 					changeBoolState();
 				}
@@ -77,7 +80,7 @@ public class OdometryCorrection extends Thread {
 			//Angle correction sensor
 			else if(MainController.getAngleLightValue() <= ANGLE_LINE_THRESHOLD) {
 				// To avoid correction while turning on itself.
-				if(!(driver.isTurning())) {
+				if(!(localization.getLocalizing())) {
 					performCorrection();
 					changeBoolState();
 				}
@@ -108,25 +111,25 @@ public class OdometryCorrection extends Thread {
 			if(!(positionCorrection)) {
 				xCounter = xCounter - 1;
 			}
-			odometer.setX((xCounter*BLOCK_LENGTH) + SENSOR_TO_TRACK);
+			odometer.setX((xCounter*GRID_LENGTH) + SENSOR_TO_TRACK);
 		}
 		else if((whichXWay > 0) && (whichYWay == 0)) {
 			if(!(positionCorrection)) {
 				xCounter = xCounter + 1;
 			}
-			odometer.setX((xCounter*BLOCK_LENGTH) + SENSOR_TO_TRACK);
+			odometer.setX((xCounter*GRID_LENGTH) + SENSOR_TO_TRACK);
 		}
 		else if((whichYWay < 0) && (whichXWay == 0)) {
 			if(!(positionCorrection)) {
 				yCounter =yCounter - 1;
 			}
-			odometer.setY((yCounter*BLOCK_LENGTH) + SENSOR_TO_TRACK);
+			odometer.setY((yCounter*GRID_LENGTH) + SENSOR_TO_TRACK);
 		}
 		else if((whichYWay > 0) && (whichXWay == 0)) {
 			if(!(positionCorrection)) {
 				yCounter = yCounter + 1;
 			}
-			odometer.setY((yCounter*BLOCK_LENGTH) + SENSOR_TO_TRACK);
+			odometer.setY((yCounter*GRID_LENGTH) + SENSOR_TO_TRACK);
 		}
 	}
 	

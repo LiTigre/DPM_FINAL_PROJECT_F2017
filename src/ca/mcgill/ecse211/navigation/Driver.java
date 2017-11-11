@@ -25,11 +25,11 @@ public class Driver {
 	/** @see MainController#WHEEL_RADIUS */
 	private static final double WHEEL_RADIUS = MainController.WHEEL_RADIUS;
 	/** @see MainController#TRACK */
-	private static final double TRACK = MainController.TRACK;
+	public double TRACK = MainController.TRACK;
 	/** The forward speed of the robot in (degrees/second) */
-	private static final int FORWARD_SPEED = 200;
+	private static final int FORWARD_SPEED = 150;
 	/** The rotational speed of the robot in (degrees/second) */
-	private static final int ROTATE_SPEED = 150;
+	private static final int ROTATE_SPEED = 100;
 	
 	
 	// Booleans
@@ -68,6 +68,7 @@ public class Driver {
 
 		double thetaD = Math.toDegrees(Math.atan2(deltaX, deltaY));
 		double thetaTurn = thetaD - odometer.getTheta();
+		System.out.println(thetaTurn);
 		
 		if (thetaTurn < -180.0) {
 			turnDistance(360.0 + thetaTurn);

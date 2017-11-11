@@ -28,15 +28,15 @@ public class MainController {
 	
 	// Constants 
 	/** The radius of the robot's wheels in cm */
-	public static final double WHEEL_RADIUS = 2.10;
+	public static final double WHEEL_RADIUS = 2.15;
 	/** The length of the robot's track in cm. */
-	public static final double TRACK = 13.22;
+	public static final double TRACK = 11;
 	/** Distance from the color sensor to the middle of the track in cm */
-	public static final double SENSOR_TO_TRACK = 13.6;
+	public static final double SENSOR_TO_TRACK = 15;
 	/** Value that indicates a black line. */
 	public static final double LINE_THRESHOLD = 450;
 	/** Value of the length of a block in cm */
-	public static final double BLOCK_LENGTH = 30.48; 
+	public static final double GRID_LENGTH = 30.48; 
 	
 	
 	// Sensors
@@ -96,15 +96,87 @@ public class MainController {
 		Odometer odometer = new Odometer(leftMotor, rightMotor);
 		Driver driver = new Driver(leftMotor, rightMotor, odometer);
 		Localization localization = new Localization(odometer, driver);
-		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver);
+		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver, localization);
 		Zipline zipline = new Zipline(ziplineMotor, driver);
 		
 		// First wait for server to send info.
 		//WifiInput.recieveServerData();
 		odometer.start();
-		driver.travelTo(6*30.48, 0);
 		
-		System.out.println("x: " + odometer.getX() + " y: " + odometer.getY() + "theta: " + odometer.getTheta());
+		/*driver.turnDistance(90);
+		while(driver.getWheelsMoving());
+		System.out.println("x: " +odometer.getX());
+		System.out.println("y: " +odometer.getY());
+		System.out.println("t: " +odometer.getTheta());
+		driver.turnDistance(90);
+		while(driver.getWheelsMoving());
+		System.out.println("x: " +odometer.getX());
+		System.out.println("y: " +odometer.getY());
+		System.out.println("t: " +odometer.getTheta());
+		driver.turnDistance(90);
+		while(driver.getWheelsMoving());
+		System.out.println("x: " +odometer.getX());
+		System.out.println("y: " +odometer.getY());
+		System.out.println("t: " +odometer.getTheta());
+		driver.turnDistance(90);
+		while(driver.getWheelsMoving());
+		System.out.println("x: " +odometer.getX());
+		System.out.println("y: " +odometer.getY());
+		System.out.println("t: " +odometer.getTheta());*/
+		/*driver.turnDistance(360);
+		while(driver.getWheelsMoving());
+		System.out.println("x: " +odometer.getX());
+		System.out.println("y: " +odometer.getY());
+		System.out.println("t: " +odometer.getTheta()); */
+
+		
+		/*
+		if(Setting.getStartingCorner() == 1){
+			odometer.setPosition(new double[] {odometer.getX()+7*GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()+270}, new boolean[] {true, true, true});
+		}
+		else if(Setting.getStartingCorner() == 2) {
+			odometer.setPosition(new double[] {odometer.getX()+7*GRID_LENGTH, odometer.getY()+7*GRID_LENGTH, odometer.getTheta()+180}, new boolean[] {true, true, true});
+		}
+		else if(Setting.getStartingCorner() == 3){
+			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+7*GRID_LENGTH, odometer.getTheta()+90}, new boolean[] {true, true, true});
+		}
+		else{
+			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()}, new boolean[] {true, true, true});
+		} */
+		//driver.travelTo(ZIPLINE_PRE_POINT_X, CURRENT_Y);
+		// localize
+		//driver.travelTo(ZIPLINE_PRE_POINT_X, ZIPLINE_PRE_POINT_Y);
+		// localize
+		//driver.travelTo(ZIPLINE_POINT_X, ZIPLINE_POINT_Y);
+		//zipline.performZiplineTravel();
+		// Something + localize
+		//driver.travelTo(somelocation_X, current_y);
+		// localize
+		//driver.travelTo(somelocation_x, some_location_y);
+		// end
+		//driver.turnDistance(360);
+		//while(driver.getWheelsMoving());
+		//localization.localize();
+		
+		//localization.lightLocalization();
+		odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()}, new boolean[] {true, true, true});
+		driver.travelTo(GRID_LENGTH, GRID_LENGTH);
+		System.out.println("x: " +odometer.getX());
+		System.out.println("y: " +odometer.getY());
+		System.out.println("t: " +odometer.getTheta());
+		
+		driver.travelTo((3*GRID_LENGTH), GRID_LENGTH);
+		localization.reLocalize((3*GRID_LENGTH), GRID_LENGTH);
+		System.out.println("x: " +odometer.getX());
+		System.out.println("y: " +odometer.getY());
+		System.out.println("t: " +odometer.getTheta());
+		
+		driver.travelTo((3*GRID_LENGTH), (3*GRID_LENGTH));
+		localization.reLocalize((3*GRID_LENGTH), (3*GRID_LENGTH));
+		System.out.println("x: " +odometer.getX());
+		System.out.println("y: " +odometer.getY());
+		System.out.println("t: " +odometer.getTheta()); 
+		
 	}
 	
 	/**
@@ -113,7 +185,7 @@ public class MainController {
 	 * @param lastY Y value of the previous coordinate.
 	 * @since 1.3
 	 */
-	private void setPreviousCoordinates(double lastX, double lastY) {
+	private static void setPreviousCoordinates(double lastX, double lastY) {
 		previousX = lastX;
 		previousY = lastY;
 	}
@@ -142,7 +214,7 @@ public class MainController {
 	 * @param nextY Y value of the next coordinate.
 	 * @since 1.3
 	 */
-	private void setFutureCoordinates(double nextX, double nextY) {
+	private static void setFutureCoordinates(double nextX, double nextY) {
 		futureX = nextX;
 		futureY = nextY;
 	}

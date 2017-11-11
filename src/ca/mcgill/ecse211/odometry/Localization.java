@@ -34,7 +34,7 @@ public class Localization {
 	
 	// Color sensor data
 	/** Array that collects the angle values of every time the robot reads a black line. */
-	private double [] collectedData;
+	private double [] collectedData = new double[4];
 	
 	
 	// Booleans
@@ -54,7 +54,6 @@ public class Localization {
 		this.odometer = odometer;
 		this.driver = driver;
 		
-		collectedData = new double[4];
 		isCompleted = false;
 		isLocalizing = false;
 	}
@@ -78,6 +77,7 @@ public class Localization {
 			fallingEdgeLocalization();
 		}
 		while(driver.getWheelsMoving());
+		driver.instantStop();
 		lightLocalization();
 		setLocalizing(false);
 	}
@@ -145,8 +145,6 @@ public class Localization {
 		odometer.setPosition(new double[] {0.0, 0.0, newTheta}, new boolean[]{true,true,true});
 		
 		//Make the robot turn to the calculated 0
-//		driver.turnTo(0, 0);
-		//If the first method does not work use this
 		driver.turnDistance(359 - newTheta);
 	}
 	
@@ -154,12 +152,11 @@ public class Localization {
 	 * Performs light localization. 
 	 * @since 1.1
 	 */
-	private void lightLocalization() {
+	public void lightLocalization() {
 		
 		driver.turnDistance(360);
-		
+		int i = 0;
 		while(driver.getWheelsMoving()) {
-			int i = 0;
 			// Collect data during the ultrasonic localization is running
 			if(MainController.getLightValue() < LINE_THRESHOLD) {
 	    			//implement collecting data here
@@ -168,17 +165,110 @@ public class Localization {
 	    			i++;
 			}
 		}
+		calculateStartingPosition();
+	}
+	
+	public void reLocalize(double aroundX, double aroundY) {
+		setLocalizing(true);
+		driver.turnTo(aroundX, aroundY);
+		while(driver.getWheelsMoving());
 		
-		driver.instantStop();
-		
-		calculatePosition();
+		driver.turnDistance(360);
+		int i = 0;
+		while(driver.getWheelsMoving()) {
+			// Collect data during the ultrasonic localization is running
+			if(MainController.getLightValue() < LINE_THRESHOLD) {
+	    			//implement collecting data here
+	    			Sound.beep();
+	    			collectedData[i] = odometer.getTheta();
+	    			i++;
+			}
+		}
+		calculatePosition(aroundX, aroundY);
+		setLocalizing(false);
+	}
+	
+	private void calculatePosition(double aroundX, double aroundY) {
+
+		if(odometer.getX() < aroundX && odometer.getY() < aroundY) {
+			System.out.println("- -");
+			double thetaX;
+			double thetaY;
+			double deltaTheta;
+			
+			//Arc angle from the first time you encounter and axis till the end. 
+			thetaX = collectedData[3]-collectedData[1];
+			thetaY = collectedData[2]-collectedData[0];
+			
+			//Set the new/actual position of the robot.
+			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+			
+			//Correct angle 
+			deltaTheta = 90-(collectedData[3]-180)+thetaX/2;
+			odometer.setTheta(deltaTheta);
+		}
+		else if(odometer.getX() > aroundX && odometer.getY() < aroundY) {
+			System.out.println("+ -");
+			double thetaX;
+			double thetaY;
+			double deltaTheta;
+			
+			//Arc angle from the first time you encounter and axis till the end. 
+			thetaX = collectedData[2]-collectedData[0];
+			thetaY = collectedData[3]-collectedData[1];
+			
+			//Set the new/actual position of the robot.
+			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+			odometer.setX(aroundX+SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+			
+			//Correct angle 
+			deltaTheta = 90-(collectedData[2])+thetaX/2;
+			odometer.setTheta(deltaTheta);
+		}
+		else if(odometer.getX() < aroundX && odometer.getY() > aroundY) {
+			System.out.println("- +");
+			double thetaX;
+			double thetaY;
+			double deltaTheta;
+			
+			//Arc angle from the first time you encounter and axis till the end. 
+			thetaX = collectedData[2]-collectedData[0];
+			thetaY = collectedData[3]-collectedData[1];
+			
+			//Set the new/actual position of the robot.
+			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+			
+			//Correct angle 
+			deltaTheta = 90-(collectedData[2]-180)+thetaX/2;
+			odometer.setTheta(deltaTheta);
+		}
+		else {
+			System.out.println("+ +");
+			double thetaX;
+			double thetaY;
+			double deltaTheta;
+			
+			//Arc angle from the first time you encounter and axis till the end. 
+			thetaX = collectedData[3]-collectedData[1];
+			thetaY = collectedData[2]-collectedData[0];
+			
+			//Set the new/actual position of the robot.
+			odometer.setY(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+			odometer.setX(aroundY+SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+	
+			//Correct angle 
+			deltaTheta = 90-(collectedData[1]-180)+thetaX/2;
+			odometer.setTheta(deltaTheta);
+		}
 	}
 	
 	/**
 	 * Calculates position of the robot based on the light localization. 
 	 * @since 1.1
 	 */
-	private void calculatePosition() {
+	private void calculateStartingPosition() {
 		double thetaX;
 		double thetaY;
 		double deltaTheta;
@@ -193,7 +283,7 @@ public class Localization {
 		
 		//Correct angle 
 		deltaTheta = 90-(collectedData[3]-180)+thetaX/2;
-		odometer.setTheta(360 - deltaTheta);
+		odometer.setTheta(deltaTheta);
 	}
 	
 	/**
@@ -256,10 +346,10 @@ public class Localization {
 	 */
 	private double calculateTheta(double firstAngle, double secondAngle) {
 		if(firstAngle < secondAngle){
-			return 40 - (firstAngle + secondAngle) / 2;
+			return 45 - (firstAngle + secondAngle) / 2;
 		}
 		else{
-			return 220 - (firstAngle + secondAngle) / 2;
+			return 225 - (firstAngle + secondAngle) / 2;
 		}
 	}
 }
