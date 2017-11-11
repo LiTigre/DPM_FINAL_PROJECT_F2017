@@ -78,7 +78,7 @@ public class Zipline {
 			}
 		}, WAIT_SECONDS * 1000);
 		
-		//ziplineMotor.stop();
+		ziplineMotor.stop();
 	}
 	
 	/**
