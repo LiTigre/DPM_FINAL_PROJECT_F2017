@@ -2,6 +2,11 @@ package ca.mcgill.ecse211.navigation;
 
 import ca.mcgill.ecse211.controller.MainController;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.jfree.chart.axis.SegmentedTimeline;
+
 import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -30,6 +35,8 @@ public class Zipline {
 	private static final int RANGE = 50;
 	/** Number of times same light sensor value has to be read to be considered acceptable */
 	private static final int FILTER = 100;
+	/** Number of seconds to wait before checking if robot landed */ 
+	private final int WAIT_SECONDS = 10;
 	
 	
 	// Variables
@@ -60,11 +67,18 @@ public class Zipline {
 		driver.forward();
 		ziplineMotor.backward();
 		
-		while (!hasLanded()) {
-			driver.instantStop();
-		}
-
-		//ziplineMotor.stop();
+		Timer timer = new Timer();
+		
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				while (!hasLanded()) {
+					driver.instantStop();
+				}
+			}
+		}, WAIT_SECONDS * 1000);
+		
+		ziplineMotor.stop();
 	}
 	
 	/**
