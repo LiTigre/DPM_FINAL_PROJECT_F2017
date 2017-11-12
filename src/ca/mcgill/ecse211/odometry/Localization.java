@@ -171,12 +171,9 @@ public class Localization {
 	public void reLocalize(double aroundX, double aroundY) {
 		setLocalizing(true);
 		
-		double thetaX;
-		double thetaY;
-		
 		driver.turnDistance((45-odometer.getTheta()));
 		while(driver.getWheelsMoving());
-		
+		odometer.setTheta(0);
 		driver.turnDistance(360);
 		int i = 0;
 		while(driver.getWheelsMoving()) {
@@ -188,13 +185,29 @@ public class Localization {
 	    			i++;
 			}
 		}
-		thetaY = collectedData[3]-collectedData[1];
-		thetaX = collectedData[2]-collectedData[0];
-		calculatePosition(thetaX, thetaY, aroundX, aroundY);
+		calculatePosition(aroundX, aroundY);
 		setLocalizing(false);
 	}
 	
-	private void calculatePosition(double thetaX, double thetaY, double aroundX, double aroundY) {
+	private void calculatePosition(double aroundX, double aroundY) {
+		
+		double thetaX;
+		double thetaY;
+		double deltaThetaY;
+		
+		//Arc angle from the first time you encounter and axis till the end. 
+		thetaX = collectedData[3]-collectedData[1];
+		thetaY = collectedData[2]-collectedData[0];
+		
+		//Set the new/actual position of the robot.
+		odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+		odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+		
+		//Correct angle 
+		deltaThetaY = 90-(collectedData[3]-180)+thetaX/2;
+		odometer.setTheta(deltaThetaY);
+		
+		/*
 		double deltaTheta;
 		//if(thetaX <= 180 && thetaY <= 180) {
 			System.out.println("- -");
@@ -210,43 +223,7 @@ public class Localization {
 			System.out.println(odometer.getTheta());
 			System.out.println(deltaTheta);
 			//odometer.setTheta(-180+theta+deltaTheta);
-			//odometer.setTheta(theta);
-			
-		//}
-		/*
-		else if(thetaX < 180 && thetaY > 180) {
-			System.out.println("+ -");
-			
-			//Set the new/actual position of the robot.
-			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
-			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
-			
-			//Correct angle 
-			deltaTheta = 45-(collectedData[3]-180)+thetaY/2;
-			odometer.setTheta(deltaTheta);
-		}
-		else if(thetaX > 180 && thetaY < 180) {
-			System.out.println("- +");
-			
-			//Set the new/actual position of the robot.
-			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
-			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
-			
-			//Correct angle 
-			deltaTheta = 45-(collectedData[3]-180)+thetaY/2;
-			odometer.setTheta(deltaTheta);
-		}
-		else {
-			System.out.println("+ +");
-			
-			//Set the new/actual position of the robot.
-			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
-			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
-	
-			//Correct angle 
-			deltaTheta = 45-(collectedData[3]-180)+thetaY/2;
-			odometer.setTheta(deltaTheta);
-		}*/
+			odometer.setTheta((theta + odometer.getTheta())/2); */
 	}
 	
 	/**

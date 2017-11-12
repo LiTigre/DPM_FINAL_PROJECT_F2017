@@ -34,7 +34,7 @@ public class Zipline {
 	/** Number of times same light sensor value has to be read to be considered acceptable */
 	private static final int FILTER = 300;
 	/** Number of seconds to wait before checking if robot landed */ 
-	private final int WAIT_SECONDS = 35;
+	private final int WAIT_SECONDS = 36;
 	
 	
 	// Variables
