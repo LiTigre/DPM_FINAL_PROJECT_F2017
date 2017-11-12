@@ -30,11 +30,11 @@ public class Zipline {
 	/** Speed of the zipline motor in degrees/second */
 	private static final int ZIPLINE_SPEED = 200;
 	/** Create a range of acceptable values to consider the floor */
-	private static final int RANGE = 50;
+	private static final int RANGE = 100;
 	/** Number of times same light sensor value has to be read to be considered acceptable */
-	private static final int FILTER = 100;
+	private static final int FILTER = 300;
 	/** Number of seconds to wait before checking if robot landed */ 
-	private final int WAIT_SECONDS = 10;
+	private final int WAIT_SECONDS = 35;
 	
 	
 	// Variables
@@ -72,13 +72,11 @@ public class Zipline {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				while (!hasLanded()) {
-					driver.instantStop();
-				}
+				ziplineMotor.stop();
+				driver.travelDistance(35);
 			}
 		}, WAIT_SECONDS * 1000);
 		
-		ziplineMotor.stop();
 	}
 	
 	/**
@@ -89,6 +87,7 @@ public class Zipline {
 	 * @version 1.1
 	 */
 	private boolean hasLanded() {
+		System.out.println(MainController.getLightValue());
 		if (MainController.getLightValue() < (floorIntensity + RANGE) && MainController.getLightValue() > (floorIntensity - RANGE)) {
 			if (count > FILTER) return true;
 			count++;

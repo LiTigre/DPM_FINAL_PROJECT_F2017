@@ -292,7 +292,7 @@ public class Localization {
 	 */
 	private void turnToWall() {
 		while(!isCompleted){
-			//System.out.println("2. " + MainController.getDistanceValue());
+			System.out.println("2. " + MainController.getDistanceValue());
 			driver.rotate();
 			
 			//Checks if we reached a falling edge
@@ -309,6 +309,7 @@ public class Localization {
 	 */
 	private void turnAwayFromWall(){
 		while(!isCompleted){
+			System.out.println("3. " + MainController.getDistanceValue());
 			driver.rotate();
 			
 			if(MainController.getDistanceValue() > THRESHOLD_WALL + NOISE_GAP){
@@ -346,10 +347,10 @@ public class Localization {
 	 */
 	private double calculateTheta(double firstAngle, double secondAngle) {
 		if(firstAngle < secondAngle){
-			return 45 - (firstAngle + secondAngle) / 2;
+			return 40 - (firstAngle + secondAngle) / 2;
 		}
 		else{
-			return 225 - (firstAngle + secondAngle) / 2;
+			return 220 - (firstAngle + secondAngle) / 2;
 		}
 	}
 }

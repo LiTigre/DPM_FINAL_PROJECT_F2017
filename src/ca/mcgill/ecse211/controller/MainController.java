@@ -30,7 +30,7 @@ public class MainController {
 	/** The radius of the robot's wheels in cm */
 	public static final double WHEEL_RADIUS = 2.15;
 	/** The length of the robot's track in cm. */
-	public static final double TRACK = 11;
+	public static final double TRACK = 14.12;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15;
 	/** Value that indicates a black line. */
@@ -50,9 +50,9 @@ public class MainController {
 	
 	// Motors
 	/** Left motor with associated port. */
-	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
 	/** Right motor with associated port. */
-	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
+	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
 	/** Zipline motor with associated port. */
 	static final EV3LargeRegulatedMotor ziplineMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
 	
@@ -102,7 +102,7 @@ public class MainController {
 		// First wait for server to send info.
 		//WifiInput.recieveServerData();
 		odometer.start();
-		
+		//zipline.performZiplineTravel();
 		/*driver.turnDistance(90);
 		while(driver.getWheelsMoving());
 		System.out.println("x: " +odometer.getX());
@@ -158,15 +158,16 @@ public class MainController {
 		//while(driver.getWheelsMoving());
 		//localization.localize();
 		
-		//localization.lightLocalization();
+		localization.lightLocalization();
 		odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()}, new boolean[] {true, true, true});
-		driver.travelTo(GRID_LENGTH, GRID_LENGTH);
+		driver.travelTo(GRID_LENGTH, odometer.getY());
+	
 		System.out.println("x: " +odometer.getX());
 		System.out.println("y: " +odometer.getY());
 		System.out.println("t: " +odometer.getTheta());
 		
 		driver.travelTo((3*GRID_LENGTH), GRID_LENGTH);
-		localization.reLocalize((3*GRID_LENGTH), GRID_LENGTH);
+		localization.reLocalize((3*GRID_LENGTH), odometer.getY());
 		System.out.println("x: " +odometer.getX());
 		System.out.println("y: " +odometer.getY());
 		System.out.println("t: " +odometer.getTheta());
