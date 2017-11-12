@@ -86,7 +86,6 @@ public class MainController {
 	/** The Y coordinate to where the robot is supposed to stop its traveling at. */
 	private static double futureY;
 	
-	
 	/**
 	 * Runs capture the flag.
 	 * @param args required to make this the main method of the system. 
@@ -122,51 +121,55 @@ public class MainController {
 		int postZip[] = Setting.getEndPointNearZipline(); 
 		int zipEnd[] = Setting.getZiplineEnd();
 		
+		// Conditions to not run into the zipline
 		if(zipEnd[0] == zipStart[0] ) {
+			//Vertical zipline alignment
 			if(zipEnd[1] < zipStart[1]) {
-				//0 and 1 do y first
+				if(Setting.getStartingCorner() == 1 || Setting.getStartingCorner() == 0) {
+					//Travel y first
+				}
 			}
 			else {
-				//2 and 3 do y first
+				if(Setting.getStartingCorner() == 2 || Setting.getStartingCorner() == 3) {
+					//Travel y first
+				}
+			}
+		}
+		else if(zipEnd[1] == zipStart[1]) {
+			//Horizontal zipline alignment
+			if(zipEnd[0] < zipStart[0]) {
+				if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 3) {
+					//Travel x first
+				}
+			}
+			else {
+				if(Setting.getStartingCorner() == 1 || Setting.getStartingCorner() == 2) {
+					//Travel x first
+				}
 			}
 		}
 		else {
-			if(zipEnd[0] < zipStart[0]) {
-				//3 and 0 do x first
-			}
-			else {
-				//1 and 2 do x first
-			}
+			//Does not matter which axis you want to travel from / diagonal zipline 
+			for(int i = 0; ;) {
+				
+			}	
 		}
-		/*driver.travelTo(((preZip[0]+i)*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
-		System.out.println("x: " +odometer.getX());
-		System.out.println("y: " +odometer.getY());
-		System.out.println("t: " +odometer.getTheta());
-		localization.reLocalize(((preZip[0]+i)*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
-		System.out.println("x: " +odometer.getX());
-		System.out.println("y: " +odometer.getY());
-		System.out.println("t: " +odometer.getTheta());  */
 		
+		// Travel to the pre zipline point
 		driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
-		System.out.println("prex: " +odometer.getX());
-		System.out.println("prey: " +odometer.getY());
-		System.out.println("pret: " +odometer.getTheta()); 
 		localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
-		System.out.println("postx: " +odometer.getX());
-		System.out.println("posty: " +odometer.getY());
-		System.out.println("postt: " +odometer.getTheta());
-	
-		driver.travelTo((zipStart[0]*GRID_LENGTH), (zipStart[1]*GRID_LENGTH));
-		System.out.println("alignx: " +odometer.getX());
-		System.out.println("aligny: " +odometer.getY());
-		System.out.println("alignt: " +odometer.getTheta());
 		
+		// Perform zipline
 		zipline.performZiplineTravel();
 		while(driver.getWheelsMoving());
+		
+		// Figure out where it is after zipline
 		localization.reLocalize(postZip[0]*GRID_LENGTH, postZip[1]*GRID_LENGTH); 
 		System.out.println("x: " +odometer.getX());
 		System.out.println("y: " +odometer.getY());
 		System.out.println("t: " +odometer.getTheta()); 
+		
+		// Travel to the final location
 		//driver.travelTo(X_SPECIFIED*GRID_LENGTH, Y_SPECIFIED*GRID_LENGTH);
 		//localization.reLocalize(X_SPECIFIED*GRID_LENGTH, Y_SPECIFIED*GRID_LENGTH); 
 		//driver.travelTo(X_SPECIFIED*GRID_LENGTH, Y_SPECIFIED*GRID_LENGTH);
