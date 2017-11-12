@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.wifi;
 
 import java.util.Map;
+
 import ca.mcgill.ecse211.WiFiClient.WifiConnection;
 import ca.mcgill.ecse211.settings.SearchRegion;
 import ca.mcgill.ecse211.settings.Setting;
@@ -18,7 +19,7 @@ import lejos.hardware.Button;
 public class WifiInput {
 
 	/** IP address of the computer running the server application. */
-	private static final String SERVER_IP = "192.168.2.10";
+	private static final String SERVER_IP = "192.168.2.5";
 	/** The project team number. */
 	private static final int TEAM_NUMBER = 2;
 

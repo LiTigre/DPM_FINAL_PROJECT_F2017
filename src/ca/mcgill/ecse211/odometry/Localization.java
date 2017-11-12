@@ -27,7 +27,7 @@ public class Localization {
 	/** @see MainController#LINE_THRESHOLD */
 	private static final double LINE_THRESHOLD = MainController.LINE_THRESHOLD;
 	/** Value that separates falling and rising edge. */
-	private static final int THRESHOLD_WALL = 35;
+	private static final int THRESHOLD_WALL = 40;
 	/** Noise created from the corner during localization and must be ignored. */
 	private static final int NOISE_GAP = 1;
 	
@@ -65,10 +65,10 @@ public class Localization {
 	public void localize() {
 		setLocalizing(true);
 	
-		// If the robot is facing the wall, do rising edge.
 		while(odometer.getTheta() < 10) {
 			driver.rotate();
 		}
+		// If the robot is facing the wall, do rising edge.
 		if(MainController.getDistanceValue() < THRESHOLD_WALL + NOISE_GAP) {
 			risingEdgeLocalization();
 		}
@@ -108,7 +108,7 @@ public class Localization {
 		 newTheta = odometer.getTheta() + deltaTheta;
 			
 		 odometer.setPosition(new double[] {0.0, 0.0, newTheta}, new boolean[]{true,true,true});
-			
+		 
 		 //Make the robot turn to the calculated 0
 		 //driver.turnTo(0, 0);
 		 //If the first method does not work use this
@@ -170,7 +170,11 @@ public class Localization {
 	
 	public void reLocalize(double aroundX, double aroundY) {
 		setLocalizing(true);
-		driver.turnTo(aroundX, aroundY);
+		
+		double thetaX;
+		double thetaY;
+		
+		driver.turnDistance((45-odometer.getTheta()));
 		while(driver.getWheelsMoving());
 		
 		driver.turnDistance(360);
@@ -184,84 +188,65 @@ public class Localization {
 	    			i++;
 			}
 		}
-		calculatePosition(aroundX, aroundY);
+		thetaY = collectedData[3]-collectedData[1];
+		thetaX = collectedData[2]-collectedData[0];
+		calculatePosition(thetaX, thetaY, aroundX, aroundY);
 		setLocalizing(false);
 	}
 	
-	private void calculatePosition(double aroundX, double aroundY) {
-
-		if(odometer.getX() < aroundX && odometer.getY() < aroundY) {
+	private void calculatePosition(double thetaX, double thetaY, double aroundX, double aroundY) {
+		double deltaTheta;
+		//if(thetaX <= 180 && thetaY <= 180) {
 			System.out.println("- -");
-			double thetaX;
-			double thetaY;
-			double deltaTheta;
-			
-			//Arc angle from the first time you encounter and axis till the end. 
-			thetaX = collectedData[3]-collectedData[1];
-			thetaY = collectedData[2]-collectedData[0];
 			
 			//Set the new/actual position of the robot.
-			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
-			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
 			
 			//Correct angle 
-			deltaTheta = 90-(collectedData[3]-180)+thetaX/2;
-			odometer.setTheta(deltaTheta);
-		}
-		else if(odometer.getX() > aroundX && odometer.getY() < aroundY) {
+			deltaTheta = 90-(collectedData[3]-180)+thetaY/2;
+			double theta = Math.toDegrees(Math.atan2(odometer.getX(), odometer.getY()));
+			System.out.println(theta);
+			System.out.println(odometer.getTheta());
+			System.out.println(deltaTheta);
+			//odometer.setTheta(-180+theta+deltaTheta);
+			//odometer.setTheta(theta);
+			
+		//}
+		/*
+		else if(thetaX < 180 && thetaY > 180) {
 			System.out.println("+ -");
-			double thetaX;
-			double thetaY;
-			double deltaTheta;
-			
-			//Arc angle from the first time you encounter and axis till the end. 
-			thetaX = collectedData[2]-collectedData[0];
-			thetaY = collectedData[3]-collectedData[1];
 			
 			//Set the new/actual position of the robot.
-			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
-			odometer.setX(aroundX+SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
 			
 			//Correct angle 
-			deltaTheta = 90-(collectedData[2])+thetaX/2;
+			deltaTheta = 45-(collectedData[3]-180)+thetaY/2;
 			odometer.setTheta(deltaTheta);
 		}
-		else if(odometer.getX() < aroundX && odometer.getY() > aroundY) {
+		else if(thetaX > 180 && thetaY < 180) {
 			System.out.println("- +");
-			double thetaX;
-			double thetaY;
-			double deltaTheta;
-			
-			//Arc angle from the first time you encounter and axis till the end. 
-			thetaX = collectedData[2]-collectedData[0];
-			thetaY = collectedData[3]-collectedData[1];
 			
 			//Set the new/actual position of the robot.
-			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
-			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
 			
 			//Correct angle 
-			deltaTheta = 90-(collectedData[2]-180)+thetaX/2;
+			deltaTheta = 45-(collectedData[3]-180)+thetaY/2;
 			odometer.setTheta(deltaTheta);
 		}
 		else {
 			System.out.println("+ +");
-			double thetaX;
-			double thetaY;
-			double deltaTheta;
-			
-			//Arc angle from the first time you encounter and axis till the end. 
-			thetaX = collectedData[3]-collectedData[1];
-			thetaY = collectedData[2]-collectedData[0];
 			
 			//Set the new/actual position of the robot.
-			odometer.setY(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
-			odometer.setX(aroundY+SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
+			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
+			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
 	
 			//Correct angle 
-			deltaTheta = 90-(collectedData[1]-180)+thetaX/2;
+			deltaTheta = 45-(collectedData[3]-180)+thetaY/2;
 			odometer.setTheta(deltaTheta);
-		}
+		}*/
 	}
 	
 	/**
@@ -284,6 +269,7 @@ public class Localization {
 		//Correct angle 
 		deltaTheta = 90-(collectedData[3]-180)+thetaX/2;
 		odometer.setTheta(deltaTheta);
+		driver.travelTo(0, 0);
 	}
 	
 	/**
@@ -292,7 +278,6 @@ public class Localization {
 	 */
 	private void turnToWall() {
 		while(!isCompleted){
-			System.out.println("2. " + MainController.getDistanceValue());
 			driver.rotate();
 			
 			//Checks if we reached a falling edge
@@ -309,7 +294,6 @@ public class Localization {
 	 */
 	private void turnAwayFromWall(){
 		while(!isCompleted){
-			System.out.println("3. " + MainController.getDistanceValue());
 			driver.rotate();
 			
 			if(MainController.getDistanceValue() > THRESHOLD_WALL + NOISE_GAP){
