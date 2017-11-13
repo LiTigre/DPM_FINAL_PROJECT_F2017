@@ -78,13 +78,13 @@ public class OdometryCorrection extends Thread {
 				}
 			}
 			//Angle correction sensor
-			else if(MainController.getAngleLightValue() <= ANGLE_LINE_THRESHOLD) {
+			//else if(MainController.getAngleLightValue() <= ANGLE_LINE_THRESHOLD) {
 				// To avoid correction while turning on itself.
 				if(!(localization.getLocalizing())) {
 					performCorrection();
 					changeBoolState();
 				}
-			}
+		//}
 			
 			if (correctionEnd - correctionStart < CORRECTION_PERIOD) {
 				try {

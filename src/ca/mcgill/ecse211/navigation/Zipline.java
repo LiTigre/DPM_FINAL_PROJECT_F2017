@@ -73,7 +73,7 @@ public class Zipline {
 			@Override
 			public void run() {
 				ziplineMotor.stop();
-				driver.travelDistance(35);
+				driver.travelDistance(33);
 			}
 		}, WAIT_SECONDS * 1000);
 		

@@ -31,7 +31,7 @@ public class MainController {
 	/** The radius of the robot's wheels in cm */
 	public static final double WHEEL_RADIUS = 2.1;
 	/** The length of the robot's track in cm. */
-	public static final double TRACK = 12.15;
+	public static final double TRACK = 11.2;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -44,7 +44,7 @@ public class MainController {
 	/**  Color sensor with associated port. */
 	private static final EV3ColorSensor lightSensor = new EV3ColorSensor(LocalEV3.get().getPort("S3"));
 	/** Color sensor used for angle correction with associated port. */
-	private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
+	//private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
 	/** Ultrasonic sensor with associated port. */
 	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S1"));
 	
@@ -62,7 +62,7 @@ public class MainController {
 	/** Data collected from the color sensor. */
 	private static SampleProvider lightSample = lightSensor.getRedMode();
 	/** Data collected from the angle color sensor. */
-	private static SampleProvider angleColorSample = angleColorSensor.getRedMode();
+//	private static SampleProvider angleColorSample = angleColorSensor.getRedMode();
 	/** Data collected from the ultrasonic sensor. */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
 
@@ -71,7 +71,7 @@ public class MainController {
 	/** Array of floats that stores the value of the data from the color sensor. */
 	private static float lightData[] = new float[lightSample.sampleSize()];
 	/** Array of floats that stores the value of the data from the color sensor. */
-	private static float angleLightData[] = new float[angleColorSample.sampleSize()];
+	//private static float angleLightData[] = new float[angleColorSample.sampleSize()];
 	/** Array of floats that stores the value of the data from the ultrasonic sensor. */
 	private static float usData[] = new float[usDistance.sampleSize()];
 	
@@ -108,7 +108,7 @@ public class MainController {
 		
 		odometer.start();
 		driver.turnDistance(360);
-		exit(1);
+		
 		localization.localize();
 		
 		if(Setting.getStartingCorner() == 1){
@@ -149,8 +149,10 @@ public class MainController {
 				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
 			}
 			
-			driver.travelTo(previousX*GRID_LENGTH, preZip[1]*GRID_LENGTH);
-			localization.reLocalize(previousX*GRID_LENGTH, preZip[1]*GRID_LENGTH);
+			if(Math.abs(futureY-previousY)!= 0) {
+				driver.travelTo(previousX*GRID_LENGTH, preZip[1]*GRID_LENGTH);
+				localization.reLocalize(previousX*GRID_LENGTH, preZip[1]*GRID_LENGTH);
+			}
 			
 			//Then X
 			while(Math.abs(futureX-previousX)!= 1 && Math.abs(futureX-previousX)!= 2 && Math.abs(futureX-previousX)!= 0) {
@@ -177,8 +179,10 @@ public class MainController {
 				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
 			}
 			
-			driver.travelTo((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-			localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
+			if(Math.abs(futureX-previousX)!= 0) {
+				driver.travelTo((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
+				localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
+			}
 			
 			//Then Y
 			while(Math.abs(futureY-previousY)!= 1 && Math.abs(futureY-previousY)!= 2 && Math.abs(futureY-previousY)!= 0) {
@@ -198,10 +202,11 @@ public class MainController {
 		// Travel to the pre zipline point
 		driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
 		localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
-		
-		//Travel to the zipline point 
-		driver.travelTo(zipStart[0]*GRID_LENGTH, zipStart[1]*GRID_LENGTH);
+		driver.turnTo(zipStart[0]*GRID_LENGTH, zipStart[1]*GRID_LENGTH);
+		while(driver.getWheelsMoving());
 		double preZipTheta = odometer.getTheta();
+		//Travel to the zipline point 
+		driver.travelDistance(33);
 		// Perform zipline
 		zipline.performZiplineTravel();
 		while(driver.getWheelsMoving());
@@ -301,8 +306,8 @@ public class MainController {
 	 * @return The angle color sensor reading multiplied by 1000 for precision.
 	 * @since 1.2
 	 */
-	public static float getAngleLightValue() {
-		angleColorSample.fetchSample(angleLightData, 0);
-		return lightData[0]*1000;
-	}
+	//public static float getAngleLightValue() {
+	//	angleColorSample.fetchSample(angleLightData, 0);
+	//	return lightData[0]*1000;
+	//}
 }
