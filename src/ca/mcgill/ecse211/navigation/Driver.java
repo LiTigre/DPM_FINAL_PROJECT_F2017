@@ -70,13 +70,13 @@ public class Driver {
 		double thetaTurn = thetaD - odometer.getTheta();
 		
 		if (thetaTurn < -180.0) {
-			turnDistance(360.0 + thetaTurn-11);
+			turnDistance(360.0 + thetaTurn);
 		}
 		else if (thetaTurn > 180.0) {
-			turnDistance(thetaTurn - 360.0-11);
+			turnDistance(thetaTurn - 360.0);
 		}
 		else {
-			turnDistance(thetaTurn-11);
+			turnDistance(thetaTurn);
 		}
 		
 		while(getWheelsMoving());
@@ -146,14 +146,14 @@ public class Driver {
 		double thetaTurn = thetaD - odometer.getTheta();
 		
 		if (thetaTurn < -180.0) {
-			turnDistance(360.0 + thetaTurn -11);
+			turnDistance(360.0 + thetaTurn);
 
 		}
 		else if (thetaTurn > 180.0) {
-			turnDistance(thetaTurn - 360.0 -11);
+			turnDistance(thetaTurn - 360.0);
 		}
 		else {
-			turnDistance(thetaTurn -11);
+			turnDistance(thetaTurn);
 		}
 		
 	}

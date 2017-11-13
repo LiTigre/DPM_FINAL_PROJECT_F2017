@@ -7,6 +7,7 @@ import ca.mcgill.ecse211.navigation.Zipline;
 import ca.mcgill.ecse211.odometry.Localization;
 import ca.mcgill.ecse211.odometry.Odometer;
 import ca.mcgill.ecse211.odometry.OdometryCorrection;
+import ca.mcgill.ecse211.settings.SearchRegion;
 import ca.mcgill.ecse211.settings.Setting;
 import ca.mcgill.ecse211.wifi.WifiInput;
 import lejos.hardware.Sound;
@@ -31,7 +32,7 @@ public class MainController {
 	/** The radius of the robot's wheels in cm */
 	public static final double WHEEL_RADIUS = 2.1;
 	/** The length of the robot's track in cm. */
-	public static final double TRACK = 11.2;
+	public static final double TRACK = 11.4;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -105,6 +106,8 @@ public class MainController {
 		int zipStart[] = Setting.getZiplineStart();
 		int postZip[] = Setting.getEndPointNearZipline(); 
 		int zipEnd[] = Setting.getZiplineEnd();
+		int upperFlag[] = SearchRegion.getMySearchUpperRightCorner();
+		int lowerFlag[] = SearchRegion.getMySearchLowerLeftCorner();
 		
 		odometer.start();
 		driver.turnDistance(360);
@@ -202,25 +205,22 @@ public class MainController {
 		// Travel to the pre zipline point
 		driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
 		localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
-		driver.turnTo(zipStart[0]*GRID_LENGTH, zipStart[1]*GRID_LENGTH);
-		while(driver.getWheelsMoving());
-		double preZipTheta = odometer.getTheta();
 		//Travel to the zipline point 
-		driver.travelDistance(33);
+		driver.turnTo(zipStart[0]*GRID_LENGTH, zipStart[1]*GRID_LENGTH);
+		double preZipTheta = odometer.getTheta();
+		while(driver.getWheelsMoving());
+		driver.turnDistance(-9);
+		while(driver.getWheelsMoving());
+		driver.travelDistance(36);
 		// Perform zipline
 		zipline.performZiplineTravel();
 		while(driver.getWheelsMoving());
 		odometer.setTheta(preZipTheta);
 		// Figure out where it is after zipline
 		localization.reLocalize(postZip[0]*GRID_LENGTH, postZip[1]*GRID_LENGTH); 
-		System.out.println("x: " +odometer.getX());
-		System.out.println("y: " +odometer.getY());
-		System.out.println("t: " +odometer.getTheta()); 
-		
+	
 		// Travel to the final location
-		//driver.travelTo(X_SPECIFIED*GRID_LENGTH, Y_SPECIFIED*GRID_LENGTH);
-		//localization.reLocalize(X_SPECIFIED*GRID_LENGTH, Y_SPECIFIED*GRID_LENGTH); 
-		//driver.travelTo(X_SPECIFIED*GRID_LENGTH, Y_SPECIFIED*GRID_LENGTH);
+		driver.travelTo(upperFlag[0]*GRID_LENGTH, upperFlag[1]*GRID_LENGTH);
 	}
 	
 	/**
