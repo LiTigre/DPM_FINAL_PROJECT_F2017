@@ -64,7 +64,7 @@ public class Zipline {
 	public void performZiplineTravel() {
 		ziplineMotor.setSpeed(ZIPLINE_SPEED);
 		
-		driver.forward();
+		driver.forward(50);
 		ziplineMotor.backward();
 		
 		Timer timer = new Timer();

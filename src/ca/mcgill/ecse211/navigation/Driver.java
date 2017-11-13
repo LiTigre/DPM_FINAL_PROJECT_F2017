@@ -110,8 +110,8 @@ public class Driver {
 		setTravelling(false);
 	}
 	
-	public void forward() {
-		setSpeed(FORWARD_SPEED);
+	public void forward(int speed) {
+		setSpeed(speed);
 		
 		leftMotor.forward();
 		rightMotor.forward();
