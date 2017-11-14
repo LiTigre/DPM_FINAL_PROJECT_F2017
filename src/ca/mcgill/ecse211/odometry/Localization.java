@@ -9,7 +9,7 @@ import lejos.robotics.SampleProvider;
 /**
  * Determines the starting point of the robot based on the corner it has been placed in. 
  * @author Team 2
- * @version 1.2
+ * @version 1.3
  * @since 1.0
  */
 public class Localization {
@@ -166,9 +166,15 @@ public class Localization {
 		calculateStartingPosition();
 	}
 	
+	/**
+	 * This method is used to localize when it is not at the starting location. 
+	 * @param aroundX The X coordinate of the point it is localizing around.
+	 * @param aroundY The Y coordinate of the point it is localizing around.
+	 * @since 1.3
+	 */
 	public void reLocalize(double aroundX, double aroundY) {
 		setLocalizing(true);
-		
+		System.out.println(45-odometer.getTheta());
 		driver.turnDistance((45-odometer.getTheta()));
 		while(driver.getWheelsMoving());
 		odometer.setTheta(0);
@@ -187,6 +193,12 @@ public class Localization {
 		setLocalizing(false);
 	}
 	
+	/**
+	 * Calculates the robots position based on the localization around a specified point. 
+	 * @param aroundX The X coordinate of the point.
+	 * @param aroundY The Y coordinate of the point.
+	 * @since 1.3
+	 */
 	private void calculatePosition(double aroundX, double aroundY) {
 		
 		double thetaX;

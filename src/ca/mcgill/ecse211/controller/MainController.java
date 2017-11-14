@@ -30,9 +30,11 @@ public class MainController {
 	
 	// Constants 
 	/** The radius of the robot's wheels in cm */
-	public static final double WHEEL_RADIUS = 2.1;
+	//public static final double WHEEL_RADIUS = 2.1;
+	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
-	public static final double TRACK = 11;
+	//public static final double TRACK = 11;
+	public static final double TRACK = 11.3;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -110,10 +112,10 @@ public class MainController {
 		int lowerFlag[] = SearchRegion.getMySearchLowerLeftCorner();
 		
 		odometer.start();
-		driver.turnDistance(360);
 		
 		localization.localize();
 		
+		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
 			odometer.setPosition(new double[] {odometer.getX()+7*GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()+270}, new boolean[] {true, true, true});
 			previousX = 7;
@@ -135,6 +137,7 @@ public class MainController {
 			previousY = 1; 
 		} 
 		
+		// Set the pre zip point 
 		futureX = preZip[0];
 		futureY = preZip[1];
 		
@@ -211,7 +214,8 @@ public class MainController {
 		//double preZipTheta = odometer.getTheta();
 		while(driver.getWheelsMoving());
 		
-		driver.turnDistance(-10);
+		//driver.turnDistance(-10);
+		driver.turnDistance(-13);
 		while(driver.getWheelsMoving());
 		driver.travelDistance(40);
 		
@@ -223,7 +227,7 @@ public class MainController {
 				odometer.setTheta(180);
 		}
 		else if (zipEnd[0] == zipStart[0] && zipEnd[1] > zipStart[1]) {		//positive y
-			odometer.setTheta(0);
+			odometer.setTheta(1);
 		}
 		else if(zipEnd[1] == zipStart[1] && zipEnd[0] < zipStart[0]) {		//negative x
 			odometer.setTheta(270);
@@ -243,23 +247,18 @@ public class MainController {
 		else if (zipEnd[0] - zipStart[0] < 0 && zipEnd[1] - zipStart[1] > 0 ) {	//bottom left
 			odometer.setTheta(225);
 		}
-		
+	
 		// Figure out where it is after zipline
 		localization.reLocalize(postZip[0]*GRID_LENGTH, postZip[1]*GRID_LENGTH); 
-	
-		System.out.println(odometer.getX());
-		System.out.println(odometer.getY());
-		System.out.println(odometer.getTheta());
 		
-		//driver.travelTo(postZip[0]*GRID_LENGTH, postZip[1]*GRID_LENGTH);
-		
+		// Set post zip point and region to go to 
 		previousX = postZip[0];
 		previousY = postZip[1];
 		futureX = upperFlag[0];
 		futureY = upperFlag[1];
 		
 		// Conditions to not run into the zipline
-				if(zipEnd[0] == zipStart[0] ) {
+				if(zipEnd[1] == zipStart[1] ) {
 					//Vertical zipline alignment. Do Y first 
 					while(Math.abs(futureY-previousY)!= 1 && Math.abs(futureY-previousY)!= 2 && Math.abs(futureY-previousY)!= 0) {
 						if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 1) {
