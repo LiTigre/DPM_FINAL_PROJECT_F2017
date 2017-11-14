@@ -27,9 +27,9 @@ public class Localization {
 	/** @see MainController#LINE_THRESHOLD */
 	private static final double LINE_THRESHOLD = MainController.LINE_THRESHOLD;
 	/** Value that separates falling and rising edge. */
-	private static final int THRESHOLD_WALL = 40;
+	private static final int THRESHOLD_WALL =35;
 	/** Noise created from the corner during localization and must be ignored. */
-	private static final int NOISE_GAP = 1;
+	private static final int NOISE_GAP = 2;
 	
 	
 	// Color sensor data
@@ -110,8 +110,6 @@ public class Localization {
 		 odometer.setPosition(new double[] {0.0, 0.0, newTheta}, new boolean[]{true,true,true});
 		 
 		 //Make the robot turn to the calculated 0
-		 //driver.turnTo(0, 0);
-		 //If the first method does not work use this
 		 driver.turnDistance(359 - newTheta);
 	}
 	
@@ -206,24 +204,6 @@ public class Localization {
 		//Correct angle 
 		deltaThetaY = 90-(collectedData[3]-180)+thetaX/2;
 		odometer.setTheta(deltaThetaY);
-		
-		/*
-		double deltaTheta;
-		//if(thetaX <= 180 && thetaY <= 180) {
-			System.out.println("- -");
-			
-			//Set the new/actual position of the robot.
-			odometer.setX(aroundX-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaY/2)));
-			odometer.setY(aroundY-SENSOR_TO_TRACK*Math.cos(Math.toRadians(thetaX/2)));
-			
-			//Correct angle 
-			deltaTheta = 90-(collectedData[3]-180)+thetaY/2;
-			double theta = Math.toDegrees(Math.atan2(odometer.getX(), odometer.getY()));
-			System.out.println(theta);
-			System.out.println(odometer.getTheta());
-			System.out.println(deltaTheta);
-			//odometer.setTheta(-180+theta+deltaTheta);
-			odometer.setTheta((theta + odometer.getTheta())/2); */
 	}
 	
 	/**

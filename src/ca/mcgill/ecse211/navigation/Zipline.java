@@ -64,7 +64,7 @@ public class Zipline {
 	public void performZiplineTravel() {
 		ziplineMotor.setSpeed(ZIPLINE_SPEED);
 		
-		driver.forward(50);
+		driver.forward(75);
 		ziplineMotor.backward();
 		
 		Timer timer = new Timer();
@@ -73,7 +73,9 @@ public class Zipline {
 			@Override
 			public void run() {
 				ziplineMotor.stop();
-				driver.travelDistance(31.5);
+				// Diagonals
+				//driver.travelDistance(29);
+				driver.travelDistance(20);
 			}
 		}, WAIT_SECONDS * 1000);
 		

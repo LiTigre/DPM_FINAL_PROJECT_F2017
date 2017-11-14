@@ -27,7 +27,7 @@ public class Driver {
 	/** @see MainController#TRACK */
 	public double TRACK = MainController.TRACK;
 	/** The forward speed of the robot in (degrees/second) */
-	private static final int FORWARD_SPEED = 150;
+	private static final int FORWARD_SPEED = 200;
 	/** The rotational speed of the robot in (degrees/second) */
 	private static final int ROTATE_SPEED = 100;
 	
@@ -76,7 +76,12 @@ public class Driver {
 			turnDistance(thetaTurn - 360.0);
 		}
 		else {
+			if (thetaTurn < 0) {
+				turnDistance(thetaTurn + 360);
+			}
+			else {
 			turnDistance(thetaTurn);
+			}
 		}
 		
 		while(getWheelsMoving());
