@@ -7,7 +7,7 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 /**
  * Main navigation class of the system. Contains all the basic travel methods necessary. 
  * @author Team 2
- * @version 1.3
+ * @version 1.4
  * @since 1.0
  */
 public class Driver {
@@ -114,6 +114,11 @@ public class Driver {
 		setTravelling(false);
 	}
 	
+	/**
+	 * Makes both wheels go forward for unspecified distance or time. 
+	 * @param speed The speed of the wheels in degrees per second. 
+	 * @since 1.4
+	 */
 	public void forward(int speed) {
 		setSpeed(speed);
 		

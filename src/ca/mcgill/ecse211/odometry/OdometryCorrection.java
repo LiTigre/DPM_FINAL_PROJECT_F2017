@@ -18,6 +18,7 @@ public class OdometryCorrection extends Thread {
 	Driver driver;
 	/** Odometer object created in the main controller. */
 	Odometer odometer;
+	/** Localization object created in the main controller. */
 	Localization localization;
 	
 	

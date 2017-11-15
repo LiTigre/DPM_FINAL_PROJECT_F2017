@@ -23,6 +23,7 @@ public class Zipline {
 	// Objects
 	/** Zipline motor created in the main controller. */
 	private EV3LargeRegulatedMotor ziplineMotor;
+	/** Driver object created in the main controller. */
 	private Driver driver;
 	
 	

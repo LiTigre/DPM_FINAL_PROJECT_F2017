@@ -28,7 +28,9 @@ public class Setting {
 	/** X and Y coordinates of the end of the zipline. [0] = X; [1] = Y */
 	private static int[] ziplineEnd;
 	
+	/** Array that holds the X and Y coordinates of the point before the zipline. [0] = X; [1] = Y; */
 	private static int[] startPointNearZipline;
+	/** Array that holds the X and Y coordinates of the point after the zipline. [0] = Xl [1] = Y; */
 	private static int[] endPointNearZipline;
 	
 	
