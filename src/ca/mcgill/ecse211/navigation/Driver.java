@@ -7,7 +7,7 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 /**
  * Main navigation class of the system. Contains all the basic travel methods necessary. 
  * @author Team 2
- * @version 1.4
+ * @version 1.5
  * @since 1.0
  */
 public class Driver {
@@ -27,9 +27,9 @@ public class Driver {
 	/** @see MainController#TRACK */
 	public double TRACK = MainController.TRACK;
 	/** The forward speed of the robot in (degrees/second) */
-	private static final int FORWARD_SPEED = 200;
+	public final int FORWARD_SPEED = 200;
 	/** The rotational speed of the robot in (degrees/second) */
-	private static final int ROTATE_SPEED = 100;
+	public final int ROTATE_SPEED = 100;
 	
 	
 	// Booleans
@@ -116,6 +116,28 @@ public class Driver {
 	
 	/**
 	 * Makes both wheels go forward for unspecified distance or time. 
+	 * @since 1.5
+	 */
+	public void forward() {
+		setSpeed(FORWARD_SPEED);
+		
+		leftMotor.forward();
+		rightMotor.forward();
+	}
+	
+	/**
+	 * Makes both wheels go backward for unspecified distance or time. 
+	 * @since 1.5
+	 */
+	public void backward() {
+		setSpeed(FORWARD_SPEED);
+		
+		leftMotor.backward();
+		rightMotor.backward();
+	}
+	
+	/**
+	 * Makes both wheels go forward for unspecified distance or time. 
 	 * @param speed The speed of the wheels in degrees per second. 
 	 * @since 1.4
 	 */
@@ -137,7 +159,7 @@ public class Driver {
 		setSpeed(ROTATE_SPEED);
 		
 		leftMotor.rotate(convertAngle(WHEEL_RADIUS, TRACK, angle), true);
-		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), true);
+		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), false);
 		setTurning(false);
 	}
 	
@@ -184,7 +206,7 @@ public class Driver {
 	 * @since 1.3
 	 */
 	public void instantStop() {
-		leftMotor.stop();
+		leftMotor.stop(true);
 		rightMotor.stop();
 		setTravelling(false);
 		setTurning(false);

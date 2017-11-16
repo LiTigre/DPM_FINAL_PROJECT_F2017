@@ -41,7 +41,7 @@ public class Localization {
 	/** Boolean that indicates whether the edges have been completed. */
 	private boolean isCompleted;
 	/** Boolean that indicates whether the robot is currently localizing. */
-	public boolean isLocalizing;
+	public static boolean isLocalizing;
 	
 	
 	/**

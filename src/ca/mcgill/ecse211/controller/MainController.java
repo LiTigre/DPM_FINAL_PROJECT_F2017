@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.controller;
 
 import ca.mcgill.ecse211.navigation.Driver;
+import ca.mcgill.ecse211.navigation.LightCorrection;
 import ca.mcgill.ecse211.navigation.ObstacleAvoidance;
 import ca.mcgill.ecse211.navigation.Search;
 import ca.mcgill.ecse211.navigation.Zipline;
@@ -10,6 +11,7 @@ import ca.mcgill.ecse211.odometry.OdometryCorrection;
 import ca.mcgill.ecse211.settings.SearchRegion;
 import ca.mcgill.ecse211.settings.Setting;
 import ca.mcgill.ecse211.wifi.WifiInput;
+import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -34,7 +36,7 @@ public class MainController {
 	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
 	//public static final double TRACK = 11;
-	public static final double TRACK = 11.3;
+	public static final double TRACK = 12.2;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -47,16 +49,16 @@ public class MainController {
 	/**  Color sensor with associated port. */
 	private static final EV3ColorSensor lightSensor = new EV3ColorSensor(LocalEV3.get().getPort("S3"));
 	/** Color sensor used for angle correction with associated port. */
-	//private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
+	private static final EV3ColorSensor angleLightSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
 	/** Ultrasonic sensor with associated port. */
 	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S1"));
 	
 	
 	// Motors
 	/** Left motor with associated port. */
-	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
+	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 	/** Right motor with associated port. */
-	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
 	/** Zipline motor with associated port. */
 	static final EV3LargeRegulatedMotor ziplineMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
 	
@@ -64,8 +66,8 @@ public class MainController {
 	// Make it that we can collect data from the sensor
 	/** Data collected from the color sensor. */
 	private static SampleProvider lightSample = lightSensor.getRedMode();
-	/** Data collected from the angle color sensor. */
-//	private static SampleProvider angleColorSample = angleColorSensor.getRedMode();
+	/** Data collected from the angle light sensor. */
+	private static SampleProvider angleLightSample = angleLightSensor.getRedMode();
 	/** Data collected from the ultrasonic sensor. */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
 
@@ -74,7 +76,7 @@ public class MainController {
 	/** Array of floats that stores the value of the data from the color sensor. */
 	private static float lightData[] = new float[lightSample.sampleSize()];
 	/** Array of floats that stores the value of the data from the color sensor. */
-	//private static float angleLightData[] = new float[angleColorSample.sampleSize()];
+	private static float angleLightData[] = new float[angleLightSample.sampleSize()];
 	/** Array of floats that stores the value of the data from the ultrasonic sensor. */
 	private static float usData[] = new float[usDistance.sampleSize()];
 	
@@ -101,6 +103,13 @@ public class MainController {
 		Localization localization = new Localization(odometer, driver);
 		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver, localization);
 		Zipline zipline = new Zipline(ziplineMotor, driver); 
+		Thread lightCorrection = new Thread(new LightCorrection(driver, odometer));
+		
+//		odometer.start();
+		
+//		lightCorrection.start();
+		
+		
 		
 		// First wait for server to send info.
 		WifiInput.recieveServerData();
@@ -114,6 +123,8 @@ public class MainController {
 		odometer.start();
 		
 		localization.localize();
+		
+		//lightCorrection.start();
 		
 		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
@@ -152,12 +163,12 @@ public class MainController {
 					previousY -= 2;
 				}
 				driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
+//				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
 			}
 			
 			if(Math.abs(futureY-previousY)!= 0) {
 				driver.travelTo(previousX*GRID_LENGTH, preZip[1]*GRID_LENGTH);
-				localization.reLocalize(previousX*GRID_LENGTH, preZip[1]*GRID_LENGTH);
+//				localization.reLocalize(previousX*GRID_LENGTH, preZip[1]*GRID_LENGTH);
 			}
 			
 			//Then X
@@ -169,7 +180,7 @@ public class MainController {
 					previousX -= 2;
 				}
 				driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
+//				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
 			}
 		}
 		else {
@@ -182,12 +193,12 @@ public class MainController {
 					previousX -= 2;
 				}
 				driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
+//				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
 			}
 			
 			if(Math.abs(futureX-previousX)!= 0) {
 				driver.travelTo((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-				localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
+//				localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
 			}
 			
 			//Then Y
@@ -199,7 +210,7 @@ public class MainController {
 					previousY -= 2;
 				}
 				driver.travelTo((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-				localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
+//				localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
 			}
 		}
 		
@@ -268,12 +279,12 @@ public class MainController {
 							previousY -= 2;
 						}
 						driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-						localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
+//						localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
 					}
 					
 					if(Math.abs(futureY-previousY)!= 0) {
 						driver.travelTo(previousX*GRID_LENGTH, upperFlag[1]*GRID_LENGTH);
-						localization.reLocalize(previousX*GRID_LENGTH, upperFlag[1]*GRID_LENGTH);
+//						localization.reLocalize(previousX*GRID_LENGTH, upperFlag[1]*GRID_LENGTH);
 					}
 					
 					//Then X
@@ -298,12 +309,12 @@ public class MainController {
 							previousX -= 2;
 						}
 						driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-						localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
+//						localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
 					}
 					
 					if(Math.abs(futureX-previousX)!= 0) {
 						driver.travelTo((upperFlag[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-						localization.reLocalize((upperFlag[0]*GRID_LENGTH), previousY*GRID_LENGTH);
+//						localization.reLocalize((upperFlag[0]*GRID_LENGTH), previousY*GRID_LENGTH);
 					}
 					
 					//Then Y
@@ -315,7 +326,7 @@ public class MainController {
 							previousY -= 2;
 						}
 						driver.travelTo((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-						localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
+//						localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
 					}
 				}
 		// Travel to the final location
@@ -405,8 +416,8 @@ public class MainController {
 	 * @return The angle color sensor reading multiplied by 1000 for precision.
 	 * @since 1.2
 	 */
-	//public static float getAngleLightValue() {
-	//	angleColorSample.fetchSample(angleLightData, 0);
-	//	return lightData[0]*1000;
-	//}
+	public static float getAngleLightValue() {
+		angleLightSample.fetchSample(angleLightData, 0);
+		return angleLightData[0]*1000;
+	}
 }
