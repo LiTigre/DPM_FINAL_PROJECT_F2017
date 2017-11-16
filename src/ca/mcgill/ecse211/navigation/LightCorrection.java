@@ -6,6 +6,7 @@ import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.odometry.Localization;
 import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.Button;
+import lejos.hardware.Sound;
 import ca.mcgill.ecse211.navigation.Driver;
 
 public class LightCorrection implements Runnable {
@@ -47,41 +48,36 @@ public class LightCorrection implements Runnable {
 			if (centerLightDataList.size() > MAX_LIST_SIZE) {
 				centerLightDataList.remove(0);
 			}
+			System.out.println(Localization.isLocalizing);
 			if (!Localization.isLocalizing && !(centerLightDataList.get(5) < MainController.LINE_THRESHOLD)){
+				Sound.buzz();
 				oldTheta = odometer.getTheta();
 				System.out.println("O: " + oldTheta);
 				if (angleLightData < MainController.LINE_THRESHOLD && centerLightData > MainController.LINE_THRESHOLD) {
+//					Sound.twoBeeps();
+					System.out.println("SIDE LINE");
 					preCorrection();
 					while (MainController.getLightValue() > MainController.LINE_THRESHOLD) {
-						System.out.println("O: " + oldTheta);
 						newTheta = odometer.getTheta();
-						System.out.println("N: " + newTheta);
 						diffTheta = getDiffTheta(oldTheta, newTheta);
-						System.out.println("D: " + diffTheta);
 						if (diffTheta > TURN_THRESHOLD_DEGREES_CLOCKWISE * 2) {
-							driver.instantStop();
-							Button.waitForAnyPress();
-							System.out.println("Turn back by: " + (-diffTheta));
-							driver.turnDistance(diffTheta - (OFFSET_CLOCKWISE * 2));
-							System.out.println("Back");
+							driver.instantStopAsync();
+							driver.turnDistanceSynchronous(diffTheta - (OFFSET_CLOCKWISE * 2));
 							break;
 						}
 						MainController.rightMotor.forward();
 					}
 					postCorrection();
 				} else if (centerLightData < MainController.LINE_THRESHOLD && angleLightData > MainController.LINE_THRESHOLD) {
+//					Sound.twoBeeps();
+					System.out.println("CENTER LINE");
 					preCorrection();
 					while (MainController.getAngleLightValue() > MainController.LINE_THRESHOLD) {
-//						System.out.println("O: " + oldTheta);
 						newTheta = odometer.getTheta();
-//						System.out.println("N: " + newTheta);
 						diffTheta = getDiffTheta(oldTheta, newTheta);
-//						System.out.println("D: " + diffTheta);
 						if (diffTheta > TURN_THRESHOLD_DEGREES_CLOCKWISE) {
-							driver.instantStop();
-//							System.out.println("Turn back by: " + (-diffTheta));
-							driver.turnDistance(-(diffTheta + OFFSET_CLOCKWISE));
-//							System.out.println("Back");
+							driver.instantStopAsync();
+							driver.turnDistanceSynchronous(-(diffTheta + OFFSET_CLOCKWISE));
 							break;
 						}
 						MainController.leftMotor.forward();
@@ -93,8 +89,7 @@ public class LightCorrection implements Runnable {
 	}
 	
 	private void preCorrection() {
-		driver.instantStop();
-		Button.waitForAnyPress();
+		driver.instantStopAsync();
 		MainController.leftMotor.setSpeed(driver.ROTATE_SPEED);
 		MainController.rightMotor.setSpeed(driver.ROTATE_SPEED);
 	}

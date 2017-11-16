@@ -36,7 +36,7 @@ public class MainController {
 	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
 	//public static final double TRACK = 11;
-	public static final double TRACK = 12.2;
+	public static final double TRACK = 12.1;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -107,9 +107,9 @@ public class MainController {
 		
 //		odometer.start();
 		
+//		driver.forward();
+		
 //		lightCorrection.start();
-		
-		
 		
 		// First wait for server to send info.
 		WifiInput.recieveServerData();
@@ -123,8 +123,6 @@ public class MainController {
 		odometer.start();
 		
 		localization.localize();
-		
-		//lightCorrection.start();
 		
 		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
@@ -151,6 +149,8 @@ public class MainController {
 		// Set the pre zip point 
 		futureX = preZip[0];
 		futureY = preZip[1];
+		
+		lightCorrection.start();
 		
 		// Conditions to not run into the zipline
 		if(zipEnd[0] == zipStart[0] ) {

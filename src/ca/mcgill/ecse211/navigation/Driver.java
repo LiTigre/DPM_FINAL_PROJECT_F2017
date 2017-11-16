@@ -151,6 +151,21 @@ public class Driver {
 	/**
 	 * Turn a specified amount. 
 	 * @param angle Angle amount the robots needs to turn in degrees.
+	 * @since 1.5
+	 */
+	public void turnDistanceSynchronous(double angle) {
+		setTurning(true);
+		
+		setSpeed(ROTATE_SPEED);
+		
+		leftMotor.rotate(convertAngle(WHEEL_RADIUS, TRACK, angle), true);
+		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), false);
+		setTurning(false);
+	}
+	
+	/**
+	 * Turn a specified amount. 
+	 * @param angle Angle amount the robots needs to turn in degrees.
 	 * @since 1.1
 	 */
 	public void turnDistance(double angle) {
@@ -159,7 +174,7 @@ public class Driver {
 		setSpeed(ROTATE_SPEED);
 		
 		leftMotor.rotate(convertAngle(WHEEL_RADIUS, TRACK, angle), true);
-		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), false);
+		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), true);
 		setTurning(false);
 	}
 	
@@ -206,6 +221,17 @@ public class Driver {
 	 * @since 1.3
 	 */
 	public void instantStop() {
+		leftMotor.stop();
+		rightMotor.stop();
+		setTravelling(false);
+		setTurning(false);
+	}
+	
+	/**
+	 * Force stop of the both motors. 
+	 * @since 1.5
+	 */
+	public void instantStopAsync() {
 		leftMotor.stop(true);
 		rightMotor.stop();
 		setTravelling(false);

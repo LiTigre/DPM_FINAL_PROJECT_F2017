@@ -174,7 +174,7 @@ public class Localization {
 	 */
 	public void reLocalize(double aroundX, double aroundY) {
 		setLocalizing(true);
-		System.out.println(45-odometer.getTheta());
+//		System.out.println(45-odometer.getTheta());
 		driver.turnDistance((45-odometer.getTheta()));
 		while(driver.getWheelsMoving());
 		odometer.setTheta(0);
