@@ -38,6 +38,9 @@ public class Driver {
 	/** Boolean that indicates whether the robot is currently turning. */
 	private boolean turning;
 	
+	public static volatile double destinationX;
+	public static volatile double destinationY;
+	
 	
 	/**
 	 * Constructor for driver class.
@@ -62,6 +65,11 @@ public class Driver {
 	 * @since 1.1
 	 */
 	public void travelTo(double newX, double newY) {
+		
+		LightCorrection.doCorrection = true;
+		
+		Driver.destinationX = newX;
+		Driver.destinationY = newY;
 		
 		double deltaY = newY - odometer.getY();
 		double deltaX = newX - odometer.getX();
@@ -93,7 +101,33 @@ public class Driver {
 		setTravelling(true);
 		
 		leftMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
-		rightMotor.rotate(convertDistance(WHEEL_RADIUS, distance), false);
+		rightMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
+		
+		setTravelling(false);
+	}
+	
+	/**
+	 * Travels to a point specified while only moving straight
+	 * @param newX X position of the new point in centimeters.
+	 * @param newY Y position of the new point in centimeters.
+	 * @since 1.1
+	 */
+	public void travelToStraight(double newX, double newY) {
+		
+		Driver.destinationX = newX;
+		Driver.destinationY = newY;
+		
+		double deltaY = newY - odometer.getY();
+		double deltaX = newX - odometer.getX();
+		
+		setSpeed(FORWARD_SPEED);
+		
+		double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+		
+		setTravelling(true);
+		
+		leftMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
+		rightMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
 		
 		setTravelling(false);
 	}
@@ -233,7 +267,7 @@ public class Driver {
 	 */
 	public void instantStopAsync() {
 		leftMotor.stop(true);
-		rightMotor.stop();
+		rightMotor.stop(true);
 		setTravelling(false);
 		setTurning(false);
 	}
@@ -243,7 +277,7 @@ public class Driver {
 	 * @param speed Speed to set both wheels to.
 	 * @since 1.3
 	 */
-	private void setSpeed(int speed) {
+	public void setSpeed(int speed) {
 		leftMotor.setSpeed(speed);
 		rightMotor.setSpeed(speed);
 	}

@@ -36,7 +36,7 @@ public class MainController {
 	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
 	//public static final double TRACK = 11;
-	public static final double TRACK = 12.1;
+	public static final double TRACK = 11.15;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -103,11 +103,29 @@ public class MainController {
 		Localization localization = new Localization(odometer, driver);
 		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver, localization);
 		Zipline zipline = new Zipline(ziplineMotor, driver); 
-		Thread lightCorrection = new Thread(new LightCorrection(driver, odometer));
+//		Thread lightCorrection = new Thread(new LightCorrection(driver, odometer));
+		LightCorrection lightCorrection = new LightCorrection(driver, odometer);
+		
+//		odometer.start();
+//		
+//		lightCorrection.start();
+//		
+//		odometer.setX(0);
+//		odometer.setY(0);
+//		driver.travelTo(0, 3 * GRID_LENGTH);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection) {
+//			System.out.println("C: " + LightCorrection.doCorrection);
+//		}
+//		driver.travelTo(3 * GRID_LENGTH, 3 * GRID_LENGTH);
+//		
+//		Button.waitForAnyPress();
 		
 //		odometer.start();
 		
 //		driver.forward();
+		
+//		driver.turnDistance(360);
+//		while (driver.getWheelsMoving());
 		
 //		lightCorrection.start();
 		
@@ -123,6 +141,8 @@ public class MainController {
 		odometer.start();
 		
 		localization.localize();
+		
+		System.out.println("0");
 		
 		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
@@ -153,7 +173,7 @@ public class MainController {
 		lightCorrection.start();
 		
 		// Conditions to not run into the zipline
-		if(zipEnd[0] == zipStart[0] ) {
+		/*if(zipEnd[0] == zipStart[0] ) {
 			//Vertical zipline alignment. Do Y first 
 			while(Math.abs(futureY-previousY)!= 1 && Math.abs(futureY-previousY)!= 2 && Math.abs(futureY-previousY)!= 0) {
 				if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 1) {
@@ -212,22 +232,30 @@ public class MainController {
 				driver.travelTo((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
 //				localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
 			}
-		}
+		}*/
 		
 		
 		
 		// Travel to the pre zipline point
+		System.out.println("1111");
+//		Button.waitForAnyPress();
 		driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		Button.waitForAnyPress();
+		System.out.println("2222");
 		localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+//		Button.waitForAnyPress();
+		System.out.println("3333");
 		driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
 		//Travel to the zipline point 
 		driver.turnTo(zipStart[0]*GRID_LENGTH, zipStart[1]*GRID_LENGTH);
 		//double preZipTheta = odometer.getTheta();
-		while(driver.getWheelsMoving());
+		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
 		
 		//driver.turnDistance(10);
 		//driver.turnDistance(-13);
-		while(driver.getWheelsMoving());
+		//while(driver.getWheelsMoving());
 		driver.travelDistance(40);
 		
 		// Perform zipline

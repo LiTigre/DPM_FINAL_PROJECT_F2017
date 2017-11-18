@@ -19,7 +19,7 @@ import lejos.hardware.Button;
 public class WifiInput {
 
 	/** IP address of the computer running the server application. */
-	private static final String SERVER_IP = "192.168.2.15";
+	private static final String SERVER_IP = "192.168.2.8";
 	/** The project team number. */
 	private static final int TEAM_NUMBER = 2;
 

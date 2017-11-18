@@ -70,6 +70,12 @@ public class Odometer extends Thread {
 		long updateStart, updateEnd;
 
 		while (true) {
+			
+//			System.out.println("L: " + Localization.isLocalizing);
+			
+//			System.out.println("X: " + x);
+//			System.out.println("Y: " + y);
+			
 			updateStart = System.currentTimeMillis();
 			double distLeft, distRight, deltaDistance, deltaTheta, dX, dY;
 			distLeft = Math.PI * WHEEL_RADIUS * (leftMotor.getTachoCount() - leftMotorTachoCount) / 180; // Calculated

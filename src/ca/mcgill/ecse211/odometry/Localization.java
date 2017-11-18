@@ -1,7 +1,11 @@
 package ca.mcgill.ecse211.odometry;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.navigation.Driver;
+import ca.mcgill.ecse211.navigation.LightCorrection;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
@@ -41,7 +45,7 @@ public class Localization {
 	/** Boolean that indicates whether the edges have been completed. */
 	private boolean isCompleted;
 	/** Boolean that indicates whether the robot is currently localizing. */
-	public static boolean isLocalizing;
+	public static volatile boolean isLocalizing;
 	
 	
 	/**
@@ -63,6 +67,9 @@ public class Localization {
 	 * @since 1.1
 	 */
 	public void localize() {
+		
+		LightCorrection.doCorrection = false;
+		
 		setLocalizing(true);
 	
 		while(odometer.getTheta() < 10) {
@@ -79,6 +86,16 @@ public class Localization {
 		while(driver.getWheelsMoving());
 		driver.instantStop();
 		lightLocalization();
+		
+		Timer timer = new Timer();
+		
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				LightCorrection.doCorrection = true;
+			}
+		}, 5 * 1000);
+		
 		setLocalizing(false);
 	}
 	
@@ -239,6 +256,7 @@ public class Localization {
 		deltaTheta = 90-(collectedData[3]-180)+thetaX/2;
 		odometer.setTheta(deltaTheta);
 		driver.travelTo(0, 0);
+		while (driver.getWheelsMoving());
 	}
 	
 	/**
