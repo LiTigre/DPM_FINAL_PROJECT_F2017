@@ -140,11 +140,13 @@ public class MainController {
 		
 		//localization
 		odometer.start();
-		localization.localize();
+//		localization.localize();
+		odoCorrection.start();
 		driver.travelTo(0, 2*30.48);
-		driver.travelTo(1*30.48, 1*30.48);
 		driver.travelTo(2*30.48, 2*30.48);
-		driver.travelTo(1*30.48, 0*30.48);
+		driver.travelTo(2*30.48, 0*30.48);
+		driver.travelTo(0*30.48, 0*30.48);
+		driver.turnTo(0, 30.48);
 		
 		try {
 			Thread.sleep(1000);
