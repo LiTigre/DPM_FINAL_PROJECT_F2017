@@ -76,12 +76,12 @@ public class Driver {
 			turnDistance(thetaTurn - 360.0);
 		}
 		else {
-			if (thetaTurn < 0) {
-				turnDistance(thetaTurn + 360);
-			}
-			else {
+//			if (thetaTurn < 0) {
+//				turnDistance(thetaTurn + 360);
+//			}
+//			else {
 			turnDistance(thetaTurn);
-			}
+//			}
 		}
 		
 		while(getWheelsMoving());
