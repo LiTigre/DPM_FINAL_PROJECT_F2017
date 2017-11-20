@@ -94,7 +94,7 @@ public class Localization {
 			public void run() {
 				LightCorrection.doCorrection = true;
 			}
-		}, 5 * 1000);
+		}, 7 * 1000);
 		
 		setLocalizing(false);
 	}

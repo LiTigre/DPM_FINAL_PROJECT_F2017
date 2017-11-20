@@ -253,7 +253,7 @@ public class MainController {
 		//double preZipTheta = odometer.getTheta();
 		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
 		
-		//driver.turnDistance(10);
+		driver.turnDistanceSynchronous(-13);
 		//driver.turnDistance(-13);
 		//while(driver.getWheelsMoving());
 		driver.travelDistance(40);

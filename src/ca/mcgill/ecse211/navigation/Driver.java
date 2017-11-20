@@ -27,7 +27,7 @@ public class Driver {
 	/** @see MainController#TRACK */
 	public double TRACK = MainController.TRACK;
 	/** The forward speed of the robot in (degrees/second) */
-	public final int FORWARD_SPEED = 200;
+	public final int FORWARD_SPEED = 175;
 	/** The rotational speed of the robot in (degrees/second) */
 	public final int ROTATE_SPEED = 100;
 	
