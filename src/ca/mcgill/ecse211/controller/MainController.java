@@ -11,6 +11,7 @@ import ca.mcgill.ecse211.settings.SearchRegion;
 import ca.mcgill.ecse211.settings.Setting;
 import ca.mcgill.ecse211.settings.Setting.TeamColor;
 import ca.mcgill.ecse211.settings.ShallowZone;
+import ca.mcgill.ecse211.settings.StartingZone;
 import ca.mcgill.ecse211.wifi.WifiInput;
 import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
@@ -119,7 +120,19 @@ public class MainController {
 		int verticalLowerShallowPath[] = ShallowZone.getVerticalLowerLeftCorner();
 		int verticalUpperShallowPath[] = ShallowZone.getVerticalUpperRightCorner();
 		int horizontalLowerShallowPath[] = ShallowZone.getHorizontalLowerLeftCorner();
-		int horizongtalUpperShallowPath[] = ShallowZone.getHorizontalUpperRightCorner();
+		int horizontalUpperShallowPath[] = ShallowZone.getHorizontalUpperRightCorner();
+		int horizontalRedZone[] = StartingZone.getRedZoneLowerLeftCorner();
+		int verticalRedZone[] = StartingZone.getRedZoneUpperRightCorner();
+		
+		// Shallow path
+		double upperRightSquareX = Math.min(verticalUpperShallowPath[0], horizontalUpperShallowPath[0]);
+		double upperRightSquareY = Math.min(verticalUpperShallowPath[1], horizontalUpperShallowPath[1]);
+					
+		double lowerLeftSquareX = Math.max(verticalLowerShallowPath[0], horizontalLowerShallowPath[0]);
+		double lowerLeftSquareY = Math.max(verticalLowerShallowPath[1], horizontalLowerShallowPath[1]);
+					
+		double middleSquareX = (upperRightSquareX + lowerLeftSquareX)/2;
+		double middleSquareY = (upperRightSquareY + lowerLeftSquareY)/2;
 		
 		odometer.start();
 		
@@ -215,12 +228,32 @@ public class MainController {
 			// SEARCH HERE
 			
 			// Shallow path 
+			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
+				// Go to middle x first
+				driver.travelTo(middleSquareX, previousY);
+				driver.travelTo(middleSquareX, middleSquareY);
+			}
+			else {
+				// Go to middle y first 
+				driver.travelTo(previousX, middleSquareY);
+				driver.travelTo(middleSquareX, middleSquareY);
+			}
 			
-			driver.travelTo(startingX, startingY);
+			driver.travelTo(startingX*GRID_LENGTH, startingY*GRID_LENGTH);
 		}
 		// Do shallow path first
 		else {
-			// Shallow path
+			
+			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
+				// Go to middle x first
+				driver.travelTo(middleSquareX, previousY);
+				driver.travelTo(middleSquareX, middleSquareY);
+			}
+			else {
+				// Go to middle y first 
+				driver.travelTo(previousX, middleSquareY);
+				driver.travelTo(middleSquareX, middleSquareY);
+			}
 			
 			// SEARCH HERE
 			
@@ -279,7 +312,7 @@ public class MainController {
 			localization.reLocalize(postZip[0]*GRID_LENGTH, postZip[1]*GRID_LENGTH); 
 			
 			// Travel to the starting corner
-			driver.travelTo(startingX, startingY);
+			driver.travelTo(startingX*GRID_LENGTH, startingY*GRID_LENGTH);
 		}
 		
 
