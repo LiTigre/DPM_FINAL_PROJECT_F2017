@@ -50,9 +50,11 @@ public class MainController {
 	/**  Color sensor with associated port. */
 	private static final EV3ColorSensor lightSensor = new EV3ColorSensor(LocalEV3.get().getPort("S3"));
 	/** Color sensor used for angle correction with associated port. */
-	//private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
+	private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
 	/** Ultrasonic sensor with associated port. */
 	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S1"));
+	/** Color sensor used for searching for the flag with associated port */
+	private static final EV3ColorSensor searchSensor = new EV3ColorSensor(LocalEV3.get().getPort("S4"));
 	
 	
 	// Motors
@@ -68,18 +70,22 @@ public class MainController {
 	/** Data collected from the color sensor. */
 	private static SampleProvider lightSample = lightSensor.getRedMode();
 	/** Data collected from the angle color sensor. */
-//	private static SampleProvider angleColorSample = angleColorSensor.getRedMode();
+	private static SampleProvider angleColorSample = angleColorSensor.getRedMode();
 	/** Data collected from the ultrasonic sensor. */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
+	/** Data collected from the search color sensor. */
+	private static SampleProvider searchSample = searchSensor.getRGBMode();
 
 	
 	// Data from the sensors
 	/** Array of floats that stores the value of the data from the color sensor. */
 	private static float lightData[] = new float[lightSample.sampleSize()];
-	/** Array of floats that stores the value of the data from the color sensor. */
-	//private static float angleLightData[] = new float[angleColorSample.sampleSize()];
+	/** Array of floats that stores the value of the data from the angle color sensor. */
+	private static float angleLightData[] = new float[angleColorSample.sampleSize()];
 	/** Array of floats that stores the value of the data from the ultrasonic sensor. */
 	private static float usData[] = new float[usDistance.sampleSize()];
+	/** Array of floats that stores the value of the data from the search color sensor */
+	private static float searchData[] = new float[searchSample.sampleSize()];
 	
 	
 	// Variables
@@ -526,8 +532,19 @@ public class MainController {
 	 * @return The angle color sensor reading multiplied by 1000 for precision.
 	 * @since 1.2
 	 */
-	//public static float getAngleLightValue() {
-	//	angleColorSample.fetchSample(angleLightData, 0);
-	//	return lightData[0]*1000;
-	//}
+	public static float getAngleLightValue() {
+		angleColorSample.fetchSample(angleLightData, 0);
+		return lightData[0]*1000;
+	}
+	
+	
+	/**
+	 * Gets the light value reading of the search color sensor. 
+	 * @param RGB Integer value that corresponds to the index of the RGB array. Must be value from 0-2.
+	 * @return The value of either red, green or blue multiplied by 1000 for precision. 
+	 */
+	public static float getSearchLightValue(int RGB) {
+		searchSample.fetchSample(searchData, 0);
+		return searchData[RGB]*1000;
+	}
 }
