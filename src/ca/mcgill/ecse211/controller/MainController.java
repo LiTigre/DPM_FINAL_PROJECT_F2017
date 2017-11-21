@@ -138,12 +138,12 @@ public class MainController {
 //		lightCorrection.start();
 		
 		
-		odometer.start();
-		
-		lightCorrection.start();
-		
-		odometer.setX(0);
-		odometer.setY(0);
+//		odometer.start();
+//		
+//		lightCorrection.start();
+//		
+//		odometer.setX(0);
+//		odometer.setY(0);
 		
 //		driver.travelTo(0, 5 * GRID_LENGTH);
 //		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
@@ -152,24 +152,24 @@ public class MainController {
 		
 //		Button.waitForAnyPress();
 		
-		driver.travelTo(0, 2 * GRID_LENGTH);
-		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
-		System.out.println("(0, 2)");
-		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
-		driver.travelTo(2 * GRID_LENGTH, 2 * GRID_LENGTH);
-		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
-		System.out.println("(2, 2)");
-		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
-		driver.travelTo(2 * GRID_LENGTH, 0);
-		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
-		System.out.println("(2, 0)");
-		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
-		driver.travelTo(0, 0);
-		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
-		System.out.println("(0, 0)");
-		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
-		
-		Button.waitForAnyPress();
+//		driver.travelTo(0, 2 * GRID_LENGTH);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		System.out.println("(0, 2)");
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+//		driver.travelTo(2 * GRID_LENGTH, 2 * GRID_LENGTH);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		System.out.println("(2, 2)");
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+//		driver.travelTo(2 * GRID_LENGTH, 0);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		System.out.println("(2, 0)");
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+//		driver.travelTo(0, 0);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		System.out.println("(0, 0)");
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+//		
+//		Button.waitForAnyPress();
 
 		
 		// First wait for server to send info.
