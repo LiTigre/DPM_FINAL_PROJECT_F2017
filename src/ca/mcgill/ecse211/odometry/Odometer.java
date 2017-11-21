@@ -119,6 +119,19 @@ public class Odometer extends Thread {
 		}
 	}
 	
+	public void update() {
+		if (this.theta < 45 || this.theta > 315 || (this.theta < 225 && this.theta > 135))
+			synchronized (lock) {
+				double diff = MainController.GRID_LENGTH - (this.x % MainController.GRID_LENGTH);
+				this.x = diff < (MainController.GRID_LENGTH / 2) ? this.x - diff : this.x + (MainController.GRID_LENGTH - diff);
+			}
+		else if ((this.theta < 135 || this.theta > 45) || (this.theta > 225 && this.theta < 315))
+			synchronized (lock) {
+				double diff = MainController.GRID_LENGTH - (this.y % MainController.GRID_LENGTH);
+				this.y = diff < (MainController.GRID_LENGTH / 2) ? this.y - diff : this.y + (MainController.GRID_LENGTH - diff);
+			}
+	}
+	
 	/**
 	 * Gets the x, y and theta position indicated by the odometer.
 	 * @param position Array with the 3 parameters (x, y, theta).

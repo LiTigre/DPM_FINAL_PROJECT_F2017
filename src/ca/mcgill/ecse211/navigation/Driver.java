@@ -1,5 +1,8 @@
 package ca.mcgill.ecse211.navigation;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -36,7 +39,7 @@ public class Driver {
 	/** Boolean that indicates whether the robot is currently traveling. */
 	private boolean travelling;
 	/** Boolean that indicates whether the robot is currently turning. */
-	private boolean turning;
+	private volatile boolean turning;
 	
 	public static volatile double destinationX;
 	public static volatile double destinationY;
@@ -78,17 +81,17 @@ public class Driver {
 		double thetaTurn = thetaD - odometer.getTheta();
 		
 		if (thetaTurn < -180.0) {
-			turnDistance(360.0 + thetaTurn);
+			turnDistanceSynchronous(360.0 + thetaTurn);
 		}
 		else if (thetaTurn > 180.0) {
-			turnDistance(thetaTurn - 360.0);
+			turnDistanceSynchronous(thetaTurn - 360.0);
 		}
 		else {
 			if (thetaTurn < 0) {
-				turnDistance(thetaTurn + 360);
+				turnDistanceSynchronous(thetaTurn + 360);
 			}
 			else {
-			turnDistance(thetaTurn);
+				turnDistanceSynchronous(thetaTurn);
 			}
 		}
 		
@@ -192,6 +195,15 @@ public class Driver {
 		
 		setSpeed(ROTATE_SPEED);
 		
+		Timer timer = new Timer();
+		
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				LightCorrection.doCorrection = true;
+			}
+		}, 2 * 1000);
+		
 		leftMotor.rotate(convertAngle(WHEEL_RADIUS, TRACK, angle), true);
 		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), false);
 		setTurning(false);
@@ -227,14 +239,14 @@ public class Driver {
 		double thetaTurn = thetaD - odometer.getTheta();
 		
 		if (thetaTurn < -180.0) {
-			turnDistance(360.0 + thetaTurn);
+			turnDistanceSynchronous(360.0 + thetaTurn);
 
 		}
 		else if (thetaTurn > 180.0) {
-			turnDistance(thetaTurn - 360.0);
+			turnDistanceSynchronous(thetaTurn - 360.0);
 		}
 		else {
-			turnDistance(thetaTurn);
+			turnDistanceSynchronous(thetaTurn);
 		}
 		
 	}

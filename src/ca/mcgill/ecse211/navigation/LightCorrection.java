@@ -13,15 +13,17 @@ public class LightCorrection extends Thread {
 
 	private final float MAX_LIST_SIZE = 100;
 	private final int SLEEP_SECONDS = 2;
-	private final int TURN_THRESHOLD_DEGREES_CLOCKWISE = 15;
+	private final int TURN_THRESHOLD_DEGREES_CLOCKWISE = 10;
 //	private final int TURN_THRESHOLD_DEGREES_COUNTER_CLOCKWISE = 40;
-	private final int OFFSET_CLOCKWISE = 5;
+	private final int OFFSET_CLOCKWISE = 2;
 //	private final int OFFSET_COUNTER_CLOCKWISE = 12;
 	
 	public static volatile boolean doCorrection = true;
 	
 	private Driver driver;
 	private Odometer odometer;
+	
+//	private boolean updateOdometer = false;
 	
 	public LightCorrection(Driver driver, Odometer odometer) {
 		this.driver = driver;
@@ -49,18 +51,24 @@ public class LightCorrection extends Thread {
 			if (centerLightDataList.size() > MAX_LIST_SIZE) {
 				centerLightDataList.remove(0);
 			}
-			if (Math.abs(Driver.destinationX - odometer.getX()) < 30 && Math.abs(Driver.destinationY - odometer.getY()) < 30) {
+			if (Math.abs(Driver.destinationX - odometer.getX()) < 20 && Math.abs(Driver.destinationY - odometer.getY()) < 20) {
 				doCorrection = false;
 			}
-			System.out.println("L: " + Localization.isLocalizing);
+//			System.out.println("L: " + Localization.isLocalizing);
+//			System.out.println("Localizing: " + Localization.isLocalizing);
+//			System.out.println("Is turning: " + driver.isTurning());
+//			System.out.println("Center black: " + centerLightDataList.get(5));
+//			System.out.println("Do correction: " + doCorrection);
 			if (!Localization.isLocalizing && !driver.isTurning() && !(centerLightDataList.get(5) < MainController.LINE_THRESHOLD) && doCorrection){
+//				System.out.println("DO");
 				oldTheta = odometer.getTheta();
 //				System.out.println("O: " + oldTheta);
 				if (angleLightData < MainController.LINE_THRESHOLD && centerLightData > MainController.LINE_THRESHOLD) {
-					System.out.println("SIDE LINE");
+//					System.out.println("SIDE LINE");
 					preCorrection();
 					while (MainController.getLightValue() > MainController.LINE_THRESHOLD) {
-						System.out.println("10");
+//						updateOdometer = true;
+//						System.out.println("10");
 //						System.out.println("O: " + oldTheta);
 						newTheta = odometer.getTheta();
 //						System.out.println("N: " + newTheta);
@@ -69,6 +77,7 @@ public class LightCorrection extends Thread {
 						if (diffTheta > TURN_THRESHOLD_DEGREES_CLOCKWISE * 2) {
 							driver.instantStopAsync();
 							driver.turnDistanceSynchronous(diffTheta - (OFFSET_CLOCKWISE * 2));
+//							updateOdometer = false;
 							break;
 						}
 						MainController.rightMotor.forward();
@@ -76,12 +85,13 @@ public class LightCorrection extends Thread {
 					MainController.rightMotor.stop();
 					postCorrection();
 				} else if (centerLightData < MainController.LINE_THRESHOLD && angleLightData > MainController.LINE_THRESHOLD) {
-					System.out.println("CENTER LINE");
+//					System.out.println("CENTER LINE");
 					preCorrection();
-					System.out.println("30");
+//					System.out.println("30");
 					while (MainController.getAngleLightValue() > MainController.LINE_THRESHOLD) {
+//						updateOdometer = true;
 //						System.out.println(MainController.getAngleLightValue());
-						System.out.println("20");
+//						System.out.println("20");
 //						System.out.println("O: " + oldTheta);
 						newTheta = odometer.getTheta();
 //						System.out.println("N: " + newTheta);
@@ -90,6 +100,7 @@ public class LightCorrection extends Thread {
 						if (diffTheta > TURN_THRESHOLD_DEGREES_CLOCKWISE) {
 							driver.instantStopAsync();
 							driver.turnDistanceSynchronous(-(diffTheta + OFFSET_CLOCKWISE));
+//							updateOdometer = false;
 							break;
 						}
 						MainController.leftMotor.forward();
@@ -102,14 +113,18 @@ public class LightCorrection extends Thread {
 	}
 	
 	private void preCorrection() {
-		System.out.println("HERE 1");
+//		System.out.println("HERE 1");
 		driver.instantStopAsync();
-		System.out.println("HERE 2");
+//		updateOdometer = true;
+//		System.out.println("HERE 2");
 		driver.setSpeed(driver.ROTATE_SPEED);
-		System.out.println("HERE 3");
+//		System.out.println("HERE 3");
 	}
 	
 	private void postCorrection() {
+//		if (updateOdometer) {
+//			odometer.update();
+//		}
 		takeBreak(300);
 //		driver.forward();
 //		System.out.println("X: " + Driver.destinationX);

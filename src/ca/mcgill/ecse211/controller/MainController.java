@@ -36,7 +36,7 @@ public class MainController {
 	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
 	//public static final double TRACK = 11;
-	public static final double TRACK = 11.15;
+	public static final double TRACK = 13;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -56,7 +56,7 @@ public class MainController {
 	
 	// Motors
 	/** Left motor with associated port. */
-	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
 	/** Right motor with associated port. */
 	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
 	/** Zipline motor with associated port. */
@@ -121,13 +121,56 @@ public class MainController {
 //		Button.waitForAnyPress();
 		
 //		odometer.start();
-		
+//		
 //		driver.forward();
-		
-//		driver.turnDistance(360);
+//		
+//		driver.turnDistanceSynchronous(90);
 //		while (driver.getWheelsMoving());
+//		driver.turnDistanceSynchronous(90);
+//		while (driver.getWheelsMoving());
+//		driver.turnDistanceSynchronous(90);
+//		while (driver.getWheelsMoving());
+//		driver.turnDistanceSynchronous(90);
+//		while (driver.getWheelsMoving());
+//		
+//		Button.waitForAnyPress();
 		
 //		lightCorrection.start();
+		
+		
+		odometer.start();
+		
+		lightCorrection.start();
+		
+		odometer.setX(0);
+		odometer.setY(0);
+		
+//		driver.travelTo(0, 5 * GRID_LENGTH);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+		
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+		
+//		Button.waitForAnyPress();
+		
+		driver.travelTo(0, 2 * GRID_LENGTH);
+		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+		System.out.println("(0, 2)");
+		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+		driver.travelTo(2 * GRID_LENGTH, 2 * GRID_LENGTH);
+		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+		System.out.println("(2, 2)");
+		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+		driver.travelTo(2 * GRID_LENGTH, 0);
+		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+		System.out.println("(2, 0)");
+		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+		driver.travelTo(0, 0);
+		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+		System.out.println("(0, 0)");
+		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+		
+		Button.waitForAnyPress();
+
 		
 		// First wait for server to send info.
 		WifiInput.recieveServerData();
@@ -237,15 +280,15 @@ public class MainController {
 		
 		
 		// Travel to the pre zipline point
-		System.out.println("1111");
+//		System.out.println("1111");
 //		Button.waitForAnyPress();
 		driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
 		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
 //		Button.waitForAnyPress();
-		System.out.println("2222");
+//		System.out.println("2222");
 		localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
 //		Button.waitForAnyPress();
-		System.out.println("3333");
+//		System.out.println("3333");
 		driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
 		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
 		//Travel to the zipline point 
