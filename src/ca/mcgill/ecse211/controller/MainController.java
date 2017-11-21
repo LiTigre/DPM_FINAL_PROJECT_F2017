@@ -26,7 +26,7 @@ import lejos.robotics.SampleProvider;
  * Controls all actions taken by the robot. Is in charge of sequencing operations 
  * in order to do what the tasks requires the robot to do. 
  * @author Team 2
- * @version 1.3
+ * @version 1.4
  * @since 1.0
  */
 public class MainController {
@@ -542,6 +542,7 @@ public class MainController {
 	 * Gets the light value reading of the search color sensor. 
 	 * @param RGB Integer value that corresponds to the index of the RGB array. Must be value from 0-2.
 	 * @return The value of either red, green or blue multiplied by 1000 for precision. 
+	 * @since 1.4
 	 */
 	public static float getSearchLightValue(int RGB) {
 		searchSample.fetchSample(searchData, 0);
