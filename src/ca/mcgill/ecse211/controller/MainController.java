@@ -230,13 +230,13 @@ public class MainController {
 			// Shallow path 
 			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
 				// Go to middle x first
-				driver.travelTo(middleSquareX, previousY);
-				driver.travelTo(middleSquareX, middleSquareY);
+				driver.travelTo(middleSquareX*GRID_LENGTH, previousY*GRID_LENGTH);
+				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
 			}
 			else {
 				// Go to middle y first 
-				driver.travelTo(previousX, middleSquareY);
-				driver.travelTo(middleSquareX, middleSquareY);
+				driver.travelTo(previousX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
+				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
 			}
 			
 			driver.travelTo(startingX*GRID_LENGTH, startingY*GRID_LENGTH);
@@ -246,13 +246,13 @@ public class MainController {
 			
 			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
 				// Go to middle x first
-				driver.travelTo(middleSquareX, previousY);
-				driver.travelTo(middleSquareX, middleSquareY);
+				driver.travelTo(middleSquareX*GRID_LENGTH, previousY*GRID_LENGTH);
+				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
 			}
 			else {
 				// Go to middle y first 
-				driver.travelTo(previousX, middleSquareY);
-				driver.travelTo(middleSquareX, middleSquareY);
+				driver.travelTo(previousX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
+				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
 			}
 			
 			// SEARCH HERE
