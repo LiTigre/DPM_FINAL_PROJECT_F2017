@@ -90,6 +90,10 @@ public class MainController {
 	private static double futureX;
 	/** The Y coordinate to where the robot is supposed to stop its traveling at. */
 	private static double futureY;
+	/** The X coordinate to where the robot started from. */
+	private static double startingX;
+	/** The Y coordinate to where the robot started from. */
+	private static double startingY;
 	
 	/**
 	 * Runs capture the flag.
@@ -124,23 +128,23 @@ public class MainController {
 		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
 			odometer.setPosition(new double[] {odometer.getX()+11*GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()+270}, new boolean[] {true, true, true});
-			previousX = 11;
-			previousY = 1;
+			startingX = 11;
+			startingY = 1;
 		}
 		else if(Setting.getStartingCorner() == 2) {
 			odometer.setPosition(new double[] {odometer.getX()+11*GRID_LENGTH, odometer.getY()+11*GRID_LENGTH, odometer.getTheta()+180}, new boolean[] {true, true, true});
-			previousX = 11;
-			previousY = 11;
+			startingX = 11;
+			startingY = 11;
 		}
 		else if(Setting.getStartingCorner() == 3){
 			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+11*GRID_LENGTH, odometer.getTheta()+90}, new boolean[] {true, true, true});
-			previousX = 1;
-			previousY = 11;
+			startingX = 1;
+			startingY = 11;
 		}
 		else{
 			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()}, new boolean[] {true, true, true});
-			previousX = 1;
-			previousY = 1; 
+			startingX = 1;
+			startingY = 1; 
 		} 
 		
 		// Do zipline first 
@@ -210,10 +214,72 @@ public class MainController {
 			
 			// SEARCH HERE
 			
+			// Shallow path 
+			
+			driver.travelTo(startingX, startingY);
 		}
 		// Do shallow path first
 		else {
+			// Shallow path
 			
+			// SEARCH HERE
+			
+			// Set the pre zip point 
+			futureX = preZip[0];
+			futureY = preZip[1];
+						
+			// Travel to the pre zipline point
+			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+						
+			// Travel to the pre zipline point
+			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+						
+			//Travel to the zipline point 
+			driver.turnTo(zipStart[0]*GRID_LENGTH, zipStart[1]*GRID_LENGTH);
+			//double preZipTheta = odometer.getTheta();
+			while(driver.getWheelsMoving());
+						
+			//driver.turnDistance(10);
+			//driver.turnDistance(-13);
+			while(driver.getWheelsMoving());
+			driver.travelDistance(40);
+						
+			// Perform zipline
+			zipline.performZiplineTravel();
+			while(driver.getWheelsMoving());
+						
+			if(zipEnd[0] == zipStart[0] && zipEnd[1] < zipStart[1]) {				//negative y
+				odometer.setTheta(180);
+			}
+			else if (zipEnd[0] == zipStart[0] && zipEnd[1] > zipStart[1]) {		//positive y
+				odometer.setTheta(1);
+			}
+			else if(zipEnd[1] == zipStart[1] && zipEnd[0] < zipStart[0]) {		//negative x
+				odometer.setTheta(270);
+			}
+			else if (zipEnd[1] == zipStart[1] && zipEnd[0] > zipStart[0]) {		//positive x
+				odometer.setTheta(90);
+			}
+			else if (zipEnd[0] - zipStart[0] > 0 && zipEnd[1] - zipStart[1] > 0) {	//top right
+				odometer.setTheta(45);
+			}
+			else if (zipEnd[0] - zipStart[0] > 0 && zipEnd[1] - zipStart[1] < 0) {	//bottom right
+				odometer.setTheta(135);
+			}
+			else if (zipEnd[0] - zipStart[0] < 0 && zipEnd[1] - zipStart[1] > 0 ) {	//top left
+				odometer.setTheta(315);
+			}
+			else if (zipEnd[0] - zipStart[0] < 0 && zipEnd[1] - zipStart[1] > 0 ) {	//bottom left
+				odometer.setTheta(225);
+			}
+						
+			// Figure out where it is after zipline
+			localization.reLocalize(postZip[0]*GRID_LENGTH, postZip[1]*GRID_LENGTH); 
+			
+			// Travel to the starting corner
+			driver.travelTo(startingX, startingY);
 		}
 		
 
