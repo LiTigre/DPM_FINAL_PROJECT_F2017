@@ -70,6 +70,12 @@ public class Odometer extends Thread {
 		long updateStart, updateEnd;
 
 		while (true) {
+			
+//			System.out.println("L: " + Localization.isLocalizing);
+			
+//			System.out.println("X: " + x);
+//			System.out.println("Y: " + y);
+			
 			updateStart = System.currentTimeMillis();
 			double distLeft, distRight, deltaDistance, deltaTheta, dX, dY;
 			distLeft = Math.PI * WHEEL_RADIUS * (leftMotor.getTachoCount() - leftMotorTachoCount) / 180; // Calculated
@@ -111,6 +117,19 @@ public class Odometer extends Thread {
 				}
 			}
 		}
+	}
+	
+	public void update() {
+		if (this.theta < 45 || this.theta > 315 || (this.theta < 225 && this.theta > 135))
+			synchronized (lock) {
+				double diff = MainController.GRID_LENGTH - (this.x % MainController.GRID_LENGTH);
+				this.x = diff < (MainController.GRID_LENGTH / 2) ? this.x - diff : this.x + (MainController.GRID_LENGTH - diff);
+			}
+		else if ((this.theta < 135 || this.theta > 45) || (this.theta > 225 && this.theta < 315))
+			synchronized (lock) {
+				double diff = MainController.GRID_LENGTH - (this.y % MainController.GRID_LENGTH);
+				this.y = diff < (MainController.GRID_LENGTH / 2) ? this.y - diff : this.y + (MainController.GRID_LENGTH - diff);
+			}
 	}
 	
 	/**

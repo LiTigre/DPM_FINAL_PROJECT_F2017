@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.controller;
 
 import ca.mcgill.ecse211.navigation.Driver;
+import ca.mcgill.ecse211.navigation.LightCorrection;
 import ca.mcgill.ecse211.navigation.ObstacleAvoidance;
 import ca.mcgill.ecse211.navigation.Search;
 import ca.mcgill.ecse211.navigation.Zipline;
@@ -13,6 +14,7 @@ import ca.mcgill.ecse211.settings.Setting.TeamColor;
 import ca.mcgill.ecse211.settings.ShallowZone;
 import ca.mcgill.ecse211.settings.StartingZone;
 import ca.mcgill.ecse211.wifi.WifiInput;
+import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -37,7 +39,7 @@ public class MainController {
 	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
 	//public static final double TRACK = 11;
-	public static final double TRACK = 11.3;
+	public static final double TRACK = 13;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -50,7 +52,7 @@ public class MainController {
 	/**  Color sensor with associated port. */
 	private static final EV3ColorSensor lightSensor = new EV3ColorSensor(LocalEV3.get().getPort("S3"));
 	/** Color sensor used for angle correction with associated port. */
-	private static final EV3ColorSensor angleColorSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
+	private static final EV3ColorSensor angleLightSensor = new EV3ColorSensor(LocalEV3.get().getPort("S2"));
 	/** Ultrasonic sensor with associated port. */
 	private static final SensorModes usSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S1"));
 	/** Color sensor used for searching for the flag with associated port */
@@ -59,9 +61,9 @@ public class MainController {
 	
 	// Motors
 	/** Left motor with associated port. */
-	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
+	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
 	/** Right motor with associated port. */
-	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
 	/** Zipline motor with associated port. */
 	static final EV3LargeRegulatedMotor ziplineMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
 	
@@ -69,8 +71,8 @@ public class MainController {
 	// Make it that we can collect data from the sensor
 	/** Data collected from the color sensor. */
 	private static SampleProvider lightSample = lightSensor.getRedMode();
-	/** Data collected from the angle color sensor. */
-	private static SampleProvider angleColorSample = angleColorSensor.getRedMode();
+	/** Data collected from the angle light sensor. */
+	private static SampleProvider angleLightSample = angleLightSensor.getRedMode();
 	/** Data collected from the ultrasonic sensor. */
 	private static SampleProvider usDistance = usSensor.getMode("Distance");
 	/** Data collected from the search color sensor. */
@@ -80,8 +82,8 @@ public class MainController {
 	// Data from the sensors
 	/** Array of floats that stores the value of the data from the color sensor. */
 	private static float lightData[] = new float[lightSample.sampleSize()];
-	/** Array of floats that stores the value of the data from the angle color sensor. */
-	private static float angleLightData[] = new float[angleColorSample.sampleSize()];
+	/** Array of floats that stores the value of the data from the color sensor. */
+	private static float angleLightData[] = new float[angleLightSample.sampleSize()];
 	/** Array of floats that stores the value of the data from the ultrasonic sensor. */
 	private static float usData[] = new float[usDistance.sampleSize()];
 	/** Array of floats that stores the value of the data from the search color sensor */
@@ -114,6 +116,74 @@ public class MainController {
 		Localization localization = new Localization(odometer, driver);
 		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver, localization);
 		Zipline zipline = new Zipline(ziplineMotor, driver); 
+//		Thread lightCorrection = new Thread(new LightCorrection(driver, odometer));
+		LightCorrection lightCorrection = new LightCorrection(driver, odometer);
+		
+//		odometer.start();
+//		
+//		lightCorrection.start();
+//		
+//		odometer.setX(0);
+//		odometer.setY(0);
+//		driver.travelTo(0, 3 * GRID_LENGTH);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection) {
+//			System.out.println("C: " + LightCorrection.doCorrection);
+//		}
+//		driver.travelTo(3 * GRID_LENGTH, 3 * GRID_LENGTH);
+//		
+//		Button.waitForAnyPress();
+		
+//		odometer.start();
+//		
+//		driver.forward();
+//		
+//		driver.turnDistanceSynchronous(90);
+//		while (driver.getWheelsMoving());
+//		driver.turnDistanceSynchronous(90);
+//		while (driver.getWheelsMoving());
+//		driver.turnDistanceSynchronous(90);
+//		while (driver.getWheelsMoving());
+//		driver.turnDistanceSynchronous(90);
+//		while (driver.getWheelsMoving());
+//		
+//		Button.waitForAnyPress();
+		
+//		lightCorrection.start();
+		
+		
+//		odometer.start();
+//		
+//		lightCorrection.start();
+//		
+//		odometer.setX(0);
+//		odometer.setY(0);
+		
+//		driver.travelTo(0, 5 * GRID_LENGTH);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+		
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+		
+//		Button.waitForAnyPress();
+		
+//		driver.travelTo(0, 2 * GRID_LENGTH);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		System.out.println("(0, 2)");
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+//		driver.travelTo(2 * GRID_LENGTH, 2 * GRID_LENGTH);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		System.out.println("(2, 2)");
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+//		driver.travelTo(2 * GRID_LENGTH, 0);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		System.out.println("(2, 0)");
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+//		driver.travelTo(0, 0);
+//		while (driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		System.out.println("(0, 0)");
+//		System.out.println("X: " + odometer.getX() + ", Y: " + odometer.getY());
+//		
+//		Button.waitForAnyPress();
+
 		
 		// First wait for server to send info.
 		WifiInput.recieveServerData();
@@ -143,6 +213,8 @@ public class MainController {
 		odometer.start();
 		
 		localization.localize();
+		
+		System.out.println("0");
 		
 		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
@@ -221,7 +293,7 @@ public class MainController {
 			
 			// Figure out where it is after zipline
 			localization.reLocalize(postZip[0]*GRID_LENGTH, postZip[1]*GRID_LENGTH); 
-			
+
 			// Set post zip point and region to go to 
 			previousX = postZip[0];
 			previousY = postZip[1];
@@ -249,7 +321,6 @@ public class MainController {
 		}
 		// Do shallow path first
 		else {
-			
 			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
 				// Go to middle x first
 				driver.travelTo(middleSquareX*GRID_LENGTH, previousY*GRID_LENGTH);
@@ -320,9 +391,7 @@ public class MainController {
 			// Travel to the starting corner
 			driver.travelTo(startingX*GRID_LENGTH, startingY*GRID_LENGTH);
 		}
-		
-
-		
+    
 		// Conditions to not run into the zipline
 //		if(zipEnd[0] == zipStart[0] ) {
 //			//Vertical zipline alignment. Do Y first 
@@ -533,8 +602,8 @@ public class MainController {
 	 * @since 1.2
 	 */
 	public static float getAngleLightValue() {
-		angleColorSample.fetchSample(angleLightData, 0);
-		return lightData[0]*1000;
+		angleLightSample.fetchSample(angleLightData, 0);
+		return angleLightData[0]*1000;
 	}
 	
 	

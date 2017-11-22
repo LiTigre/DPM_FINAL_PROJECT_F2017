@@ -1,5 +1,8 @@
 package ca.mcgill.ecse211.navigation;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -7,7 +10,7 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 /**
  * Main navigation class of the system. Contains all the basic travel methods necessary. 
  * @author Team 2
- * @version 1.4
+ * @version 1.5
  * @since 1.0
  */
 public class Driver {
@@ -27,16 +30,19 @@ public class Driver {
 	/** @see MainController#TRACK */
 	public double TRACK = MainController.TRACK;
 	/** The forward speed of the robot in (degrees/second) */
-	private static final int FORWARD_SPEED = 200;
+	public final int FORWARD_SPEED = 175;
 	/** The rotational speed of the robot in (degrees/second) */
-	private static final int ROTATE_SPEED = 100;
+	public final int ROTATE_SPEED = 100;
 	
 	
 	// Booleans
 	/** Boolean that indicates whether the robot is currently traveling. */
 	private boolean travelling;
 	/** Boolean that indicates whether the robot is currently turning. */
-	private boolean turning;
+	private volatile boolean turning;
+	
+	public static volatile double destinationX;
+	public static volatile double destinationY;
 	
 	
 	/**
@@ -63,6 +69,11 @@ public class Driver {
 	 */
 	public void travelTo(double newX, double newY) {
 		
+		LightCorrection.doCorrection = true;
+		
+		Driver.destinationX = newX;
+		Driver.destinationY = newY;
+		
 		double deltaY = newY - odometer.getY();
 		double deltaX = newX - odometer.getX();
 
@@ -70,17 +81,17 @@ public class Driver {
 		double thetaTurn = thetaD - odometer.getTheta();
 		
 		if (thetaTurn < -180.0) {
-			turnDistance(360.0 + thetaTurn);
+			turnDistanceSynchronous(360.0 + thetaTurn);
 		}
 		else if (thetaTurn > 180.0) {
-			turnDistance(thetaTurn - 360.0);
+			turnDistanceSynchronous(thetaTurn - 360.0);
 		}
 		else {
 			if (thetaTurn < 0) {
-				turnDistance(thetaTurn + 360);
+				turnDistanceSynchronous(thetaTurn + 360);
 			}
 			else {
-			turnDistance(thetaTurn);
+				turnDistanceSynchronous(thetaTurn);
 			}
 		}
 		
@@ -93,7 +104,33 @@ public class Driver {
 		setTravelling(true);
 		
 		leftMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
-		rightMotor.rotate(convertDistance(WHEEL_RADIUS, distance), false);
+		rightMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
+		
+		setTravelling(false);
+	}
+	
+	/**
+	 * Travels to a point specified while only moving straight
+	 * @param newX X position of the new point in centimeters.
+	 * @param newY Y position of the new point in centimeters.
+	 * @since 1.1
+	 */
+	public void travelToStraight(double newX, double newY) {
+		
+		Driver.destinationX = newX;
+		Driver.destinationY = newY;
+		
+		double deltaY = newY - odometer.getY();
+		double deltaX = newX - odometer.getX();
+		
+		setSpeed(FORWARD_SPEED);
+		
+		double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+		
+		setTravelling(true);
+		
+		leftMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
+		rightMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
 		
 		setTravelling(false);
 	}
@@ -116,6 +153,28 @@ public class Driver {
 	
 	/**
 	 * Makes both wheels go forward for unspecified distance or time. 
+	 * @since 1.5
+	 */
+	public void forward() {
+		setSpeed(FORWARD_SPEED);
+		
+		leftMotor.forward();
+		rightMotor.forward();
+	}
+	
+	/**
+	 * Makes both wheels go backward for unspecified distance or time. 
+	 * @since 1.5
+	 */
+	public void backward() {
+		setSpeed(FORWARD_SPEED);
+		
+		leftMotor.backward();
+		rightMotor.backward();
+	}
+	
+	/**
+	 * Makes both wheels go forward for unspecified distance or time. 
 	 * @param speed The speed of the wheels in degrees per second. 
 	 * @since 1.4
 	 */
@@ -124,6 +183,30 @@ public class Driver {
 		
 		leftMotor.forward();
 		rightMotor.forward();
+	}
+	
+	/**
+	 * Turn a specified amount. 
+	 * @param angle Angle amount the robots needs to turn in degrees.
+	 * @since 1.5
+	 */
+	public void turnDistanceSynchronous(double angle) {
+		setTurning(true);
+		
+		setSpeed(ROTATE_SPEED);
+		
+		Timer timer = new Timer();
+		
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				LightCorrection.doCorrection = true;
+			}
+		}, 2 * 1000);
+		
+		leftMotor.rotate(convertAngle(WHEEL_RADIUS, TRACK, angle), true);
+		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), false);
+		setTurning(false);
 	}
 	
 	/**
@@ -156,14 +239,14 @@ public class Driver {
 		double thetaTurn = thetaD - odometer.getTheta();
 		
 		if (thetaTurn < -180.0) {
-			turnDistance(360.0 + thetaTurn);
+			turnDistanceSynchronous(360.0 + thetaTurn);
 
 		}
 		else if (thetaTurn > 180.0) {
-			turnDistance(thetaTurn - 360.0);
+			turnDistanceSynchronous(thetaTurn - 360.0);
 		}
 		else {
-			turnDistance(thetaTurn);
+			turnDistanceSynchronous(thetaTurn);
 		}
 		
 	}
@@ -191,11 +274,22 @@ public class Driver {
 	}
 	
 	/**
+	 * Force stop of the both motors. 
+	 * @since 1.5
+	 */
+	public void instantStopAsync() {
+		leftMotor.stop(true);
+		rightMotor.stop(true);
+		setTravelling(false);
+		setTurning(false);
+	}
+	
+	/**
 	 * This makes setting the speed of both wheels easier.
 	 * @param speed Speed to set both wheels to.
 	 * @since 1.3
 	 */
-	private void setSpeed(int speed) {
+	public void setSpeed(int speed) {
 		leftMotor.setSpeed(speed);
 		rightMotor.setSpeed(speed);
 	}
