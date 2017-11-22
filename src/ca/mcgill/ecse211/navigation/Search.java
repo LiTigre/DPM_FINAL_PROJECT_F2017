@@ -45,10 +45,6 @@ public class Search extends Thread {
 		}
 	}
 	
-	public void search() {
-		
-	}
-	
 	/**
 	 * Scans the block found to check whether it is the right color block or not.
 	 * @since 1.1
