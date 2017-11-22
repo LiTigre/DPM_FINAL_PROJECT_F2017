@@ -1,6 +1,8 @@
 package ca.mcgill.ecse211.navigation;
 
+import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.odometry.Odometer;
+import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 
 /**
@@ -9,7 +11,7 @@ import lejos.robotics.SampleProvider;
  * @version 1.1
  * @since 1.0
  */
-public class Search implements Runnable {
+public class Search extends Thread {
 
 	/**
 	 * Constructor for the Search class.
@@ -17,7 +19,7 @@ public class Search implements Runnable {
 	 * @param driver Driver created in MainController.
 	 * @since 1.1
 	 */
-	public Search(Odometer odometer, Driver driver) {
+	public Search() {
 		
 	}
 	
@@ -25,7 +27,35 @@ public class Search implements Runnable {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
-		
+		while(!(getCaptured())) {
+			float redColor = MainController.getSearchLightValue(0);	//Red
+			float greenColor = MainController.getSearchLightValue(1);	//Green
+			float blueColor = MainController.getSearchLightValue(2);	//Blue
+			if( redColor > (greenColor + blueColor)){  						// Red block or Yellow block
+				if (redColor/2 > (greenColor + blueColor)){					// Red block
+					Sound.beep();
+					Sound.beep();
+					Sound.beep();
+
+				}
+				else if(redColor/2 < (greenColor+blueColor)){				// Yellow block
+					Sound.beep();
+					Sound.beep();
+
+				}
+			}
+			else if (redColor < (greenColor + blueColor)){					// White block or blue block
+				if ( blueColor > redColor && blueColor > greenColor){		// Blue block
+					Sound.beep();
+				}
+				else if ( blueColor < redColor && blueColor < greenColor){	// White block
+					Sound.beep();
+					Sound.beep();
+					Sound.beep();
+					Sound.beep();
+				}
+			}
+		}
 	}
 	
 	/**
@@ -49,9 +79,9 @@ public class Search implements Runnable {
 	 * @return captureStatus Returns true if the block has been captured, false otherwise. 
 	 * @since 1.1
 	 */
-	//public boolean getCaptured() {
-	//	return captureStatus;
-//	}
+	public boolean getCaptured() {
+		return false;
+	}
 	
 
 	/**
