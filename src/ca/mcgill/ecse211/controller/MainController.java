@@ -116,8 +116,8 @@ public class MainController {
 		Zipline zipline = new Zipline(ziplineMotor, driver); 
 //		Thread lightCorrection = new Thread(new LightCorrection(driver, odometer));
 		LightCorrection lightCorrection = new LightCorrection(driver, odometer);
-		Search search = new Search(); 
-		search.start();
+		Search search = new Search(driver); 
+		search.search();
 //		odometer.start();
 //		
 //		lightCorrection.start();

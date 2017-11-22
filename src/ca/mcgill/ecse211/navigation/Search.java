@@ -12,64 +12,76 @@ import lejos.robotics.SampleProvider;
  * @since 1.0
  */
 public class Search extends Thread {
+	Driver driver;
 	
 	private static boolean captured = false;
+	private static boolean searching = false;
 	
+	private static int blockColor;
+	private static float redColor;
+	private static float blueColor;
+	private static float greenColor; 
 	/**
 	 * Constructor for the Search class.
 	 * @param odometer Odometer created in the MainController class.
 	 * @param driver Driver created in MainController.
 	 * @since 1.1
 	 */
-	public Search() {
-		
+	public Search(Driver driver) {
+		this.driver = driver;
 	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
-		while(!(getCaptured())) {
-			float redColor = MainController.getSearchLightValue(0);	//Red
-			float greenColor = MainController.getSearchLightValue(1);	//Green
-			float blueColor = MainController.getSearchLightValue(2);	//Blue
-			if ( !(redColor >= 0.002 && greenColor >= 0.002 && blueColor >= 0.002)){
-				if( redColor > (greenColor + blueColor)){  						// Red block or Yellow block
-					if (redColor/2 > (greenColor + blueColor)){					// Red block
-						Sound.beep();
-						Sound.beep();
-						Sound.beep();
-						setCaptured(true);
-					}
-					else if(redColor/2 < (greenColor+blueColor)){				// Yellow block
-						Sound.beep();
-						Sound.beep();
-						setCaptured(false);
-					}
-				}
-				else if (redColor < (greenColor + blueColor)){					// White block or blue block
-					if ( blueColor > redColor && blueColor > greenColor){		// Blue block
-						Sound.beep();
-						setCaptured(true);
-					}
-					else if ( blueColor < redColor && blueColor < greenColor){	// White block
-						Sound.beep();
-						Sound.beep();
-						Sound.beep();
-						Sound.beep();
-						setCaptured(true);
-					}
-				}
+		while(!(getCaptured()) && getSearching()) {
+			redColor = MainController.getSearchLightValue(0);	//Red
+			greenColor = MainController.getSearchLightValue(1);	//Green
+			blueColor = MainController.getSearchLightValue(2);	//Blue
+			if (redColor >= 2 && greenColor >= 2 && blueColor >= 2){
+				scanBlock(redColor, greenColor, blueColor);
 			}
 		}
+	}
+	
+	public void search() {
+		
 	}
 	
 	/**
 	 * Scans the block found to check whether it is the right color block or not.
 	 * @since 1.1
 	 */
-	private void scanBlock() {
-		
+	private void scanBlock(float red, float green, float blue) {
+		if(getBlock() == 1) { //Red 
+			if( red > (green + blue)){  						// Red block or Yellow block
+				if (red/2 > (green + blue)){					// Red block
+					captureBlock();
+				}
+			}
+		}
+		else if(getBlock() == 2) { //Blue
+			if (red < (green + blue)){					
+				if ( blue > red && blue > green){		
+					captureBlock();
+				}
+			}
+		}
+		else if(getBlock() == 3) { //Yellow
+			if( red > (green + blue)){  		
+				if(redColor/2 < (greenColor+blueColor)){
+					captureBlock();
+				}
+			}
+		}
+		else if(getBlock() == 4) { //White
+			if (red < (green + blue)){	
+				if ( blueColor < redColor && blueColor < greenColor){
+					captureBlock();
+				}
+			}
+		}
 	}
 	
 	/**
@@ -77,7 +89,11 @@ public class Search extends Thread {
 	 * @since 1.1
 	 */
 	private void captureBlock() {
-		
+		Sound.beep();
+		Sound.beep();
+		Sound.beep();
+		setCaptured(true);
+		setSearching(false);
 	}
 	
 	/**
@@ -104,9 +120,9 @@ public class Search extends Thread {
 	 * @return Returns true if the block is the flag, false otherwise.
 	 * @since 1.1
 	 */
-	//public boolean getBlock() {
-	//	return foundBlock;
-	//}
+	public int getBlock() {
+		return blockColor;
+	}
 	
 	/**
 	 * Sets the values of the foundBlock boolean. 
@@ -114,7 +130,7 @@ public class Search extends Thread {
 	 * @since 1.1
 	 */
 	private void setBlock(int flagColor) {
-		
+		blockColor = flagColor;
 	}
 
 	/**
@@ -122,8 +138,11 @@ public class Search extends Thread {
 	 * @return True if it is searching, false otherwise.
 	 * @since 1.1
 	 */
-	public boolean isSearching() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean getSearching() {
+		return searching;
+	}
+	
+	public void setSearching(boolean bool) {
+		searching = bool;
 	}
 }
