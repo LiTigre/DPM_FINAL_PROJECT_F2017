@@ -12,7 +12,9 @@ import lejos.robotics.SampleProvider;
  * @since 1.0
  */
 public class Search extends Thread {
-
+	
+	private static boolean captured = false;
+	
 	/**
 	 * Constructor for the Search class.
 	 * @param odometer Odometer created in the MainController class.
@@ -37,23 +39,25 @@ public class Search extends Thread {
 						Sound.beep();
 						Sound.beep();
 						Sound.beep();
-
+						setCaptured(true);
 					}
 					else if(redColor/2 < (greenColor+blueColor)){				// Yellow block
 						Sound.beep();
 						Sound.beep();
-
+						setCaptured(false);
 					}
 				}
 				else if (redColor < (greenColor + blueColor)){					// White block or blue block
 					if ( blueColor > redColor && blueColor > greenColor){		// Blue block
 						Sound.beep();
+						setCaptured(true);
 					}
 					else if ( blueColor < redColor && blueColor < greenColor){	// White block
 						Sound.beep();
 						Sound.beep();
 						Sound.beep();
 						Sound.beep();
+						setCaptured(true);
 					}
 				}
 			}
@@ -82,7 +86,7 @@ public class Search extends Thread {
 	 * @since 1.1
 	 */
 	public boolean getCaptured() {
-		return false;
+		return captured;
 	}
 	
 
@@ -91,8 +95,8 @@ public class Search extends Thread {
 	 * @param captured Boolean true if the block has been captured, false otherwise. 
 	 * @since 1.1
 	 */
-	private void setCaptured(boolean captured) {
-		
+	private void setCaptured(boolean found) {
+		captured = found; 
 	}
 	
 	/**
