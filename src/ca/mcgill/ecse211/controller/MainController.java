@@ -1,13 +1,12 @@
 package ca.mcgill.ecse211.controller;
 
 import ca.mcgill.ecse211.navigation.Driver;
-import ca.mcgill.ecse211.navigation.LightCorrection;
 import ca.mcgill.ecse211.navigation.ObstacleAvoidance;
 import ca.mcgill.ecse211.navigation.Search;
 import ca.mcgill.ecse211.navigation.Zipline;
+import ca.mcgill.ecse211.odometry.LightCorrection;
 import ca.mcgill.ecse211.odometry.Localization;
 import ca.mcgill.ecse211.odometry.Odometer;
-import ca.mcgill.ecse211.odometry.OdometryCorrection;
 import ca.mcgill.ecse211.settings.SearchRegion;
 import ca.mcgill.ecse211.settings.Setting;
 import ca.mcgill.ecse211.settings.Setting.TeamColor;
@@ -114,7 +113,6 @@ public class MainController {
 		Odometer odometer = new Odometer(leftMotor, rightMotor);
 		Driver driver = new Driver(leftMotor, rightMotor, odometer);
 		Localization localization = new Localization(odometer, driver);
-		OdometryCorrection odoCorrection = new OdometryCorrection(odometer, driver, localization);
 		Zipline zipline = new Zipline(ziplineMotor, driver); 
 //		Thread lightCorrection = new Thread(new LightCorrection(driver, odometer));
 		LightCorrection lightCorrection = new LightCorrection(driver, odometer);

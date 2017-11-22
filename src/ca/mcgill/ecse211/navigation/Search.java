@@ -49,7 +49,7 @@ public class Search implements Runnable {
 	 * @return captureStatus Returns true if the block has been captured, false otherwise. 
 	 * @since 1.1
 	 */
-	//public boolean isCaptured() {
+	//public boolean getCaptured() {
 	//	return captureStatus;
 //	}
 	
@@ -68,7 +68,7 @@ public class Search implements Runnable {
 	 * @return Returns true if the block is the flag, false otherwise.
 	 * @since 1.1
 	 */
-	//public boolean isBlock() {
+	//public boolean getBlock() {
 	//	return foundBlock;
 	//}
 	
@@ -77,7 +77,7 @@ public class Search implements Runnable {
 	 * @param foundBlock True if the block is the flag, false otherwise. 
 	 * @since 1.1
 	 */
-	private void setFoundBlock(boolean foundBlock) {
+	private void setBlock(int flagColor) {
 		
 	}
 

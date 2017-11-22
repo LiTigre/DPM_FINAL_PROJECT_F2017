@@ -1,10 +1,8 @@
-package ca.mcgill.ecse211.navigation;
+package ca.mcgill.ecse211.odometry;
 
 import java.util.ArrayList;
 
 import ca.mcgill.ecse211.controller.MainController;
-import ca.mcgill.ecse211.odometry.Localization;
-import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import ca.mcgill.ecse211.navigation.Driver;

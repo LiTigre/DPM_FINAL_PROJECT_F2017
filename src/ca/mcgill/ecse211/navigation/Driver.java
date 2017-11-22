@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ca.mcgill.ecse211.controller.MainController;
+import ca.mcgill.ecse211.odometry.LightCorrection;
 import ca.mcgill.ecse211.odometry.Odometer;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 

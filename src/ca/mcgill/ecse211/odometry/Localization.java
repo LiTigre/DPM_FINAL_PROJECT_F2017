@@ -5,7 +5,6 @@ import java.util.TimerTask;
 
 import ca.mcgill.ecse211.controller.MainController;
 import ca.mcgill.ecse211.navigation.Driver;
-import ca.mcgill.ecse211.navigation.LightCorrection;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
