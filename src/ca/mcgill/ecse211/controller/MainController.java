@@ -119,6 +119,16 @@ public class MainController {
 		Search search = new Search(driver); 
 		
 //		odometer.start();
+//		localization.lightLocalization();
+//		lightCorrection.start();
+//		driver.travelTo(6*30.48, 0);
+//		while(driver.getWheelsMoving() || LightCorrection.doCorrection);
+//		search.setBlock(1);
+//		search.setSearching(true);
+//		search.start();
+//		driver.travelTo(30.48, 30.48);
+//		while(driver.getWheelsMoving());
+//		driver.turnDistanceSynchronous(360);
 //		
 //		lightCorrection.start();
 //		
@@ -213,8 +223,6 @@ public class MainController {
 		
 		localization.localize();
 		
-		System.out.println("0");
-		
 		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
 			odometer.setPosition(new double[] {odometer.getX()+11*GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()+270}, new boolean[] {true, true, true});
@@ -237,6 +245,8 @@ public class MainController {
 			startingY = 1; 
 		} 
 		
+		lightCorrection.start();
+		
 		// Do zipline first 
 		if(Setting.getTeamColor() == TeamColor.Green) {
 			// Set the pre zip point 
@@ -244,6 +254,7 @@ public class MainController {
 			futureY = preZip[1];
 			
 			// Travel to the pre zipline point
+			// one axis at a time 
 			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
 			
 			// Travel to the pre zipline point
@@ -304,7 +315,7 @@ public class MainController {
 			driver.travelTo(upperFlag[0]*GRID_LENGTH, upperFlag[1]*GRID_LENGTH);
 			
 			// Search
-			search.start();
+			search.search();
 			
 			
 			
@@ -339,7 +350,7 @@ public class MainController {
 			//Travel to search region 
 			
 			// Search
-			search.start();
+			search.search();
 			
 			// Set the pre zip point 
 			futureX = preZip[0];
@@ -398,7 +409,7 @@ public class MainController {
 			// Travel to the starting corner
 			driver.travelTo(startingX*GRID_LENGTH, startingY*GRID_LENGTH);
 		}
-    
+//    
 		// Conditions to not run into the zipline
 //		if(zipEnd[0] == zipStart[0] ) {
 //			//Vertical zipline alignment. Do Y first 

@@ -88,12 +88,8 @@ public class Driver {
 			turnDistanceSynchronous(thetaTurn - 360.0);
 		}
 		else {
-			if (thetaTurn < 0) {
-				turnDistanceSynchronous(thetaTurn + 360);
-			}
-			else {
-				turnDistanceSynchronous(thetaTurn);
-			}
+
+			turnDistanceSynchronous(thetaTurn);	
 		}
 		
 		while(getWheelsMoving());

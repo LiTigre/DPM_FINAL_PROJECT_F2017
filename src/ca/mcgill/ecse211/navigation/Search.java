@@ -11,7 +11,7 @@ import lejos.robotics.SampleProvider;
  * @version 1.1
  * @since 1.0
  */
-public class Search extends Thread {
+public class Search {
 	Driver driver;
 	
 	private static boolean captured = false;
@@ -34,7 +34,7 @@ public class Search extends Thread {
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
-	public void run() {
+	public void search() {
 		while(!(getCaptured()) && getSearching()) {
 			redColor = MainController.getSearchLightValue(0);	//Red
 			greenColor = MainController.getSearchLightValue(1);	//Green
@@ -125,7 +125,7 @@ public class Search extends Thread {
 	 * @param foundBlock True if the block is the flag, false otherwise. 
 	 * @since 1.1
 	 */
-	private void setBlock(int flagColor) {
+	public void setBlock(int flagColor) {
 		blockColor = flagColor;
 	}
 
