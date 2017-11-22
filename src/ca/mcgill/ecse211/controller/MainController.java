@@ -38,7 +38,7 @@ public class MainController {
 	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
 	//public static final double TRACK = 11;
-	public static final double TRACK = 13;
+	public static final double TRACK = 12.56;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -226,23 +226,31 @@ public class MainController {
 		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
 			odometer.setPosition(new double[] {odometer.getX()+11*GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()+270}, new boolean[] {true, true, true});
-			startingX = 11;
-			startingY = 1;
+			startingX = 11.5;
+			startingY = 0.5;
+			previousX = 11;
+			previousY = 1;
 		}
 		else if(Setting.getStartingCorner() == 2) {
 			odometer.setPosition(new double[] {odometer.getX()+11*GRID_LENGTH, odometer.getY()+11*GRID_LENGTH, odometer.getTheta()+180}, new boolean[] {true, true, true});
-			startingX = 11;
-			startingY = 11;
+			startingX = 11.5;
+			startingY = 11.5;
+			previousX = 11;
+			previousY = 11;
 		}
 		else if(Setting.getStartingCorner() == 3){
 			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+11*GRID_LENGTH, odometer.getTheta()+90}, new boolean[] {true, true, true});
-			startingX = 1;
-			startingY = 11;
+			startingX = 0.5;
+			startingY = 11.5;
+			previousX = 1;
+			previousY = 11;
 		}
 		else{
 			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()}, new boolean[] {true, true, true});
-			startingX = 1;
-			startingY = 1; 
+			startingX = 0.5;
+			startingY = 0.5; 
+			previousX = 1;
+			previousY = 1;
 		} 
 		
 		lightCorrection.start();
@@ -253,14 +261,19 @@ public class MainController {
 			futureX = preZip[0];
 			futureY = preZip[1];
 			
-			// Travel to the pre zipline point
-			// one axis at a time 
-			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			// Travel to the pre zipline point X
+			driver.travelTo((futureX*GRID_LENGTH), (previousY*GRID_LENGTH));
+			while(driver.getWheelsMoving() || LightCorrection.doCorrection);
 			
 			// Travel to the pre zipline point
-			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			driver.travelTo((futureX*GRID_LENGTH), (futureY*GRID_LENGTH));
+			while(driver.getWheelsMoving() || LightCorrection.doCorrection);
+			
+			LightCorrection.doCorrection = false;
 			localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			
 			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			while(driver.getWheelsMoving());
 			
 			//Travel to the zipline point 
 			driver.turnTo(zipStart[0]*GRID_LENGTH, zipStart[1]*GRID_LENGTH);
@@ -268,7 +281,7 @@ public class MainController {
 			while(driver.getWheelsMoving());
 			
 			//driver.turnDistance(10);
-			//driver.turnDistance(-13);
+			driver.turnDistance(-16);
 			while(driver.getWheelsMoving());
 			driver.travelDistance(40);
 			
@@ -310,44 +323,62 @@ public class MainController {
 			futureX = upperFlag[0];
 			futureY = upperFlag[1];
 			
+			LightCorrection.doCorrection = true;
+		
 			// Travel to the flag location 
 			// Check for walls and water
-			driver.travelTo(upperFlag[0]*GRID_LENGTH, upperFlag[1]*GRID_LENGTH);
+			
+		
 			
 			// Search
 			search.search();
-			
-			
-			
 			
 			// Shallow path 
 			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
 				// Go to middle x first
 				driver.travelTo(middleSquareX*GRID_LENGTH, previousY*GRID_LENGTH);
+				while(driver.getWheelsMoving());
+				
 				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
+				while(driver.getWheelsMoving());
 			}
 			else {
 				// Go to middle y first 
 				driver.travelTo(previousX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
+				while(driver.getWheelsMoving());
+				
 				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
+				while(driver.getWheelsMoving());
 			}
 			
+			// Travel to the starting corner
+			driver.travelTo(previousX*GRID_LENGTH, startingY*GRID_LENGTH);
+			while(driver.getWheelsMoving());
+						
 			driver.travelTo(startingX*GRID_LENGTH, startingY*GRID_LENGTH);
+			while(driver.getWheelsMoving());
 		}
 		// Do shallow path first
 		else {
 			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
 				// Go to middle x first
 				driver.travelTo(middleSquareX*GRID_LENGTH, previousY*GRID_LENGTH);
+				while(driver.getWheelsMoving());
+				
 				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
+				while(driver.getWheelsMoving());
 			}
 			else {
 				// Go to middle y first 
 				driver.travelTo(previousX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
+				while(driver.getWheelsMoving());
+				
 				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
+				while(driver.getWheelsMoving());
 			}
 			
 			//Travel to search region 
+			
 			
 			// Search
 			search.search();
@@ -357,12 +388,19 @@ public class MainController {
 			futureY = preZip[1];
 						
 			// Travel to the pre zipline point
-			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			driver.travelTo((previousX*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			while(driver.getWheelsMoving());
 						
 			// Travel to the pre zipline point
 			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			while(driver.getWheelsMoving());
+			
+			LightCorrection.doCorrection = false;
+			
 			localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			
 			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
+			while(driver.getWheelsMoving());
 						
 			//Travel to the zipline point 
 			driver.turnTo(zipStart[0]*GRID_LENGTH, zipStart[1]*GRID_LENGTH);
@@ -371,7 +409,7 @@ public class MainController {
 						
 			//driver.turnDistance(10);
 			//driver.turnDistance(-13);
-			while(driver.getWheelsMoving());
+			//while(driver.getWheelsMoving());
 			driver.travelDistance(40);
 						
 			// Perform zipline
@@ -406,8 +444,16 @@ public class MainController {
 			// Figure out where it is after zipline
 			localization.reLocalize(postZip[0]*GRID_LENGTH, postZip[1]*GRID_LENGTH); 
 			
+			previousX = postZip[0];
+			previousY = postZip[1]; 
+			LightCorrection.doCorrection = true;
+			
 			// Travel to the starting corner
+			driver.travelTo(previousX*GRID_LENGTH, startingY*GRID_LENGTH);
+			while(driver.getWheelsMoving());
+			
 			driver.travelTo(startingX*GRID_LENGTH, startingY*GRID_LENGTH);
+			while(driver.getWheelsMoving());
 		}
 //    
 		// Conditions to not run into the zipline
