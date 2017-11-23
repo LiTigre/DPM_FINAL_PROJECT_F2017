@@ -83,7 +83,7 @@ public class Search {
 	 * If the robot finds the block perform this. 
 	 * @since 1.1
 	 */
-	private void captureBlock() {
+	public void captureBlock() {
 		Sound.beep();
 		Sound.beep();
 		Sound.beep();

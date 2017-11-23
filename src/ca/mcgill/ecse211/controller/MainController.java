@@ -149,25 +149,25 @@ public class MainController {
 		
 		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
-			odometer.setPosition(new double[] {odometer.getX()+11*GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()+270}, new boolean[] {true, true, true});
-			startingX = 11.5;
+			odometer.setPosition(new double[] {odometer.getX()+7*GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()+270}, new boolean[] {true, true, true});
+			startingX = 7.5;
 			startingY = 0.5;
-			previousX = 11;
+			previousX = 7;
 			previousY = 1;
 		}
 		else if(Setting.getStartingCorner() == 2) {
-			odometer.setPosition(new double[] {odometer.getX()+11*GRID_LENGTH, odometer.getY()+11*GRID_LENGTH, odometer.getTheta()+180}, new boolean[] {true, true, true});
-			startingX = 11.5;
-			startingY = 11.5;
-			previousX = 11;
-			previousY = 11;
+			odometer.setPosition(new double[] {odometer.getX()+7*GRID_LENGTH, odometer.getY()+7*GRID_LENGTH, odometer.getTheta()+180}, new boolean[] {true, true, true});
+			startingX = 7.5;
+			startingY = 7.5;
+			previousX = 7;
+			previousY = 7;
 		}
 		else if(Setting.getStartingCorner() == 3){
-			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+11*GRID_LENGTH, odometer.getTheta()+90}, new boolean[] {true, true, true});
+			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+7*GRID_LENGTH, odometer.getTheta()+90}, new boolean[] {true, true, true});
 			startingX = 0.5;
-			startingY = 11.5;
+			startingY = 7.5;
 			previousX = 1;
-			previousY = 11;
+			previousY = 7;
 		}
 		else{
 			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()}, new boolean[] {true, true, true});
@@ -193,7 +193,7 @@ public class MainController {
 			driver.travelTo((futureX*GRID_LENGTH), (futureY*GRID_LENGTH));
 			while(driver.getWheelsMoving() || LightCorrection.doCorrection);
 			
-			LightCorrection.doCorrection = false;
+			//LightCorrection.doCorrection = false;
 			localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
 			
 			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
@@ -247,7 +247,7 @@ public class MainController {
 			futureX = (upperFlag[0] + lowerFlag[0])/2.0;
 			futureY = (upperFlag[1] + lowerFlag[1])/2.0;
 			
-			LightCorrection.doCorrection = true;
+			//LightCorrection.doCorrection = true;
 		
 			// Travel to the flag location 
 			driver.travelTo(futureX*GRID_LENGTH, previousY*GRID_LENGTH);
@@ -261,6 +261,10 @@ public class MainController {
 				search.search();
 			}
 			
+			if(search.getCaptured() == false) {
+				search.captureBlock();
+			}
+			
 			previousX = futureX;
 			previousY = futureY;
 			
@@ -268,9 +272,7 @@ public class MainController {
 			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
 				// Go to middle x first
 				driver.travelTo(middleSquareX*GRID_LENGTH, previousY*GRID_LENGTH);
-				while(driver.getWheelsMoving() || LightCorrection.doCorrection) {
-					search.search();
-				}
+				while(driver.getWheelsMoving() || LightCorrection.doCorrection);
 				
 				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
 				while(driver.getWheelsMoving() || LightCorrection.doCorrection);
@@ -330,6 +332,10 @@ public class MainController {
 				search.search();
 			}
 			
+			if(search.getCaptured() == false) {
+				search.captureBlock();
+			}
+			
 			// Set the pre zip point 
 			futureX = preZip[0];
 			futureY = preZip[1];
@@ -342,7 +348,7 @@ public class MainController {
 			driver.travelTo((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
 			while(driver.getWheelsMoving()|| LightCorrection.doCorrection);
 			
-			LightCorrection.doCorrection = false;
+			//LightCorrection.doCorrection = false;
 			
 			localization.reLocalize((preZip[0]*GRID_LENGTH), (preZip[1]*GRID_LENGTH));
 			
@@ -393,7 +399,7 @@ public class MainController {
 			
 			previousX = postZip[0];
 			previousY = postZip[1]; 
-			LightCorrection.doCorrection = true;
+			//LightCorrection.doCorrection = true;
 			
 			// Travel to the starting corner
 			driver.travelTo(previousX*GRID_LENGTH, startingY*GRID_LENGTH);
