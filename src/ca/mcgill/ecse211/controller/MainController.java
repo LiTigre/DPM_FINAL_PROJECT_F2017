@@ -38,7 +38,7 @@ public class MainController {
 	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
 	//public static final double TRACK = 11;
-	public static final double TRACK = 12.56;
+	public static final double TRACK = 11.5;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -117,7 +117,7 @@ public class MainController {
 		LightCorrection lightCorrection = new LightCorrection(driver, odometer);
 		Search search = new Search(driver); 
 		
-		// First wait for server to send info.
+		// First wait for server to send info
 		WifiInput.recieveServerData();
 		int preZip[] = Setting.getStartPointNearZipline();
 		int zipStart[] = Setting.getZiplineStart();
@@ -131,6 +131,7 @@ public class MainController {
 		int horizontalUpperShallowPath[] = ShallowZone.getHorizontalUpperRightCorner();
 		int horizontalRedZone[] = StartingZone.getRedZoneLowerLeftCorner();
 		int verticalRedZone[] = StartingZone.getRedZoneUpperRightCorner();
+		search.setBlock(Setting.getOpponentFlagColor());
 		
 		// Shallow path
 		double upperRightSquareX = Math.min(verticalUpperShallowPath[0], horizontalUpperShallowPath[0]);
@@ -267,7 +268,9 @@ public class MainController {
 			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
 				// Go to middle x first
 				driver.travelTo(middleSquareX*GRID_LENGTH, previousY*GRID_LENGTH);
-				while(driver.getWheelsMoving() || LightCorrection.doCorrection);
+				while(driver.getWheelsMoving() || LightCorrection.doCorrection) {
+					search.search();
+				}
 				
 				driver.travelTo(middleSquareX*GRID_LENGTH, middleSquareY*GRID_LENGTH);
 				while(driver.getWheelsMoving() || LightCorrection.doCorrection);

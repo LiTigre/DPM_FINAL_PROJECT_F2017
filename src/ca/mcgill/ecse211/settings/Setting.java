@@ -11,14 +11,14 @@ public class Setting {
 	/** Enumeration of all possible team colors (2). */
 	public static enum TeamColor {Red, Green};
 	/** Enumeration of all possible block colors (4). */
-	public static enum BlockColor {Red, Blue, Yellow, White};
+	//public static enum BlockColor {Red, Blue, Yellow, White};
 	
 	
 	// Constants
 	/** Variable that will hold the team's color that was given from the server. */
 	private static TeamColor teamColor; 
 	/** Variable that indicates the color of the flag that must be captured. */
-	private static BlockColor opponentFlagColor;
+	private static int opponentFlagColor;
 	
 	/** Indicates which corner the robot will be starting in. Values = 0-3; */
 	private static int startingCorner;
@@ -57,7 +57,7 @@ public class Setting {
 	 * @return The block's color. This is the flag the robot wants to capture. BlockColor enum value. 
 	 * @since 1.0
 	 */
-	public static BlockColor getOpponentFlagColor() {
+	public static int getOpponentFlagColor() {
 		return opponentFlagColor;
 	}
 	/**
@@ -66,10 +66,7 @@ public class Setting {
 	 * @since 1.0
 	 */
 	public static void setOpponentFlagColor(int n) {
-		if (n == 1) Setting.opponentFlagColor = BlockColor.Red;
-		if (n == 2) Setting.opponentFlagColor = BlockColor.Blue;
-		if (n == 3) Setting.opponentFlagColor = BlockColor.Yellow;
-		if (n == 4) Setting.opponentFlagColor = BlockColor.White;
+		Setting.opponentFlagColor = n;
 	}
 	/**
 	 * Getter for the starting corner of the robot. 

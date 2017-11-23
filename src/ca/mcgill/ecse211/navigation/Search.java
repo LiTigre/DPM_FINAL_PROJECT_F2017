@@ -15,7 +15,6 @@ public class Search {
 	Driver driver;
 	
 	private static boolean captured = false;
-	private static boolean searching = false;
 	
 	private static int blockColor;
 	private static float redColor;
@@ -35,7 +34,7 @@ public class Search {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void search() {
-		while(!(getCaptured()) && getSearching()) {
+		while(!(getCaptured())) {
 			redColor = MainController.getSearchLightValue(0);	//Red
 			greenColor = MainController.getSearchLightValue(1);	//Green
 			blueColor = MainController.getSearchLightValue(2);	//Blue
@@ -89,7 +88,6 @@ public class Search {
 		Sound.beep();
 		Sound.beep();
 		setCaptured(true);
-		setSearching(false);
 	}
 	
 	/**
@@ -127,18 +125,5 @@ public class Search {
 	 */
 	public void setBlock(int flagColor) {
 		blockColor = flagColor;
-	}
-
-	/**
-	 * Checks if the robot is currently searching for the block. 
-	 * @return True if it is searching, false otherwise.
-	 * @since 1.1
-	 */
-	public boolean getSearching() {
-		return searching;
-	}
-	
-	public void setSearching(boolean bool) {
-		searching = bool;
 	}
 }
