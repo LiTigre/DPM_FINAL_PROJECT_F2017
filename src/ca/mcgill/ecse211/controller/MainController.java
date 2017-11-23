@@ -38,7 +38,7 @@ public class MainController {
 	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
 	//public static final double TRACK = 11;
-	public static final double TRACK = 11.5;
+	public static final double TRACK = 12;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -142,6 +142,8 @@ public class MainController {
 					
 		double middleSquareX = (upperRightSquareX + lowerLeftSquareX)/2.0;
 		double middleSquareY = (upperRightSquareY + lowerLeftSquareY)/2.0;
+		System.out.println(middleSquareX);
+		System.out.println(middleSquareY);
 		
 		odometer.start();
 		
@@ -205,7 +207,7 @@ public class MainController {
 			while(driver.getWheelsMoving() || LightCorrection.doCorrection);
 			
 			//driver.turnDistance(10);
-			driver.turnDistance(-16);
+			//driver.turnDistance(-16);
 			while(driver.getWheelsMoving() || LightCorrection.doCorrection);
 			driver.travelDistance(40);
 			
@@ -246,6 +248,8 @@ public class MainController {
 			previousY = postZip[1];
 			futureX = (upperFlag[0] + lowerFlag[0])/2.0;
 			futureY = (upperFlag[1] + lowerFlag[1])/2.0;
+			System.out.println(futureX);
+			System.out.println(futureY);
 			
 			//LightCorrection.doCorrection = true;
 		
@@ -408,131 +412,6 @@ public class MainController {
 			driver.travelTo(startingX*GRID_LENGTH, startingY*GRID_LENGTH);
 			while(driver.getWheelsMoving()|| LightCorrection.doCorrection);
 		}
-//    
-		// Conditions to not run into the zipline
-//		if(zipEnd[0] == zipStart[0] ) {
-//			//Vertical zipline alignment. Do Y first 
-//			while(Math.abs(futureY-previousY)!= 1 && Math.abs(futureY-previousY)!= 2 && Math.abs(futureY-previousY)!= 0) {
-//				if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 1) {
-//					previousY += 2;
-//				}
-//				else {
-//					previousY -= 2;
-//				}
-//				driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//			}
-//			
-//			if(Math.abs(futureY-previousY)!= 0) {
-//				driver.travelTo(previousX*GRID_LENGTH, preZip[1]*GRID_LENGTH);
-//				localization.reLocalize(previousX*GRID_LENGTH, preZip[1]*GRID_LENGTH);
-//			}
-//			
-//			//Then X
-//			while(Math.abs(futureX-previousX)!= 1 && Math.abs(futureX-previousX)!= 2 && Math.abs(futureX-previousX)!= 0) {
-//				if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 3) {
-//					previousX += 2;
-//				}
-//				else {
-//					previousX -= 2;
-//				}
-//				driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//			}
-//		}
-//		else {
-//			//Horizontal zipline alignment. Do X first
-//			while(Math.abs(futureX-previousX)!= 1 && Math.abs(futureX-previousX)!= 2 && Math.abs(futureX-previousX)!= 0) {
-//				if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 3) {
-//					previousX += 2;
-//				}
-//				else {
-//					previousX -= 2;
-//				}
-//				driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//				localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//			}
-//			
-//			if(Math.abs(futureX-previousX)!= 0) {
-//				driver.travelTo((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-//				localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-//			}
-//			
-//			//Then Y
-//			while(Math.abs(futureY-previousY)!= 1 && Math.abs(futureY-previousY)!= 2 && Math.abs(futureY-previousY)!= 0) {
-//				if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 1) {
-//					previousY += 2;
-//				}
-//				else {
-//					previousY -= 2;
-//				}
-//				driver.travelTo((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-//				localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-//			}
-//		}
-//		
-		
-		// Conditions to not run into the zipline
-//				if(zipEnd[1] == zipStart[1] ) {
-//					//Vertical zipline alignment. Do Y first 
-//					while(Math.abs(futureY-previousY)!= 1 && Math.abs(futureY-previousY)!= 2 && Math.abs(futureY-previousY)!= 0) {
-//						if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 1) {
-//							previousY += 2;
-//						}
-//						else {
-//							previousY -= 2;
-//						}
-//						driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//						localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//					}
-//					
-//					if(Math.abs(futureY-previousY)!= 0) {
-//						driver.travelTo(previousX*GRID_LENGTH, upperFlag[1]*GRID_LENGTH);
-//						localization.reLocalize(previousX*GRID_LENGTH, upperFlag[1]*GRID_LENGTH);
-//					}
-//					
-//					//Then X
-//					while(Math.abs(futureX-previousX)!= 1 && Math.abs(futureX-previousX)!= 2 && Math.abs(futureX-previousX)!= 0) {
-//						if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 3) {
-//							previousX += 2;
-//						}
-//						else {
-//							previousX -= 2;
-//						}
-//						driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//						localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//					}
-//				}
-//				else {
-//					//Horizontal zipline alignment. Do X first
-//					while(Math.abs(futureX-previousX)!= 1 && Math.abs(futureX-previousX)!= 2 && Math.abs(futureX-previousX)!= 0) {
-//						if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 3) {
-//							previousX += 2;
-//						}
-//						else {
-//							previousX -= 2;
-//						}
-//						driver.travelTo(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//						localization.reLocalize(previousX*GRID_LENGTH, previousY*GRID_LENGTH);
-//					}
-//					
-//					if(Math.abs(futureX-previousX)!= 0) {
-//						driver.travelTo((upperFlag[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-//						localization.reLocalize((upperFlag[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-//					}
-//					
-//					//Then Y
-//					while(Math.abs(futureY-previousY)!= 1 && Math.abs(futureY-previousY)!= 2 && Math.abs(futureY-previousY)!= 0) {
-//						if(Setting.getStartingCorner() == 0 || Setting.getStartingCorner() == 1) {
-//							previousY += 2;
-//						}
-//						else {
-//							previousY -= 2;
-//						}
-//						driver.travelTo((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-//						localization.reLocalize((preZip[0]*GRID_LENGTH), previousY*GRID_LENGTH);
-//					}
-//				}
 	}
 	
 	/**
