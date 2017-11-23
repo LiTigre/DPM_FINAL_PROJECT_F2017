@@ -16,7 +16,7 @@ public class LightCorrection extends Thread {
 	private final int OFFSET_CLOCKWISE = 2;
 //	private final int OFFSET_COUNTER_CLOCKWISE = 12;
 	
-	public static volatile boolean doCorrection = true;
+	public static volatile boolean doCorrection;
 	
 	private Driver driver;
 	private Odometer odometer;
@@ -30,7 +30,7 @@ public class LightCorrection extends Thread {
 
 	@Override
 	public void run() {
-		
+		doCorrection = true;
 		ArrayList<Float> centerLightDataList = new ArrayList<Float>();
 		float centerLightData;
 		float angleLightData;
@@ -52,6 +52,12 @@ public class LightCorrection extends Thread {
 			if (Math.abs(Driver.destinationX - odometer.getX()) < 20 && Math.abs(Driver.destinationY - odometer.getY()) < 20) {
 				doCorrection = false;
 			}
+//			if (odometer.getTheta() < 45 || odometer.getTheta() > 315 || (odometer.getTheta() < 225 && odometer.getTheta() > 135))
+//				if (Math.abs(Driver.destinationY - odometer.getY()) < 20)
+//					doCorrection = false;
+//			else if ((odometer.getTheta() < 135 || odometer.getTheta() > 45) || (odometer.getTheta() > 225 && odometer.getTheta() < 315))
+//				if (Math.abs(Driver.destinationX - odometer.getX()) < 20)
+//					doCorrection = false;
 //			System.out.println("L: " + Localization.isLocalizing);
 //			System.out.println("Localizing: " + Localization.isLocalizing);
 //			System.out.println("Is turning: " + driver.isTurning());

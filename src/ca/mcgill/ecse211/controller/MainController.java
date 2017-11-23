@@ -38,7 +38,7 @@ public class MainController {
 	public static final double WHEEL_RADIUS = 2.063;
 	/** The length of the robot's track in cm. */
 	//public static final double TRACK = 11;
-	public static final double TRACK = 12;
+	public static final double TRACK = 13.5;
 	/** Distance from the color sensor to the middle of the track in cm */
 	public static final double SENSOR_TO_TRACK = 15.4;
 	/** Value that indicates a black line. */
@@ -151,25 +151,25 @@ public class MainController {
 		
 		// Setting the odometer to the right corner
 		if(Setting.getStartingCorner() == 1){
-			odometer.setPosition(new double[] {odometer.getX()+7*GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()+270}, new boolean[] {true, true, true});
-			startingX = 7.5;
+			odometer.setPosition(new double[] {odometer.getX()+11*GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()+270}, new boolean[] {true, true, true});
+			startingX = 11.5;
 			startingY = 0.5;
-			previousX = 7;
+			previousX = 11;
 			previousY = 1;
 		}
 		else if(Setting.getStartingCorner() == 2) {
-			odometer.setPosition(new double[] {odometer.getX()+7*GRID_LENGTH, odometer.getY()+7*GRID_LENGTH, odometer.getTheta()+180}, new boolean[] {true, true, true});
-			startingX = 7.5;
-			startingY = 7.5;
-			previousX = 7;
-			previousY = 7;
+			odometer.setPosition(new double[] {odometer.getX()+11*GRID_LENGTH, odometer.getY()+7*GRID_LENGTH, odometer.getTheta()+180}, new boolean[] {true, true, true});
+			startingX = 11.5;
+			startingY = 11.5;
+			previousX = 11;
+			previousY = 11;
 		}
 		else if(Setting.getStartingCorner() == 3){
-			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+7*GRID_LENGTH, odometer.getTheta()+90}, new boolean[] {true, true, true});
+			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+11*GRID_LENGTH, odometer.getTheta()+90}, new boolean[] {true, true, true});
 			startingX = 0.5;
-			startingY = 7.5;
+			startingY = 11.5;
 			previousX = 1;
-			previousY = 7;
+			previousY = 11;
 		}
 		else{
 			odometer.setPosition(new double[] {odometer.getX()+GRID_LENGTH, odometer.getY()+GRID_LENGTH, odometer.getTheta()}, new boolean[] {true, true, true});

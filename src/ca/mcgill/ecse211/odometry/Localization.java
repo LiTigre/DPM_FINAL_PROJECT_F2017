@@ -86,15 +86,6 @@ public class Localization {
 		driver.instantStop();
 		lightLocalization();
 		
-		Timer timer = new Timer();
-		
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				LightCorrection.doCorrection = true;
-			}
-		}, 7 * 1000);
-		
 		setLocalizing(false);
 	}
 	
