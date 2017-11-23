@@ -140,8 +140,8 @@ public class MainController {
 		double lowerLeftSquareX = Math.max(verticalLowerShallowPath[0], horizontalLowerShallowPath[0]);
 		double lowerLeftSquareY = Math.max(verticalLowerShallowPath[1], horizontalLowerShallowPath[1]);
 					
-		double middleSquareX = (upperRightSquareX + lowerLeftSquareX)/2;
-		double middleSquareY = (upperRightSquareY + lowerLeftSquareY)/2;
+		double middleSquareX = (upperRightSquareX + lowerLeftSquareX)/2.0;
+		double middleSquareY = (upperRightSquareY + lowerLeftSquareY)/2.0;
 		
 		odometer.start();
 		
@@ -244,15 +244,15 @@ public class MainController {
 			// Set post zip point and region to go to 
 			previousX = postZip[0];
 			previousY = postZip[1];
-			futureX = (upperFlag[0] + lowerFlag[0])/2;
-			futureY = (upperFlag[1] + lowerFlag[1])/2;
+			futureX = (upperFlag[0] + lowerFlag[0])/2.0;
+			futureY = (upperFlag[1] + lowerFlag[1])/2.0;
 			
 			LightCorrection.doCorrection = true;
 		
 			// Travel to the flag location 
 			driver.travelTo(futureX*GRID_LENGTH, previousY*GRID_LENGTH);
 			while(driver.getWheelsMoving() || LightCorrection.doCorrection);
-			
+		
 			driver.travelTo(futureX*GRID_LENGTH, futureY*GRID_LENGTH);
 			while(driver.getWheelsMoving() || LightCorrection.doCorrection);
 			
@@ -296,8 +296,8 @@ public class MainController {
 		}
 		// Do shallow path first
 		else {
-			futureX = (upperFlag[0] + lowerFlag[0])/2;
-			futureY = (upperFlag[1] + lowerFlag[1])/2;
+			futureX = (upperFlag[0] + lowerFlag[0])/2.0;
+			futureY = (upperFlag[1] + lowerFlag[1])/2.0;
 			
 			if(horizontalRedZone[0] < middleSquareX && verticalRedZone[0] < middleSquareX ) {
 				// Go to middle x first
