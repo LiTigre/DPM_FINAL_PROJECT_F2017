@@ -25,7 +25,7 @@ public class LightCorrection extends Thread {
 	/** Robot doesn't turn back enough, add this offset to fix */
 	private final int OFFSET_CLOCKWISE = 2;
 	
-	public static volatile boolean doCorrection = true;
+	public static volatile boolean doCorrection;
 	
 	private Driver driver;
 	private Odometer odometer;
@@ -42,7 +42,7 @@ public class LightCorrection extends Thread {
 	 */
 	@Override
 	public void run() {
-		
+		doCorrection = true;
 		ArrayList<Float> centerLightDataList = new ArrayList<Float>();
 		float centerLightData;
 		float angleLightData;

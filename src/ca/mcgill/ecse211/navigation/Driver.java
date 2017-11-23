@@ -45,6 +45,8 @@ public class Driver {
 	public static volatile double destinationX;
 	public static volatile double destinationY;
 	
+	private Object lock; 
+	
 	
 	/**
 	 * Constructor for driver class.
@@ -60,6 +62,8 @@ public class Driver {
 		
 		this.travelling = false;
 		this.turning = false;
+		
+		lock = new Object();
 	}
 	
 	/**
@@ -191,15 +195,6 @@ public class Driver {
 		setTurning(true);
 		
 		setSpeed(ROTATE_SPEED);
-		
-		Timer timer = new Timer();
-		
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				LightCorrection.doCorrection = true;
-			}
-		}, 2 * 1000);
 		
 		leftMotor.rotate(convertAngle(WHEEL_RADIUS, TRACK, angle), true);
 		rightMotor.rotate(-convertAngle(WHEEL_RADIUS, TRACK, angle), false);
