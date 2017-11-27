@@ -25,11 +25,20 @@ public class LightCorrection extends Thread {
 	/** Robot doesn't turn back enough, add this offset to fix */
 	private final int OFFSET_CLOCKWISE = 2;
 	
+	/** Boolean that indicates wheter the robot should light correct or not. */
 	public static volatile boolean doCorrection;
 	
+	/** Driver object created in the Main Controller. */
 	private Driver driver;
+	/** Odometer object created in the Main Controller. */
 	private Odometer odometer;
 	
+	/**
+	 * Constructor for the LightCorrection class. 
+	 * @param driver Driver created in the Main Controller.
+	 * @param odomter Odometer created in the Main Controller. 
+	 * @since 1.0 
+	 */
 	public LightCorrection(Driver driver, Odometer odometer) {
 		this.driver = driver;
 		this.odometer = odometer;
@@ -38,11 +47,11 @@ public class LightCorrection extends Thread {
 	/**
 	 * Do light correction. Drive until a line is detected, then make sure both
 	 * sensors are on a line, if not then rotate until both sensors are on a line.
-	 * @version 1.0
+	 * @since 1.0
 	 */
 	@Override
 	public void run() {
-		doCorrection = true;
+		
 		ArrayList<Float> centerLightDataList = new ArrayList<Float>();
 		float centerLightData;
 		float angleLightData;
@@ -100,8 +109,8 @@ public class LightCorrection extends Thread {
 	}
 	
 	/**
-	 *  Setup before the correction. Stop the robot and set the speed to rotate speed.
-	 * @version 1.0
+	 * Setup before the correction. Stop the robot and set the speed to rotate speed.
+	 * @since 1.0
 	 */
 	private void preCorrection() {
 		driver.instantStopAsync();
@@ -110,7 +119,7 @@ public class LightCorrection extends Thread {
 	
 	/**
 	 *  Finalize after correction. Take a break, and then continue driving.
-	 * @version 1.0
+	 * @since 1.0
 	 */
 	private void postCorrection() {
 		takeBreak(300);
@@ -121,7 +130,7 @@ public class LightCorrection extends Thread {
 	/**
 	 * Sleep the thread for a set amount of milliseconds
 	 * @param milliseconds how many milliseconds to sleep the thread for
-	 * @version 1.0
+	 * @since 1.0
 	 */
 	private void takeBreak(int milliseconds) {
 		try {
@@ -136,7 +145,7 @@ public class LightCorrection extends Thread {
 	 * @param oldTheta first angle
 	 * @param newTheta second angle
 	 * @return difference between oldTheta and newTheta
-	 * @version 1.0
+	 * @since 1.0
 	 */
 	private double getDiffTheta (double oldTheta, double newTheta) {
 		double diffTheta = Math.abs(newTheta - oldTheta);

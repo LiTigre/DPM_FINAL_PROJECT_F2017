@@ -10,7 +10,7 @@ import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 
 /**
- * Determines the starting point of the robot based on the corner it has been placed in. 
+ * Determines the position of the robot based off the nearest point. 
  * @author Team 2
  * @version 1.3
  * @since 1.0
@@ -62,7 +62,8 @@ public class Localization {
 	}
 	
 	/**
-	 * Performs localization to determine the starting position of the robot.
+	 * Performs localization to determine the starting position of the robot. It does both ultrasonic
+	 * localization and then light localization. 
 	 * @since 1.1
 	 */
 	public void localize() {
@@ -154,7 +155,7 @@ public class Localization {
 	}
 	
 	/**
-	 * Performs light localization. 
+	 * Performs light localization around the nearest point. 
 	 * @since 1.1
 	 */
 	public void lightLocalization() {
@@ -226,7 +227,7 @@ public class Localization {
 	}
 	
 	/**
-	 * Calculates position of the robot based on the light localization. 
+	 * Calculates the starting position of the robot based on the light localization. 
 	 * @since 1.1
 	 */
 	private void calculateStartingPosition() {

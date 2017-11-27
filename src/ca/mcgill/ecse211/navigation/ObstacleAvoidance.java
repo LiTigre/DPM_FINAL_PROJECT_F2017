@@ -23,12 +23,12 @@ public class ObstacleAvoidance extends Thread {
 	
 	
 	// Constants
-	/** Constant that is associated to how close the robot can get to an object without triggered obstacle avoidance. */
-//	private final static double DISTANCE_FROM_OBJECT ;
-	/** Threshold added to the distance from an object because of variation is ultrasonic data. */
-//	private final static double DISTANCE_THRESHOLD ;
-	/** Constant that indicated how far away the robot needs to travel from the block before returning to normal process. */
-//	private final static double DISTANCE_TO_AVOID ;
+	/** Constant that is associated to how close the robot can get to an object without triggered obstacle avoidance (cm). */
+	private final static double DISTANCE_FROM_OBJECT = 10;
+	/** Threshold added to the distance from an object because of variation is ultrasonic data (cm). */
+	private final static double DISTANCE_THRESHOLD = 1;
+	/** Constant that indicated how far away the robot needs to travel from the block before returning to normal process (cm). */
+	private final static double DISTANCE_TO_AVOID = 30.48;
 	
 	
 	// Booleans
@@ -53,12 +53,11 @@ public class ObstacleAvoidance extends Thread {
 	 * @see java.lang.Thread#run()
 	 * @since 1.1
 	 */
-	/*
 	public void run() {
 		while (true) {
 			double error; 	
 			if((DISTANCE_FROM_OBJECT+DISTANCE_THRESHOLD) >= MainController.getDistanceValue()) {
-				if(driver.isTraveling() && !(search.isSearching()) && isAvoiding()) {
+				if(driver.isTraveling() && isAvoiding()) {
 		    			avoid();
 				}
 		    }
@@ -69,12 +68,10 @@ public class ObstacleAvoidance extends Thread {
 		     } // Poor man's timed sampling
 		}
 	} 
-	*/
 	/**
 	 * Performs the avoidance and returns to the previous operation. 
 	 * @since 1.1
 	 */
-	/*
 	public void avoid() {
 		setAvoiding(true);
 		driver.instantStop();
@@ -82,7 +79,7 @@ public class ObstacleAvoidance extends Thread {
 		setAvoiding(false);
 		driver.travelDistance(DISTANCE_TO_AVOID);
 		driver.turnDistance(-90);
-	}*/
+	}
 	
 	/**
 	 * Checks if the robot is currently avoiding an object. 

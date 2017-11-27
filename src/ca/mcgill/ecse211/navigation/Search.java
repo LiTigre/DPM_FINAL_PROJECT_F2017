@@ -8,21 +8,27 @@ import lejos.robotics.SampleProvider;
 /**
  * Class that searches the opposing zone for the flag.
  * @author Team 2
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class Search {
+	/** Driver object that is created in the Main Controller.  */
 	Driver driver;
 	
+	/** Boolean that indicates if the flag has been captured or not. */
 	private static boolean captured = false;
 	
+	/** Integer value that corresponds to the color of the flag. */
 	private static int blockColor;
+	/** Float value that corresponds to the red color sensor reading. */
 	private static float redColor;
+	/** Float value that corresponds to the blue color sensor reading. */
 	private static float blueColor;
+	/** Float value that corresponds to the green color sensor reading. */
 	private static float greenColor; 
+
 	/**
 	 * Constructor for the Search class.
-	 * @param odometer Odometer created in the MainController class.
 	 * @param driver Driver created in MainController.
 	 * @since 1.1
 	 */
@@ -30,8 +36,9 @@ public class Search {
 		this.driver = driver;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
+	/**
+	 * Search reads in the data from the search color sensor and filters the data before passing it to the scanBlock method.
+	 * @since 1.2
 	 */
 	public void search() {
 		while(!(getCaptured())) {
@@ -46,6 +53,9 @@ public class Search {
 	
 	/**
 	 * Scans the block found to check whether it is the right color block or not.
+	 * @param red Float value of the red value read from the search color sensor. 
+	 * @param green Float value of the green value read from the search color sensor.
+	 * @param blue  Float value of the blue value read from the search color sensor. 
 	 * @since 1.1
 	 */
 	private void scanBlock(float red, float green, float blue) {
@@ -80,7 +90,7 @@ public class Search {
 	}
 	
 	/**
-	 * If the robot finds the block perform this. 
+	 * If the robot finds the block perform then the robot beeps three times. Updates the captured boolean.
 	 * @since 1.1
 	 */
 	public void captureBlock() {

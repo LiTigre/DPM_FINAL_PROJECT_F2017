@@ -49,7 +49,6 @@ public class Zipline {
 	 * @param odometer Odometer created in MainController.
 	 * @param ZiplineMotor Motor controlling the pulley
 	 * @since 1.1
-	 * @version 1.1
 	 */
 	public Zipline(EV3LargeRegulatedMotor ziplineMotor, Driver driver) {
 		this.ziplineMotor = ziplineMotor;
@@ -58,9 +57,8 @@ public class Zipline {
 	}
 	
 	/**
-	 * Starts and stops the pulley's motor. 
+	 * Starts and stops the pulley's motor. Based on a timer.  
 	 * @since 1.1
-	 * @version 1.0
 	 */
 	public void performZiplineTravel() {
 		ziplineMotor.setSpeed(ZIPLINE_SPEED);
@@ -87,7 +85,7 @@ public class Zipline {
 	 * on ground
 	 * @return boolean true if finished traversing zipline, otherwise false
 	 * @since 1.2
-	 * @version 1.1
+	 * @deprecated
 	 */
 	private boolean hasLanded() {
 		System.out.println(MainController.getLightValue());
@@ -105,7 +103,7 @@ public class Zipline {
 	 * of the values from the light sensor when facing the floor
 	 * @return float light intensity of floor
 	 * @since 1.2
-	 * @version 1.1
+	 * @deprecated
 	 */
 	
 	private float calculateFloorIntensity() {

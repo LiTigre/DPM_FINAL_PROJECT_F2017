@@ -10,9 +10,6 @@ public class Setting {
 	// Enumerations
 	/** Enumeration of all possible team colors (2). */
 	public static enum TeamColor {Red, Green};
-	/** Enumeration of all possible block colors (4). */
-	//public static enum BlockColor {Red, Blue, Yellow, White};
-	
 	
 	// Constants
 	/** Variable that will hold the team's color that was given from the server. */

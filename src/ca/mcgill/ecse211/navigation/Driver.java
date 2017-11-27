@@ -42,10 +42,10 @@ public class Driver {
 	/** Boolean that indicates whether the robot is currently turning. */
 	private volatile boolean turning;
 	
+	/** Double that holds the destination X position of the travelTo method */
 	public static volatile double destinationX;
+	/** Double that holds the destination Y position of the travelTo method */
 	public static volatile double destinationY;
-	
-	private Object lock; 
 	
 	
 	/**
@@ -62,8 +62,6 @@ public class Driver {
 		
 		this.travelling = false;
 		this.turning = false;
-		
-		lock = new Object();
 	}
 	
 	/**
@@ -73,18 +71,21 @@ public class Driver {
 	 * @since 1.1
 	 */
 	public void travelTo(double newX, double newY) {
-		
+		//Do lightCorrection while travelling
 		LightCorrection.doCorrection = true;
 		
+		//Store the destination position of the X and Y axis. 
 		Driver.destinationX = newX;
 		Driver.destinationY = newY;
 		
 		double deltaY = newY - odometer.getY();
 		double deltaX = newX - odometer.getX();
 
+		//Calculates the angle it needs to turn to. 
 		double thetaD = Math.toDegrees(Math.atan2(deltaX, deltaY));
 		double thetaTurn = thetaD - odometer.getTheta();
 		
+		//Figures out the shortest angle it needs to turn 
 		if (thetaTurn < -180.0) {
 			turnDistanceSynchronous(360.0 + thetaTurn);
 		}
@@ -96,14 +97,13 @@ public class Driver {
 			turnDistanceSynchronous(thetaTurn);	
 		}
 		
-		while(getWheelsMoving());
-		
+		//Set the speed of the motors
 		setSpeed(FORWARD_SPEED);
 		
 		double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 		
 		setTravelling(true);
-		
+		//Travels here
 		leftMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
 		rightMotor.rotate(convertDistance(WHEEL_RADIUS, distance), true);
 		
@@ -111,10 +111,10 @@ public class Driver {
 	}
 	
 	/**
-	 * Travels to a point specified while only moving straight
+	 * Travels to a point specified without correction. 
 	 * @param newX X position of the new point in centimeters.
 	 * @param newY Y position of the new point in centimeters.
-	 * @since 1.1
+	 * @since 1.5
 	 */
 	public void travelToStraight(double newX, double newY) {
 		
@@ -137,7 +137,7 @@ public class Driver {
 	}
 	
 	/**
-	 * Travels a certain distance specified. 
+	 * Travels a distance specified. 
 	 * @param distance Distance the robot needs to travel in centimeters.
 	 * @since 1.1
 	 */
@@ -175,7 +175,7 @@ public class Driver {
 	}
 	
 	/**
-	 * Makes both wheels go forward for unspecified distance or time. 
+	 * Makes both wheels go forward for unspecified distance or time at a specified speed.  
 	 * @param speed The speed of the wheels in degrees per second. 
 	 * @since 1.4
 	 */
@@ -187,8 +187,8 @@ public class Driver {
 	}
 	
 	/**
-	 * Turn a specified amount. 
-	 * @param angle Angle amount the robots needs to turn in degrees.
+	 * Turn a specified amount. Waits for the turn to finish before continuing to the next action. 
+	 * @param angle Angle amount the robots needs to turn in degrees. Positive angle is a clockwise turn. Negative angle is a counter-clockwise turn.
 	 * @since 1.5
 	 */
 	public void turnDistanceSynchronous(double angle) {
@@ -202,7 +202,7 @@ public class Driver {
 	}
 	
 	/**
-	 * Turn a specified amount. 
+	 * Turn a specified amount. Sequences of actions continue to perform as it turns.
 	 * @param angle Angle amount the robots needs to turn in degrees.
 	 * @since 1.1
 	 */
@@ -278,7 +278,7 @@ public class Driver {
 	
 	/**
 	 * This makes setting the speed of both wheels easier.
-	 * @param speed Speed to set both wheels to.
+	 * @param speed Speed to set both wheels to in degrees/second
 	 * @since 1.3
 	 */
 	public void setSpeed(int speed) {
